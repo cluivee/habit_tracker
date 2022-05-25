@@ -21,9 +21,30 @@ const App = () => {
 
   const [date, setDate] = useState(new Date());
 
+  const [buttonColor, setColor] = useState('yellow')
+  const [borders,setBorders]=useState('black');
+  const [check,setCheck]=useState(true);
+
+  function changeButtonColors() {
+    if (check == true) {
+      setColor("black");
+      setCheck(false);
+      setBorders('#0ACF83');}
+      else {setColor("yellow");
+      setCheck(true);
+      setBorders('black');}
+  }
+
   return (
     <div className="App">
     <h1 className='text-center'>React Calendar with Range</h1>
+    <Sidebar habits={habits} />
+    <div>
+      <button style={{background:buttonColor, color:'red', height: '100px', width: '200px', border: '5px solid', borderColor: borders}} className='btn btn-primary' onClick={changeButtonColors}>Click here</button>
+    </div>
+    <p className='text-center'>
+          <span className='bold'>Print: </span>{}
+        </p>
       <div className='calendar-container'>
         <Calendar
           onChange={setDate}
@@ -31,11 +52,11 @@ const App = () => {
           // selectRange={true} 
           // defaultValue={date}
           showFixedNumberOfWeeks={true}
-
-
         />
-        
       </div>
+
+      {/* This is the text for the selected date at the bottom  */}
+
       {date.length > 0 ? (
         <p className='text-center'>
           <span className='bold'>Start:</span>{' '}
@@ -49,9 +70,9 @@ const App = () => {
           {date.toDateString()}
         </p>
       )}
+      
     </div>
   );
-
 
   
 }
@@ -111,5 +132,11 @@ Break down into chucks
 - logins
 - count streak
 - make it look good/ material ui
+
+TODO 24.05.2022:
+- We can do the css at the end, let's get the buttons working first
+- for the css:
+- get the border sorted, as in the difference between borders between buttons and the ones at the edge
+- sort out the height as a percentage of the screen height, so it's the right size, and we also get squares
 
 */

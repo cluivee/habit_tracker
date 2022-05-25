@@ -1,6 +1,6 @@
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
 h1 {
   color: coral;
@@ -41,6 +41,10 @@ h1 {
   }
 }
 
+*{
+  font-family: 'Roboto', sans-serif;
+}
+
 /* React Calendar Styles */
 
 .react-calendar {
@@ -48,7 +52,9 @@ h1 {
   max-width: 100%;
   background: white;
   border: 1px solid #a0a096;
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-weight: 100;
+  /* font-size: 50px; */
   line-height: .125em;
 }
 .react-calendar--doubleView {
@@ -71,8 +77,8 @@ h1 {
   box-sizing: border-box;
 }
 .react-calendar button {
-  margin: 0;
-  border: 0;
+  margin: 0px;
+  border: 3px solid #fff;
   outline: none;
 }
 .react-calendar button:enabled:hover {
@@ -97,7 +103,7 @@ h1 {
 .react-calendar__month-view__weekdays {
   text-align: center;
   text-transform: uppercase;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 0.75em;
 }
 .react-calendar__month-view__weekdays__weekday {
@@ -125,10 +131,18 @@ h1 {
   max-width: 100%;
   /* default padding */
   /* padding: 10px 6.6667px; */
-  padding: 30px 5px;
+  padding: 0px 5px;
   background: coral;
-  text-align: center;
-  line-height: 16px;
+  /* border: 100px solid #000;
+  margin: 10px; */
+  height: 120px;
+  /* line-height: 16px; */
+  font-size: 30px;
+  /* keep the inline nature of buttons */
+  display: inline-flex; 
+  align-items: flex-start; /* this is default */
+  justify-content: flex-end; 
+  
 }
 .react-calendar__tile:disabled {
   background-color: #f0f0f0;
