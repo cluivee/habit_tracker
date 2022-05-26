@@ -1,55 +1,85 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 // import Calendar from './Calendar'
-import Sidebar from './Sidebar'
-import './App.css';
-import Calendar from 'react-calendar';
+import Sidebar from "./Sidebar";
+import "./App.css";
+import Calendar from "react-calendar";
 // import 'react-calendar/dist/Calendar.css';
 
 const App = () => {
-
-  const [habits, setHabits] = useState([])
-// setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
-// lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call funciton again (dependency array)
+  const [habits, setHabits] = useState([]);
+  // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
+  // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call funciton again (dependency array)
   useEffect(() => {
-    fetch('http://localhost:3000/habits')
-    .then(response => response.json())
-    .then(habits => {
-    console.log('Success:', habits);
-    setHabits(habits)
-  })
-  }, [])
+    fetch("http://localhost:3000/habits")
+      .then((response) => response.json())
+      .then((habits) => {
+        console.log("Success:", habits);
+        setHabits(habits);
+      });
+  }, []);
 
   const [date, setDate] = useState(new Date());
 
-  const [buttonColor, setColor] = useState('yellow')
-  const [borders,setBorders]=useState('black');
-  const [check,setCheck]=useState(true);
+  const [buttonColor, setColor] = useState("yellow");
+  const [borders, setBorders] = useState("black");
+  const [check, setCheck] = useState(true);
+
+  const d = new Date(2018, 11, 24, 10, 33, 30, 0);
 
   function changeButtonColors() {
     if (check == true) {
       setColor("black");
       setCheck(false);
-      setBorders('#0ACF83');}
-      else {setColor("yellow");
+      setBorders("#0ACF83");
+    } else {
+      setColor("yellow");
       setCheck(true);
-      setBorders('black');}
+      setBorders("black");
+    }
   }
+
+  // some nonsense tests
+  // function dateMethod() {
+  //  setDate();
+  //  console.log(date);
+  // }
+
+  // dateMethod();
+
 
   return (
     <div className="App">
-    <h1 className='text-center'>React Calendar with Range</h1>
-    <Sidebar habits={habits} />
-    <div>
-      <button style={{background:buttonColor, color:'red', height: '100px', width: '200px', border: '5px solid', borderColor: borders}} className='btn btn-primary' onClick={changeButtonColors}>Click here</button>
-    </div>
-    <p className='text-center'>
-          <span className='bold'>Print: </span>{}
-        </p>
-      <div className='calendar-container'>
+      <h1 className="text-center">React Calendar with Range</h1>
+
+      <Sidebar habits={habits} />
+
+      <div>
+        <button
+          style={{
+            background: buttonColor,
+            color: "red",
+            height: "100px",
+            width: "200px",
+            border: "5px solid",
+            borderColor: borders,
+          }}
+          className="btn btn-primary"
+          onClick={changeButtonColors}
+        >
+          Click here
+        </button>
+      </div>
+
+      <p className="text-center">
+        <span className="bold">Print: </span>
+        {date.toDateString()}
+      </p>
+      
+      <div className="calendar-container">
         <Calendar
           onChange={setDate}
-          value={date}
-          // selectRange={true} 
+          // value={date}
+          // selectRange={true}
           // defaultValue={date}
           showFixedNumberOfWeeks={true}
         />
@@ -58,24 +88,20 @@ const App = () => {
       {/* This is the text for the selected date at the bottom  */}
 
       {date.length > 0 ? (
-        <p className='text-center'>
-          <span className='bold'>Start:</span>{' '}
-          {date[0].toDateString()}
+        <p className="text-center">
+          <span className="bold">Start:</span> {date[0].toDateString()}
           &nbsp;|&nbsp;
-          <span className='bold'>End:</span> {date[1].toDateString()}
+          <span className="bold">End:</span> {date[1].toDateString()}
         </p>
       ) : (
-        <p className='text-center'>
-          <span className='bold'>Default selected date:</span>{' '}
+        <p className="text-center">
+          <span className="bold">Default selected date:</span>{" "}
           {date.toDateString()}
         </p>
       )}
-      
     </div>
   );
-
-  
-}
+};
 
 export default App;
 
@@ -138,5 +164,8 @@ TODO 24.05.2022:
 - for the css:
 - get the border sorted, as in the difference between borders between buttons and the ones at the edge
 - sort out the height as a percentage of the screen height, so it's the right size, and we also get squares
+
+26.05.2022:
+- How is setdate updating the date? We don't even pass the date into it? Can we just pass anything into setdate? Like potatoes?
 
 */
