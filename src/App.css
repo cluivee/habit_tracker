@@ -144,6 +144,24 @@ h1 {
   justify-content: flex-end; 
   
 }
+.react-calendar__newtile {
+  max-width: 100%;
+  /* default padding */
+  /* padding: 10px 6.6667px; */
+  padding: 0px 5px;
+  background: green;
+  border: 100px solid #000;
+  margin: 10px;
+  height: 120px;
+  /* line-height: 16px; */
+  font-size: 90px;
+  /* keep the inline nature of buttons */
+  display: inline-flex; 
+  align-items: flex-start; /* this is default */
+  justify-content: flex-end; 
+  
+}
+
 .react-calendar__tile:disabled {
   background-color: #f0f0f0;
 }
@@ -172,6 +190,8 @@ h1 {
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
   background: #1087ff;
+  border: 5px solid red;
+
 }
 .react-calendar--selectRange .react-calendar__tile--hover {
   background-color: #e6e6e6;

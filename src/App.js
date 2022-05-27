@@ -16,7 +16,7 @@ const App = () => {
         console.log("Success:", habits);
         setHabits(habits);
       });
-  }, []);
+  }, []); // Empty array means nothing to watch, so only runs once
 
   const [date, setDate] = useState(new Date());
 
@@ -25,6 +25,10 @@ const App = () => {
   const [check, setCheck] = useState(true);
 
   const d = new Date(2018, 11, 24, 10, 33, 30, 0);
+
+  function isSameDay(a, b) {
+    return a.getTime() === b.getTime();
+  }
 
   function changeButtonColors() {
     if (check == true) {
@@ -37,6 +41,23 @@ const App = () => {
       setBorders("black");
     }
   }
+  Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  };
+
+  const datesToAddClassTo = [date, date.addDays(1)];
+
+  function functileClassName({ date, view }) {
+    // Add class to tiles in month view only
+    if (view === "month") {
+      // Check if a date React-Calendar wants to check is on the list of dates to add class to
+      if (datesToAddClassTo.find((dDate) => isSameDay(dDate, date))) {
+        return "react-calendar__newtile";
+      }
+    }
+  }
 
   // some nonsense tests
   // function dateMethod() {
@@ -46,42 +67,56 @@ const App = () => {
 
   // dateMethod();
 
-
   return (
     <div className="App">
       <h1 className="text-center">React Calendar with Range</h1>
 
       <Sidebar habits={habits} />
 
-      <div>
-        <button
-          style={{
-            background: buttonColor,
-            color: "red",
-            height: "100px",
-            width: "200px",
-            border: "5px solid",
-            borderColor: borders,
-          }}
-          className="btn btn-primary"
-          onClick={changeButtonColors}
-        >
-          Click here
-        </button>
-      </div>
+      <button
+        style={{
+          background: buttonColor,
+          color: "red",
+          height: "100px",
+          width: "200px",
+          border: "5px solid",
+          borderColor: borders,
+        }}
+        className="btn btn-primary"
+        onClick={changeButtonColors}
+      >
+        Click here
+      </button>
 
       <p className="text-center">
         <span className="bold">Print: </span>
         {date.toDateString()}
       </p>
-      
+
+      <button
+        id="todayButton"
+        onClick = {() => setDate(d)}
+        style={{
+          background: "white",
+          fontSize: "30px",
+          color: "green",
+          height: "60px",
+          width: "200px",
+        }}
+        className="btn btn-primary"
+      >
+        Today Button
+      </button>
+
       <div className="calendar-container">
         <Calendar
           onChange={setDate}
-          // value={date}
+          value={date}
+          tileClassName={functileClassName}
           // selectRange={true}
           // defaultValue={date}
           showFixedNumberOfWeeks={true}
+          activeStartDate={date}
         />
       </div>
 
