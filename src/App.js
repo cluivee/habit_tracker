@@ -8,7 +8,7 @@ import Calendar from "react-calendar";
 const App = () => {
   const [habits, setHabits] = useState([]);
   // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
-  // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call funciton again (dependency array)
+  // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call function again (dependency array)
   useEffect(() => {
     fetch("http://localhost:3000/habits")
       .then((response) => response.json())
@@ -95,7 +95,7 @@ const App = () => {
 
       <button
         id="todayButton"
-        onClick = {() => setDate(d)}
+        onClick = {() => {const copyD = d; setDate(copyD)}}
         style={{
           background: "white",
           fontSize: "30px",
@@ -111,12 +111,14 @@ const App = () => {
       <div className="calendar-container">
         <Calendar
           onChange={setDate}
+          // onClickDay= {() => alert('New date pot is: ' + date)}
           value={date}
           tileClassName={functileClassName}
           // selectRange={true}
+
           // defaultValue={date}
           showFixedNumberOfWeeks={true}
-          activeStartDate={date}
+          defaultActiveStartDate={date}
         />
       </div>
 
