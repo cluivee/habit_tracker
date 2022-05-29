@@ -4,14 +4,40 @@ import Sidebar from "./Sidebar";
 import "./App.css";
 import Calendar from "react-calendar";
 // import 'react-calendar/dist/Calendar.css';
+import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
 
-const Experiment = () => {
-  return <button height="100px" text="hello" />;
+const BorderTestButton = () => {
+  const [check, setCheck] = useState(true);
+  const [buttonColor, setColor] = useState("yellow");
+  const [borders, setBorders] = useState("black");
+  function changeButtonColors() {
+    if (check === true) {
+      setColor("black");
+      setCheck(false);
+      setBorders("#0ACF83");
+    } else {
+      setColor("yellow");
+      setCheck(true);
+      setBorders("black");
+    }
+  }
+  return (
+    <button
+      style={{
+        background: buttonColor,
+        color: "red",
+        height: "100px",
+        width: "200px",
+        border: "5px solid",
+        borderColor: borders,
+      }}
+      className="btn btn-primary"
+      onClick={changeButtonColors}
+    >
+      Click here
+    </button>
+  );
 };
-
-function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
 
 const TheCalendarContainer = () => {
   const [date, setDate] = useState(new Date());
@@ -54,7 +80,7 @@ const TheCalendarContainer = () => {
           {date.toDateString()}
         </p>
       )}
-      
+
       <Calendar
         onChange={setDate}
         // onClickDay= {() => alert('New date pot is: ' + date)}
@@ -83,42 +109,23 @@ const App = () => {
       });
   }, []); // Empty array means nothing to watch, so only runs once
 
-  const [check, setCheck] = useState(true);
-  const [buttonColor, setColor] = useState("yellow");
-  const [borders, setBorders] = useState("black");
-  function changeButtonColors() {
-    if (check === true) {
-      setColor("black");
-      setCheck(false);
-      setBorders("#0ACF83");
-    } else {
-      setColor("yellow");
-      setCheck(true);
-      setBorders("black");
-    }
-  }
-
   return (
     <div className="App">
       <h1 className="text-center">React Calendar with Range</h1>
+      <div class="flexcontainer">
+        {/* <div id="leftSidebar" class="fixed">
+          Sidebar left
+        </div> */}
+        
 
+        <div class="flex-item">
+          <TheCalendarContainer />
+          Dynamically sized content
+        </div>
+      </div>
       <Sidebar habits={habits} />
-      <button
-        style={{
-          background: buttonColor,
-          color: "red",
-          height: "100px",
-          width: "200px",
-          border: "5px solid",
-          borderColor: borders,
-        }}
-        className="btn btn-primary"
-        onClick={changeButtonColors}
-      >
-        Click here
-      </button>
-
-      <TheCalendarContainer />
+      <BorderTestButton />
+      <SimpleHTMLSidebarTest />
     </div>
   );
 };
