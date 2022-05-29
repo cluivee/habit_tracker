@@ -5,24 +5,16 @@ import "./App.css";
 import Calendar from "react-calendar";
 // import 'react-calendar/dist/Calendar.css';
 
-const App = () => {
-  const [habits, setHabits] = useState([]);
-  // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
-  // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call function again (dependency array)
-  useEffect(() => {
-    fetch("http://localhost:3000/habits")
-      .then((response) => response.json())
-      .then((habits) => {
-        console.log("Success:", habits);
-        setHabits(habits);
-      });
-  }, []); // Empty array means nothing to watch, so only runs once
+const Experiment = () => {
+  return <button height="100px" text="hello" />;
+};
 
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+const TheCalendarContainer = () => {
   const [date, setDate] = useState(new Date());
-
-  const [buttonColor, setColor] = useState("yellow");
-  const [borders, setBorders] = useState("black");
-  const [check, setCheck] = useState(true);
 
   const d = new Date(2018, 11, 24, 10, 33, 30, 0);
 
@@ -30,17 +22,6 @@ const App = () => {
     return a.getTime() === b.getTime();
   }
 
-  function changeButtonColors() {
-    if (check == true) {
-      setColor("black");
-      setCheck(false);
-      setBorders("#0ACF83");
-    } else {
-      setColor("yellow");
-      setCheck(true);
-      setBorders("black");
-    }
-  }
   Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
@@ -59,20 +40,69 @@ const App = () => {
     }
   }
 
-  // some nonsense tests
-  // function dateMethod() {
-  //  setDate();
-  //  console.log(date);
-  // }
+  return (
+    <div className="calendar-container">
+      {date.length > 0 ? (
+        <p className="text-center">
+          <span className="bold">Start:</span> {date[0].toDateString()}
+          &nbsp;|&nbsp;
+          <span className="bold">End:</span> {date[1].toDateString()}
+        </p>
+      ) : (
+        <p className="text-center">
+          <span className="bold">Default selected date:</span>{" "}
+          {date.toDateString()}
+        </p>
+      )}
+      
+      <Calendar
+        onChange={setDate}
+        // onClickDay= {() => alert('New date pot is: ' + date)}
+        value={date}
+        tileClassName={functileClassName}
+        // selectRange={true}
 
-  // dateMethod();
+        // defaultValue={date}
+        showFixedNumberOfWeeks={true}
+        defaultActiveStartDate={date}
+      />
+    </div>
+  );
+};
+
+const App = () => {
+  const [habits, setHabits] = useState([]);
+  // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
+  // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call function again (dependency array)
+  useEffect(() => {
+    fetch("http://localhost:3000/habits")
+      .then((response) => response.json())
+      .then((habits) => {
+        console.log("Success:", habits);
+        setHabits(habits);
+      });
+  }, []); // Empty array means nothing to watch, so only runs once
+
+  const [check, setCheck] = useState(true);
+  const [buttonColor, setColor] = useState("yellow");
+  const [borders, setBorders] = useState("black");
+  function changeButtonColors() {
+    if (check === true) {
+      setColor("black");
+      setCheck(false);
+      setBorders("#0ACF83");
+    } else {
+      setColor("yellow");
+      setCheck(true);
+      setBorders("black");
+    }
+  }
 
   return (
     <div className="App">
       <h1 className="text-center">React Calendar with Range</h1>
 
       <Sidebar habits={habits} />
-
       <button
         style={{
           background: buttonColor,
@@ -88,54 +118,7 @@ const App = () => {
         Click here
       </button>
 
-      <p className="text-center">
-        <span className="bold">Print: </span>
-        {date.toDateString()}
-      </p>
-
-      <button
-        id="todayButton"
-        onClick = {() => {const copyD = d; setDate(copyD)}}
-        style={{
-          background: "white",
-          fontSize: "30px",
-          color: "green",
-          height: "60px",
-          width: "200px",
-        }}
-        className="btn btn-primary"
-      >
-        Today Button
-      </button>
-
-      <div className="calendar-container">
-        <Calendar
-          onChange={setDate}
-          // onClickDay= {() => alert('New date pot is: ' + date)}
-          value={date}
-          tileClassName={functileClassName}
-          // selectRange={true}
-
-          // defaultValue={date}
-          showFixedNumberOfWeeks={true}
-          defaultActiveStartDate={date}
-        />
-      </div>
-
-      {/* This is the text for the selected date at the bottom  */}
-
-      {date.length > 0 ? (
-        <p className="text-center">
-          <span className="bold">Start:</span> {date[0].toDateString()}
-          &nbsp;|&nbsp;
-          <span className="bold">End:</span> {date[1].toDateString()}
-        </p>
-      ) : (
-        <p className="text-center">
-          <span className="bold">Default selected date:</span>{" "}
-          {date.toDateString()}
-        </p>
-      )}
+      <TheCalendarContainer />
     </div>
   );
 };
