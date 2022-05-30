@@ -51,7 +51,6 @@ h1 {
 }
 .fixed {
   background-color:#fff;
-  border:1px solid red;
   flex-basis: 25%;
   flex-grow: 0;
   flex-shrink: 0;
@@ -74,6 +73,12 @@ h1 {
 .flex-item {
   background-color:#7887AB;
   flex-grow: 1;
+}
+
+/* Mui sidebar test */
+.MuiSidebar {
+  width: 240px;
+  border: 1px solid blueviolet
 }
 
 /* React Calendar Styles */

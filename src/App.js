@@ -5,11 +5,93 @@ import "./App.css";
 import Calendar from "react-calendar";
 // import 'react-calendar/dist/Calendar.css';
 import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
+import Button from "@mui/material/Button";
+import MuiSidebar from "./MuiSidebar";
+
+// below are imports for mui drawer
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+// Imports for dynamic css slider
+
+import { alpha, styled } from "@mui/material/styles";
+import Slider from "@mui/material/Slider";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+
+const darkTheme = createTheme({
+  palette: {
+    // I can change this to light to change the theme
+    mode: "dark",
+    myColor: {
+      main: "#ffa726",
+      contrastText: "#fff",
+    },
+    myOtherColor: {
+      main: "#3700B3",
+      contrastText: "#fff",
+    },
+  },
+});
+
+const drawerWidth = 240;
+
+// DynamicCSS styledSlider test
+
+const StyledSlider = styled(Slider, {
+  shouldForwardProp: (prop) => prop !== "success",
+})(({ success, theme }) => ({
+  width: 300,
+  ...(success && {color: theme.palette.warning.main,}),
+}));
+
+function DynamicCSS() {
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (event) => {
+    console.log(event.target)
+    console.log('Then checked is: ' + event.target.checked)
+    setSuccess(event.target.checked);
+  };
+
+  return (
+    <React.Fragment>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={success}
+            onChange={handleChange}
+            color="primary"
+            value="dynamic-class-name"
+          />
+        }
+        label="Success"
+      />
+
+      <StyledSlider success={success} defaultValue={30} sx={{ mt: 1 }} />
+    </React.Fragment>
+  );
+}
 
 const BorderTestButton = () => {
   const [check, setCheck] = useState(true);
   const [buttonColor, setColor] = useState("yellow");
   const [borders, setBorders] = useState("black");
+
   function changeButtonColors() {
     if (check === true) {
       setColor("black");
@@ -25,7 +107,7 @@ const BorderTestButton = () => {
     <button
       style={{
         background: buttonColor,
-        color: "red",
+        color: "newColor",
         height: "100px",
         width: "200px",
         border: "5px solid",
@@ -36,6 +118,112 @@ const BorderTestButton = () => {
     >
       Click here
     </button>
+  );
+};
+
+// This example from SO shows how to use useEffect to track the initial State and update change the text back after a timeout, though useEffect isn't actually required and I could just call setTimeout directly, which also worked.
+
+const FancyButton = () => {
+  const initialState = "Next";
+  const [buttonText, setButtonText] = useState("Next"); //same as creating your state variable where "Next" is the default value for buttonText and setButtonText is the setter function for your state variable instead of setState
+
+  // the effect
+  useEffect(() => {
+    if (buttonText !== initialState) {
+      setTimeout(() => setButtonText(initialState), [1000]);
+    }
+  }, [buttonText]);
+
+  const changeText = (text) => setButtonText(text);
+
+  return (
+    <button type="button" onClick={() => changeText("newText")}>
+      {buttonText}
+    </button>
+  );
+};
+
+const JustMUIDrawer = ({ propClick, propCount }) => {
+  const [btnColor, setBtnColor] = useState("myColor");
+  const [buttonText, setButtonText] = useState("Hello World");
+
+  const [success, setSuccess] = useState(true);
+
+  const handleChange = (event) => {
+     console.log(event.target)
+    console.log('Then checked is: ' + event.target)
+    setSuccess(success ? false : true);
+  }
+
+
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <Drawer
+        sx={{
+          // possible to change this to a percentage
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Toolbar />
+        <Divider />
+        <List>
+          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {["All mail", "Trash", "Spam"].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+          {/* MUI button tutorial */}
+
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            size="large"
+            style={{
+              maxHeight: "30px",
+              minHeight: "60px",
+              content: "Purple",
+            }}
+            // onClick={() => {
+            //   btnColor === "myColor" ? setBtnColor("myOtherColor") : setBtnColor("myColor");
+            //   buttonText === "Hello World"
+            //     ? setButtonText("Purple Active")
+            //     : setButtonText("Hello World");
+            // }}
+            onClick={handleChange}
+          >
+            {propCount}
+          </Button>
+
+          <StyledSlider success={success} defaultValue={30} sx={{ mt: 1 }} />
+        </List>
+      </Drawer>
+    </ThemeProvider>
   );
 };
 
@@ -87,7 +275,6 @@ const TheCalendarContainer = () => {
         value={date}
         tileClassName={functileClassName}
         // selectRange={true}
-
         // defaultValue={date}
         showFixedNumberOfWeeks={true}
         defaultActiveStartDate={date}
@@ -109,23 +296,44 @@ const App = () => {
       });
   }, []); // Empty array means nothing to watch, so only runs once
 
+  const [myColorState, setmyColorState] = useState("#ffa726");
+  const changeColor = () => {setmyColorState("#3700B3");};
+
+  const [count, setCount] = useState(5);
+
+  const increment = () => {setCount(count + 1)};
+
+  const items = [
+    { name: "home", label: "Home" },
+    { name: "sales", label: "Sales" },
+    { name: "orders", label: "Orders" },
+    { name: "billing", label: "Billing" },
+    { name: "settings", label: "Settings" },
+  ];
+
   return (
     <div className="App">
       <h1 className="text-center">React Calendar with Range</h1>
       <div class="flexcontainer">
-        {/* <div id="leftSidebar" class="fixed">
-          Sidebar left
-        </div> */}
-        
+        {/* <div id="leftSidebar" className="fixed"> </div> */}
+        <JustMUIDrawer
+          className="fixed"
+          propClick={increment}
+          myColorState={myColorState}
+          propCount={count}
+        />
 
-        <div class="flex-item">
+        <div className="flex-item">
           <TheCalendarContainer />
-          Dynamically sized content
+          <h2> The Count is : {count} </h2>
+          <Sidebar habits={habits} />
+          <BorderTestButton />
+          <div className="MuiSidebar">
+            <MuiSidebar items={items} />
+          </div>
+          <DynamicCSS />
         </div>
       </div>
-      <Sidebar habits={habits} />
-      <BorderTestButton />
-      <SimpleHTMLSidebarTest />
     </div>
   );
 };
