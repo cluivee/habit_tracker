@@ -56,15 +56,15 @@ const StyledSlider = styled(Slider, {
   shouldForwardProp: (prop) => prop !== "success",
 })(({ success, theme }) => ({
   width: 300,
-  ...(success && {color: theme.palette.warning.main,}),
+  ...(success && { color: theme.palette.warning.main }),
 }));
 
 function DynamicCSS() {
   const [success, setSuccess] = useState(false);
 
   const handleChange = (event) => {
-    console.log(event.target)
-    console.log('Then checked is: ' + event.target.checked)
+    console.log(event.target);
+    console.log("Then checked is: " + event.target.checked);
     setSuccess(event.target.checked);
   };
 
@@ -147,14 +147,10 @@ const JustMUIDrawer = ({ propClick, propCount }) => {
   const [btnColor, setBtnColor] = useState("myColor");
   const [buttonText, setButtonText] = useState("Hello World");
 
-  const [success, setSuccess] = useState(true);
-
-  const handleChange = (event) => {
-     console.log(event.target)
-    console.log('Then checked is: ' + event.target)
-    setSuccess(success ? false : true);
+  function childHandleChange(e) {
+    console.log(e.target.value);
+    this.props.onHandleChange(e.target.value);
   }
-
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -215,12 +211,10 @@ const JustMUIDrawer = ({ propClick, propCount }) => {
             //     ? setButtonText("Purple Active")
             //     : setButtonText("Hello World");
             // }}
-            onClick={handleChange}
+            onClick={childHandleChange}
           >
             {propCount}
           </Button>
-
-          <StyledSlider success={success} defaultValue={30} sx={{ mt: 1 }} />
         </List>
       </Drawer>
     </ThemeProvider>
@@ -297,19 +291,21 @@ const App = () => {
   }, []); // Empty array means nothing to watch, so only runs once
 
   const [myColorState, setmyColorState] = useState("#ffa726");
-  const changeColor = () => {setmyColorState("#3700B3");};
+  const changeColor = () => {
+    setmyColorState("#3700B3");
+  };
 
   const [count, setCount] = useState(5);
 
-  const increment = () => {setCount(count + 1)};
+  const increment = () => {
+    setCount(count + 1);
+  };
 
-  const items = [
-    { name: "home", label: "Home" },
-    { name: "sales", label: "Sales" },
-    { name: "orders", label: "Orders" },
-    { name: "billing", label: "Billing" },
-    { name: "settings", label: "Settings" },
-  ];
+  const [success, setSuccess] = useState(true);
+
+  const handleChange = () => {
+    setSuccess(success);
+  };
 
   return (
     <div className="App">
@@ -325,13 +321,18 @@ const App = () => {
 
         <div className="flex-item">
           <TheCalendarContainer />
-          <h2> The Count is : {count} </h2>
+          <StyledSlider
+            success={success}
+            onHandleChange={handleChange}
+            defaultValue={30}
+            sx={{ mt: 1 }}
+          />
           <Sidebar habits={habits} />
           <BorderTestButton />
-          <div className="MuiSidebar">
-            <MuiSidebar items={items} />
-          </div>
           <DynamicCSS />
+          
+          <Counter parentCallback={callback} />
+          <h2>count {count}</h2>
         </div>
       </div>
     </div>
