@@ -2,8 +2,23 @@
   text-align: center;
 } */
 
+/* Here are the css variables I can use for global colors. This is equivalent to the html selector i.e. html { } */
+:root {
+  --main-color: #eb31b3;
+  --second-color: #2764BA;
+  --body-color: white;
+}
+
 h1 {
   color: coral;
+}
+
+.ExampleButton {
+  color: "red";
+  height: "100px";
+  width: "200px";
+  border: "20px solid";
+  border-color: var(--second-color);
 }
 
 .App-logo {
@@ -226,7 +241,8 @@ h1 {
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
   background: #1087ff;
-  border: 5px solid red;
+  border: 5px solid;
+  border-color: var(--main-color);
 
 }
 .react-calendar--selectRange .react-calendar__tile--hover {

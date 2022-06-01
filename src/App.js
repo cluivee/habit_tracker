@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 // import Calendar from './Calendar'
 import Sidebar from "./Sidebar";
 import "./App.css";
@@ -7,6 +7,7 @@ import Calendar from "react-calendar";
 import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
 import Button from "@mui/material/Button";
 import MuiSidebar from "./MuiSidebar";
+import ExampleChild from "./ExampleChild";
 
 // below are imports for mui drawer
 import Box from "@mui/material/Box";
@@ -27,7 +28,6 @@ import MailIcon from "@mui/icons-material/Mail";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 // Imports for dynamic css slider
-
 import { alpha, styled } from "@mui/material/styles";
 import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -53,10 +53,10 @@ const drawerWidth = 240;
 // DynamicCSS styledSlider test
 
 const StyledSlider = styled(Slider, {
-  shouldForwardProp: (prop) => prop !== "success",
-})(({ success, theme }) => ({
+  shouldForwardProp: (prop) => prop !== "propParentInfo",
+})(({ propParentInfo, theme }) => ({
   width: 300,
-  ...(success && { color: theme.palette.warning.main }),
+  ...(propParentInfo && { color: theme.palette.warning.main }),
 }));
 
 function DynamicCSS() {
@@ -81,11 +81,31 @@ function DynamicCSS() {
         }
         label="Success"
       />
-
       <StyledSlider success={success} defaultValue={30} sx={{ mt: 1 }} />
     </React.Fragment>
   );
 }
+
+const AnotherExampleButton = () => {
+  const [buttonColor, setColor] = useState('#2764BA');
+
+  function changeButtonColors() {
+    buttonColor === '#2764BA' ? setColor('#eb31b3') : setColor('#2764BA')
+    document.documentElement.style.setProperty('--second-color', buttonColor);
+  }
+  return (
+    <button
+      style={{
+        color: "newColor",
+      }}
+      className="ExampleButton"
+      onClick={changeButtonColors}
+    >
+      Second Button
+    </button>
+  );
+};
+
 
 const BorderTestButton = () => {
   const [check, setCheck] = useState(true);
@@ -125,7 +145,8 @@ const BorderTestButton = () => {
 
 const FancyButton = () => {
   const initialState = "Next";
-  const [buttonText, setButtonText] = useState("Next"); //same as creating your state variable where "Next" is the default value for buttonText and setButtonText is the setter function for your state variable instead of setState
+  const [buttonText, setButtonText] = useState("Next"); 
+  //same as creating your state variable where "Next" is the default value for buttonText and setButtonText is the setter function for your state variable instead of setState
 
   // the effect
   useEffect(() => {
@@ -143,14 +164,25 @@ const FancyButton = () => {
   );
 };
 
-const JustMUIDrawer = ({ propClick, propCount }) => {
+const JustMUIDrawer = ({ propSetParentInfo, propParentInfo, propCount, parentCallback }) => {
   const [btnColor, setBtnColor] = useState("myColor");
   const [buttonText, setButtonText] = useState("Hello World");
+  const [cssColor, setCSSColor] = useState("green");
+
 
   function childHandleChange(e) {
     console.log(e.target.value);
     this.props.onHandleChange(e.target.value);
   }
+
+  const handleClick = () => {
+    cssColor === 'green' ? setCSSColor('#eb31b3') : setCSSColor('green')
+    document.documentElement.style.setProperty('--main-color', cssColor);
+    console.log("--main-color value: " + document.documentElement.style.getPropertyValue('--main-color'));
+    console.log(cssColor);
+
+    propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -211,13 +243,31 @@ const JustMUIDrawer = ({ propClick, propCount }) => {
             //     ? setButtonText("Purple Active")
             //     : setButtonText("Hello World");
             // }}
-            onClick={childHandleChange}
+            onClick={handleClick}
           >
-            {propCount}
+            We'll deal with this text later
           </Button>
+
+          <Counter parentCallback={parentCallback} />
         </List>
       </Drawer>
     </ThemeProvider>
+  );
+};
+
+const Counter = ({ parentCallback }) => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button
+      style={{ margin: "10px" }}
+      onClick={() => {
+        setCount((count) => count + 1);
+        parentCallback(count + 1);
+      }}
+    >
+      Click to increment
+    </button>
   );
 };
 
@@ -295,47 +345,58 @@ const App = () => {
     setmyColorState("#3700B3");
   };
 
-  const [count, setCount] = useState(5);
-
-  const increment = () => {
-    setCount(count + 1);
-  };
-
   const [success, setSuccess] = useState(true);
 
   const handleChange = () => {
     setSuccess(success);
   };
 
+  const [newCount, setNewCount] = useState(0);
+
+  const callback = useCallback((newCount) => {
+    setNewCount(newCount);
+  }, []);
+  
+  
+  const [msg, setMsg] = useState("Initial Message");
+
+  const [parentInfo, setParentInfo] = useState(true);
+
   return (
+    <ThemeProvider theme={darkTheme}>
     <div className="App">
       <h1 className="text-center">React Calendar with Range</h1>
       <div class="flexcontainer">
         {/* <div id="leftSidebar" className="fixed"> </div> */}
         <JustMUIDrawer
+          parentCallback={callback}
           className="fixed"
-          propClick={increment}
           myColorState={myColorState}
-          propCount={count}
+          propSetParentInfo={setParentInfo}
+          propParentInfo={parentInfo}
         />
-
         <div className="flex-item">
           <TheCalendarContainer />
           <StyledSlider
             success={success}
             onHandleChange={handleChange}
             defaultValue={30}
+            propParentInfo={parentInfo}
             sx={{ mt: 1 }}
           />
           <Sidebar habits={habits} />
           <BorderTestButton />
           <DynamicCSS />
-          
-          <Counter parentCallback={callback} />
-          <h2>count {count}</h2>
+          <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
+            <h1>I'm the parent, here's your message:</h1>
+            <h1>{msg}</h1>
+            <ExampleChild propSetMsg={setMsg} />
+          </div>
+          <AnotherExampleButton />
         </div>
       </div>
     </div>
+    </ThemeProvider>
   );
 };
 
@@ -403,5 +464,7 @@ TODO 24.05.2022:
 
 26.05.2022:
 - How is setdate updating the date? We don't even pass the date into it? Can we just pass anything into setdate? Like potatoes?
+- Ans: apparently the event is somehow being passed into implicitly I think
+
 
 */
