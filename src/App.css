@@ -3,21 +3,25 @@
 } */
 
 /* Here are the css variables I can use for global colors. This is equivalent to the html selector i.e. html { } */
-:root {
+/* Apparently css variables even work if you don't define them in the :root tag, you can just use var(--variable) and then reference
+it directly in the JS */
+
+/* :root {
   --main-color: #eb31b3;
   --second-color: #2764BA;
   --body-color: white;
-}
+} */
 
 h1 {
   color: coral;
 }
 
-.ExampleButton {
-  color: "red";
-  height: "100px";
-  width: "200px";
-  border: "20px solid";
+.exampleButton {
+  font-size: 10px;
+  color: red;
+  height: 100px;
+  width: 200px;
+  border: 10px solid;
   border-color: var(--second-color);
 }
 
@@ -64,6 +68,7 @@ h1 {
 .flexcontainer {
   display:flex;
 }
+
 .fixed {
   background-color:#fff;
   flex-basis: 25%;
@@ -234,6 +239,7 @@ h1 {
 .react-calendar__tile--hasActive:enabled:focus {
   background: #a9d4ff;
 }
+
 .react-calendar__tile--active {
   background: #006edc;
   color: white;
@@ -243,6 +249,7 @@ h1 {
   background: #1087ff;
   border: 5px solid;
   border-color: var(--main-color);
+  
 
 }
 .react-calendar--selectRange .react-calendar__tile--hover {

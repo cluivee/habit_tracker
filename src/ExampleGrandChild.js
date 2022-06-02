@@ -13,6 +13,7 @@ function GrandChild({anotherPropSetMsg}) {
       <input
         type="text"
         value={text}
+        // this bit is kind of clever as well
         onChange={(e) => setText(e.target.value)}
       />
       <button onClick={() => anotherPropSetMsg(text)}>Send message</button>

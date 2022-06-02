@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-// import Calendar from './Calendar'
+import MyCalendar from './MyCalendar'
 import Sidebar from "./Sidebar";
 import "./App.css";
 import Calendar from "react-calendar";
@@ -33,6 +33,9 @@ import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
+
+var r = document.querySelector(':root');
+
 const darkTheme = createTheme({
   palette: {
     // I can change this to light to change the theme
@@ -61,7 +64,6 @@ const StyledSlider = styled(Slider, {
 
 function DynamicCSS() {
   const [success, setSuccess] = useState(false);
-
   const handleChange = (event) => {
     console.log(event.target);
     console.log("Then checked is: " + event.target.checked);
@@ -87,25 +89,21 @@ function DynamicCSS() {
 }
 
 const AnotherExampleButton = () => {
-  const [buttonColor, setColor] = useState('#2764BA');
+  const [buttonColor, setColor] = useState("#2764BA");
 
   function changeButtonColors() {
-    buttonColor === '#2764BA' ? setColor('#eb31b3') : setColor('#2764BA')
-    document.documentElement.style.setProperty('--second-color', buttonColor);
+    buttonColor === "#2764BA" ? setColor("#eb31b3") : setColor("#2764BA");
+    // This is the second way of setting css variables in the :root, using querySelector
+    r.style.setProperty('--second-color', buttonColor);
   }
   return (
-    <button
-      style={{
-        color: "newColor",
-      }}
-      className="ExampleButton"
-      onClick={changeButtonColors}
-    >
-      Second Button
-    </button>
+    <div>
+      <button className="exampleButton" onClick={changeButtonColors}>
+        Second Button
+      </button>
+    </div>
   );
 };
-
 
 const BorderTestButton = () => {
   const [check, setCheck] = useState(true);
@@ -133,7 +131,6 @@ const BorderTestButton = () => {
         border: "5px solid",
         borderColor: borders,
       }}
-      className="btn btn-primary"
       onClick={changeButtonColors}
     >
       Click here
@@ -145,7 +142,7 @@ const BorderTestButton = () => {
 
 const FancyButton = () => {
   const initialState = "Next";
-  const [buttonText, setButtonText] = useState("Next"); 
+  const [buttonText, setButtonText] = useState("Next");
   //same as creating your state variable where "Next" is the default value for buttonText and setButtonText is the setter function for your state variable instead of setState
 
   // the effect
@@ -164,94 +161,98 @@ const FancyButton = () => {
   );
 };
 
-const JustMUIDrawer = ({ propSetParentInfo, propParentInfo, propCount, parentCallback }) => {
+const JustMUIDrawer = ({
+  propSetParentInfo,
+  propParentInfo,
+  propCount,
+  parentCallback,
+}) => {
   const [btnColor, setBtnColor] = useState("myColor");
   const [buttonText, setButtonText] = useState("Hello World");
   const [cssColor, setCSSColor] = useState("green");
-
 
   function childHandleChange(e) {
     console.log(e.target.value);
     this.props.onHandleChange(e.target.value);
   }
-
+// Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
   const handleClick = () => {
-    cssColor === 'green' ? setCSSColor('#eb31b3') : setCSSColor('green')
-    document.documentElement.style.setProperty('--main-color', cssColor);
-    console.log("--main-color value: " + document.documentElement.style.getPropertyValue('--main-color'));
+    cssColor === "green" ? setCSSColor("#eb31b3") : setCSSColor("green");
+    document.documentElement.style.setProperty("--main-color", cssColor);
+    console.log(
+      "--main-color value: " +
+        document.documentElement.style.getPropertyValue("--main-color")
+    );
     console.log(cssColor);
-
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Drawer
-        sx={{
-          // possible to change this to a percentage
+    <Drawer
+      sx={{
+        // possible to change this to a percentage
+        width: drawerWidth,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
           width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Toolbar />
-        <Divider />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-          {/* MUI button tutorial */}
+          boxSizing: "border-box",
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <Toolbar />
+      <Divider />
+      <List>
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {["All mail", "Trash", "Spam"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+        {/* MUI button tutorial */}
 
-          <Button
-            variant="outlined"
-            color="primary"
-            fullWidth
-            size="large"
-            style={{
-              maxHeight: "30px",
-              minHeight: "60px",
-              content: "Purple",
-            }}
-            // onClick={() => {
-            //   btnColor === "myColor" ? setBtnColor("myOtherColor") : setBtnColor("myColor");
-            //   buttonText === "Hello World"
-            //     ? setButtonText("Purple Active")
-            //     : setButtonText("Hello World");
-            // }}
-            onClick={handleClick}
-          >
-            We'll deal with this text later
-          </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          fullWidth
+          size="large"
+          style={{
+            maxHeight: "30px",
+            minHeight: "60px",
+            content: "Purple",
+          }}
+          // onClick={() => {
+          //   btnColor === "myColor" ? setBtnColor("myOtherColor") : setBtnColor("myColor");
+          //   buttonText === "Hello World"
+          //     ? setButtonText("Purple Active")
+          //     : setButtonText("Hello World");
+          // }}
+          onClick={handleClick}
+        >
+          We'll deal with this text later
+        </Button>
 
-          <Counter parentCallback={parentCallback} />
-        </List>
-      </Drawer>
-    </ThemeProvider>
+        <Counter parentCallback={parentCallback} />
+      </List>
+    </Drawer>
   );
 };
 
@@ -356,51 +357,53 @@ const App = () => {
   const callback = useCallback((newCount) => {
     setNewCount(newCount);
   }, []);
-  
-  
+
   const [msg, setMsg] = useState("Initial Message");
 
   const [parentInfo, setParentInfo] = useState(true);
 
   return (
     <ThemeProvider theme={darkTheme}>
-    <div className="App">
-      <h1 className="text-center">React Calendar with Range</h1>
-      <div class="flexcontainer">
-        {/* <div id="leftSidebar" className="fixed"> </div> */}
-        <JustMUIDrawer
-          parentCallback={callback}
-          className="fixed"
-          myColorState={myColorState}
-          propSetParentInfo={setParentInfo}
-          propParentInfo={parentInfo}
-        />
-        <div className="flex-item">
-          <TheCalendarContainer />
-          <StyledSlider
-            success={success}
-            onHandleChange={handleChange}
-            defaultValue={30}
+      <div className="App">
+        <h1 className="text-center">React Calendar with Range</h1>
+        <div class="flexcontainer">
+          {/* <div id="leftSidebar" className="fixed"> </div> */}
+          <JustMUIDrawer
+            parentCallback={callback}
+            className="fixed"
+            myColorState={myColorState}
+            propSetParentInfo={setParentInfo}
             propParentInfo={parentInfo}
-            sx={{ mt: 1 }}
           />
-          <Sidebar habits={habits} />
-          <BorderTestButton />
-          <DynamicCSS />
-          <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
-            <h1>I'm the parent, here's your message:</h1>
-            <h1>{msg}</h1>
-            <ExampleChild propSetMsg={setMsg} />
+          <div className="flex-item">
+            {/* <TheCalendarContainer /> */}
+            <MyCalendar />
+            <StyledSlider
+              success={success}
+              onHandleChange={handleChange}
+              defaultValue={30}
+              propParentInfo={parentInfo}
+              sx={{ mt: 1 }}
+            />
+            <Sidebar habits={habits} />
+            <BorderTestButton />
+            <DynamicCSS />
+            <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
+              <h1>I'm the parent, here's your message:</h1>
+              <h1>{msg}</h1>
+              <ExampleChild propSetMsg={setMsg} />
+            </div>
+            <AnotherExampleButton />
           </div>
-          <AnotherExampleButton />
         </div>
       </div>
-    </div>
     </ThemeProvider>
   );
 };
 
 export default App;
+
+
 
 /*
 Notes on React Habit Tracker Project
