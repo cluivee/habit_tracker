@@ -175,6 +175,7 @@ const JustMUIDrawer = ({
     console.log(e.target.value);
     this.props.onHandleChange(e.target.value);
   }
+
 // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
   const handleClick = () => {
     cssColor === "green" ? setCSSColor("#eb31b3") : setCSSColor("green");
@@ -362,11 +363,13 @@ const App = () => {
 
   const [parentInfo, setParentInfo] = useState(true);
 
+  const [calendarDateText, setCalendarDateText] = useState("Date Label");
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className="App">
         <h1 className="text-center">React Calendar with Range</h1>
-        <div class="flexcontainer">
+        <div className="flexcontainer">
           {/* <div id="leftSidebar" className="fixed"> </div> */}
           <JustMUIDrawer
             parentCallback={callback}
@@ -377,7 +380,8 @@ const App = () => {
           />
           <div className="flex-item">
             {/* <TheCalendarContainer /> */}
-            <MyCalendar />
+            <MyCalendar propSetCalendarDateText={setCalendarDateText}/>
+            <h2 style={{color: "black"}}> {calendarDateText} </h2>
             <StyledSlider
               success={success}
               onHandleChange={handleChange}
