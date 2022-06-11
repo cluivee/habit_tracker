@@ -169,7 +169,8 @@ const JustMUIDrawer = ({
 }) => {
   const [btnColor, setBtnColor] = useState("myColor");
   const [buttonText, setButtonText] = useState("Hello World");
-  const [cssColor, setCSSColor] = useState("green");
+  const [cssColor, setCSSColor] = useState("#1affa0");
+  const [colorToggle, setColorToggle] = useState(false);
 
   function childHandleChange(e) {
     console.log(e.target.value);
@@ -177,8 +178,8 @@ const JustMUIDrawer = ({
   }
 
 // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
-  const handleClick = () => {
-    cssColor === "green" ? setCSSColor("#eb31b3") : setCSSColor("green");
+  const handleClick = (event) => {
+    cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
     document.documentElement.style.setProperty("--main-color", cssColor);
     console.log(
       "--main-color value: " +
@@ -186,6 +187,10 @@ const JustMUIDrawer = ({
     );
     console.log(cssColor);
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
+    event.target.style.content = "newtext";
+    event.target.style.backgroundColor = "green";
+
+
   };
 
   return (
@@ -238,7 +243,6 @@ const JustMUIDrawer = ({
           style={{
             maxHeight: "30px",
             minHeight: "60px",
-            content: "Purple",
           }}
           // onClick={() => {
           //   btnColor === "myColor" ? setBtnColor("myOtherColor") : setBtnColor("myColor");
@@ -246,11 +250,26 @@ const JustMUIDrawer = ({
           //     ? setButtonText("Purple Active")
           //     : setButtonText("Hello World");
           // }}
+          onClick={() => {
+            handleClick();
+            setButtonText("Selected")
+          }}
+        >
+          {buttonText}
+        </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          size="large"
+          style={{
+            maxHeight: "30px",
+            minHeight: "60px",
+          }}
           onClick={handleClick}
         >
-          We'll deal with this text later
+          {buttonText}
         </Button>
-
         <Counter parentCallback={parentCallback} />
       </List>
     </Drawer>

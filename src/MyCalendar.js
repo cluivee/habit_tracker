@@ -19,6 +19,8 @@ import {
 function MyCalendar({propSetCalendarDateText}) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [colorToggle, setColorToggle] = useState('green');
+
   const header = () => {
     const dateFormat = "MMMM yyyy";
     return (
@@ -68,10 +70,10 @@ function MyCalendar({propSetCalendarDateText}) {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = format(day, dateFormat);
+        // ok apparently cloneDay is necessary otherwise if we just passed in 'day' into the onDateClick method it would just be keep using the startDate which is at the beginning on the month
+      
         const cloneDay = day;
 
-        // console.log(cloneDay);
-        // console.log("to date: " + toDate(cloneDay));
         days.push(
           <div
             className={`column cell ${
@@ -82,7 +84,7 @@ function MyCalendar({propSetCalendarDateText}) {
                 : ""
             }`}
             key={day}
-            onClick={() => onDateClick(toDate(cloneDay))}
+            onClick={(e) => onDateClick(toDate(cloneDay), e)}
           >
             <span className="number">{formattedDate}</span>
             <span className="bg">{formattedDate}</span>
@@ -107,9 +109,18 @@ function MyCalendar({propSetCalendarDateText}) {
   const prevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
   };
-  const onDateClick = (day) => {
+
+  const onDateClick = (day, event) => {
+    console.log(day);
     setSelectedDate(day);
     propSetCalendarDateText(selectedDate.toString());
+    if (colorToggle === event.target.style.backgroundColor) {
+      event.target.style.backgroundColor = "#fff"
+    } else {
+      event.target.style.backgroundColor = "green"
+    }
+
+
   };
 
   return (

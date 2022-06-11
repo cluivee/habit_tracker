@@ -27,7 +27,8 @@
     --text-color-light: #ccc;	
     --border-color: #eee;	
     --bg-color: #f9f9f9;	
-    --neutral-color: #fff;	
+    --neutral-color: #fff;
+    --cell-color: #fff;
   }	
   
 /* GENERAL */
@@ -141,7 +142,7 @@ header {
   border-right: 1px solid var(--border-color);
   overflow: hidden;
   cursor: pointer;
-  background: var(--neutral-color);
+  background: var(--cell-color);
   transition: 0.25s ease-out;
 }
 
