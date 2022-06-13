@@ -20,6 +20,7 @@ import { ToggleButton } from "@mui/material";
 function MyCalendar({ propSetCalendarDateText }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+
   const [colorToggle, setColorToggle] = useState("green");
   const [addStyle, setAddStyle] = useState({});
 
@@ -31,25 +32,25 @@ function MyCalendar({ propSetCalendarDateText }) {
     // boxSizing: "content-box",
   };
 
-  // const MyToggleButton = ({ habits }) => {
-  //   return (
-  //     <div
-  //       className={`column cell ${
-  //         !isSameMonth(day, monthStart)
-  //           ? "disabled"
-  //           : isSameDay(day, selectedDate)
-  //           ? "selected"
-  //           : ""
-  //       }`}
-  //       key={day}
-  //       style={addStyle}
-  //       onClick={(e) => onDateClick(toDate(cloneDay), e)}
-  //     >
-  //       <span className="number">{formattedDate}</span>
-  //       <span className="bg">{formattedDate}</span>
-  //     </div>
-  //   );
-  // };
+  const MyToggleButton = ({ day, cloneDay, monthStart, formattedDate }) => {
+    return (
+      <div
+        className={`column cell ${
+          !isSameMonth(day, monthStart)
+            ? "disabled"
+            : isSameDay(day, selectedDate)
+            ? "selected"
+            : ""
+        }`}
+        key={day}
+        // style={{backgroundColor:'red'}}
+        onClick={(e) => onDateClick(toDate(cloneDay), e)}
+      >
+        <span className="number">{formattedDate}</span>
+        <span className="bg">{formattedDate}</span>
+      </div>
+    );
+  };
 
   const header = () => {
     const dateFormat = "MMMM yyyy";
@@ -84,7 +85,7 @@ function MyCalendar({ propSetCalendarDateText }) {
         </div>
       );
     }
-    return <div className="days row">{days}</div>;
+    return <div className="days row">{daysHeader}</div>;
   };
 
   const cells = () => {
@@ -106,27 +107,19 @@ function MyCalendar({ propSetCalendarDateText }) {
         const cloneDay = day;
 
         days.push(
-          <div
-        className={`column cell ${
-          !isSameMonth(day, monthStart)
-            ? "disabled"
-            : isSameDay(day, selectedDate)
-            ? "selected"
-            : ""
-        }`}
-        key={day}
-        style={addStyle}
-        onClick={(e) => onDateClick(toDate(cloneDay), e)}
-      >
-        <span className="number">{formattedDate}</span>
-        <span className="bg">{formattedDate}</span>
-      </div>
+        <MyToggleButton 
+          day={day}
+          cloneDay={cloneDay}
+          monthStart={monthStart}
+          formattedDate={formattedDate}
+        />
         );
         day = addDays(day, 1);
       }
       rows.push(
         <div className="row" key={day}>
-          {" "}{days}{" "}
+          {" "}
+          {days}{" "}
         </div>
       );
       days = [];
@@ -142,7 +135,7 @@ function MyCalendar({ propSetCalendarDateText }) {
   };
 
   const onDateClick = (day, event) => {
-    setAddStyle(elementStyle);
+
     console.log(day);
     setSelectedDate(day);
     propSetCalendarDateText(selectedDate.toString());
