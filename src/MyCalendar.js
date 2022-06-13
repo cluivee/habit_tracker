@@ -14,12 +14,42 @@ import {
   isSameDay,
   toDate,
 } from "date-fns";
+import { ToggleButton } from "@mui/material";
 
 // const MyCalendar = ({propSetCalendarDateText,}) => {
-function MyCalendar({propSetCalendarDateText}) {
+function MyCalendar({ propSetCalendarDateText }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [colorToggle, setColorToggle] = useState('green');
+  const [colorToggle, setColorToggle] = useState("green");
+  const [addStyle, setAddStyle] = useState({});
+
+  const elementStyle = {
+    // width: "100%",
+    backgroundColor: "#000",
+    // color: "#404040",
+    // padding: "8px 15px",
+    // boxSizing: "content-box",
+  };
+
+  // const MyToggleButton = ({ habits }) => {
+  //   return (
+  //     <div
+  //       className={`column cell ${
+  //         !isSameMonth(day, monthStart)
+  //           ? "disabled"
+  //           : isSameDay(day, selectedDate)
+  //           ? "selected"
+  //           : ""
+  //       }`}
+  //       key={day}
+  //       style={addStyle}
+  //       onClick={(e) => onDateClick(toDate(cloneDay), e)}
+  //     >
+  //       <span className="number">{formattedDate}</span>
+  //       <span className="bg">{formattedDate}</span>
+  //     </div>
+  //   );
+  // };
 
   const header = () => {
     const dateFormat = "MMMM yyyy";
@@ -42,12 +72,13 @@ function MyCalendar({propSetCalendarDateText}) {
     );
   };
 
+  // This is the header bar for days of the week
   const days = () => {
     const dateFormat = "iii";
-    const days = [];
+    const daysHeader = [];
     let startDate = startOfWeek(currentDate);
     for (let i = 0; i < 7; i++) {
-      days.push(
+      daysHeader.push(
         <div className="column col-center" key={i}>
           {format(addDays(startDate, i), dateFormat)}
         </div>
@@ -70,32 +101,32 @@ function MyCalendar({propSetCalendarDateText}) {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = format(day, dateFormat);
+
         // ok apparently cloneDay is necessary otherwise if we just passed in 'day' into the onDateClick method it would just be keep using the startDate which is at the beginning on the month
-      
         const cloneDay = day;
 
         days.push(
           <div
-            className={`column cell ${
-              !isSameMonth(day, monthStart)
-                ? "disabled"
-                : isSameDay(day, selectedDate)
-                ? "selected"
-                : ""
-            }`}
-            key={day}
-            onClick={(e) => onDateClick(toDate(cloneDay), e)}
-          >
-            <span className="number">{formattedDate}</span>
-            <span className="bg">{formattedDate}</span>
-          </div>
+        className={`column cell ${
+          !isSameMonth(day, monthStart)
+            ? "disabled"
+            : isSameDay(day, selectedDate)
+            ? "selected"
+            : ""
+        }`}
+        key={day}
+        style={addStyle}
+        onClick={(e) => onDateClick(toDate(cloneDay), e)}
+      >
+        <span className="number">{formattedDate}</span>
+        <span className="bg">{formattedDate}</span>
+      </div>
         );
         day = addDays(day, 1);
       }
       rows.push(
         <div className="row" key={day}>
-          {" "}
-          {days}{" "}
+          {" "}{days}{" "}
         </div>
       );
       days = [];
@@ -111,16 +142,18 @@ function MyCalendar({propSetCalendarDateText}) {
   };
 
   const onDateClick = (day, event) => {
+    setAddStyle(elementStyle);
     console.log(day);
     setSelectedDate(day);
     propSetCalendarDateText(selectedDate.toString());
-    if (colorToggle === event.target.style.backgroundColor) {
-      event.target.style.backgroundColor = "#fff"
-    } else {
-      event.target.style.backgroundColor = "green"
-    }
+    event.target.classList.add("myClass");
 
-
+    // if (document.documentElement.style.getPropertyValue("--toggled-color") === event.target.style.backgroundColor) {
+    //   event.target.style.backgroundColor = "#fff"
+    // } else {
+    //   console.log(document.documentElement.style.getPropertyValue("--toggled-color"))
+    //   event.target.style.backgroundColor = document.documentElement.style.getPropertyValue("--toggled-color")
+    // }
   };
 
   return (
@@ -130,6 +163,6 @@ function MyCalendar({propSetCalendarDateText}) {
       <div>{cells()}</div>
     </div>
   );
-};
+}
 
 export default MyCalendar;

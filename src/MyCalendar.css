@@ -29,6 +29,7 @@
     --bg-color: #f9f9f9;	
     --neutral-color: #fff;
     --cell-color: #fff;
+    --toggled-color: #fff;
   }	
   
 /* GENERAL */
@@ -212,5 +213,9 @@ header {
   flex-grow: 0;
   flex-basis: calc(100% / 7);
   width: calc(100% / 7);
+}
+
+.myClass{
+  background: blue;
 }
 

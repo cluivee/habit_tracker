@@ -27,12 +27,11 @@ import MailIcon from "@mui/icons-material/Mail";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-// Imports for dynamic css slider
+// Imports for mui dynamic css slider
 import { alpha, styled } from "@mui/material/styles";
 import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-
 
 var r = document.querySelector(':root');
 
@@ -168,7 +167,8 @@ const JustMUIDrawer = ({
   parentCallback,
 }) => {
   const [btnColor, setBtnColor] = useState("myColor");
-  const [buttonText, setButtonText] = useState("Hello World");
+  const [buttonText, setButtonText] = useState("Not Selected");
+  const [button2Text, setButton2Text] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
   const [colorToggle, setColorToggle] = useState(false);
 
@@ -180,19 +180,31 @@ const JustMUIDrawer = ({
 // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
   const handleClick = (event) => {
     cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
+    buttonText === "Selected" ? setButtonText("Not Selected") : setButtonText("Selected")
     document.documentElement.style.setProperty("--main-color", cssColor);
+    document.documentElement.style.setProperty("--toggled-color", "blue");
     console.log(
       "--main-color value: " +
         document.documentElement.style.getPropertyValue("--main-color")
     );
     console.log(cssColor);
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
-    event.target.style.content = "newtext";
-    event.target.style.backgroundColor = "green";
-
 
   };
 
+  const handle2Click = (event) => {
+    cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
+    button2Text === "Selected" ? setButton2Text("Not Selected") : setButton2Text("Selected")
+    document.documentElement.style.setProperty("--main-color", cssColor);
+    document.documentElement.style.setProperty("--toggled-color", "purple");
+    console.log(
+      "--main-color value: " +
+        document.documentElement.style.getPropertyValue("--main-color")
+    );
+    console.log(cssColor);
+    propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
+
+  };
   return (
     <Drawer
       sx={{
@@ -250,10 +262,7 @@ const JustMUIDrawer = ({
           //     ? setButtonText("Purple Active")
           //     : setButtonText("Hello World");
           // }}
-          onClick={() => {
-            handleClick();
-            setButtonText("Selected")
-          }}
+          onClick={handleClick}
         >
           {buttonText}
         </Button>
@@ -266,9 +275,9 @@ const JustMUIDrawer = ({
             maxHeight: "30px",
             minHeight: "60px",
           }}
-          onClick={handleClick}
+          onClick={handle2Click}
         >
-          {buttonText}
+          {button2Text}
         </Button>
         <Counter parentCallback={parentCallback} />
       </List>
