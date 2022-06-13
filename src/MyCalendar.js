@@ -18,21 +18,48 @@ import { ToggleButton } from "@mui/material";
 
 // const MyCalendar = ({propSetCalendarDateText,}) => {
 function MyCalendar({ propSetCalendarDateText }) {
+ 
+
+  const buttonStyle = {
+    backgroundColor: "#fff",
+  };
+
+  const otherStyle = {
+    backgroundColor: "green",
+  };
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [colorToggle, setColorToggle] = useState("green");
   const [addStyle, setAddStyle] = useState({});
 
-  const elementStyle = {
-    // width: "100%",
-    backgroundColor: "#000",
-    // color: "#404040",
-    // padding: "8px 15px",
-    // boxSizing: "content-box",
-  };
+  
 
   const MyToggleButton = ({ day, cloneDay, monthStart, formattedDate }) => {
+    const [buttonState, setButtonState] = useState(true);
+
+    const onDateClick = (day, event) => {
+      // setButtonState(false);
+      console.log(buttonState);
+      console.log(day);
+      setSelectedDate(day);
+      propSetCalendarDateText(selectedDate.toString());
+      // event.target.classList.add("myClass");
+  
+      // if (document.documentElement.style.getPropertyValue("--toggled-color") === event.target.style.backgroundColor) {
+      //   event.target.style.backgroundColor = "#fff"
+      // } else {
+      //   console.log(document.documentElement.style.getPropertyValue("--toggled-color"))
+      //   event.target.style.backgroundColor = document.documentElement.style.getPropertyValue("--toggled-color")
+      // }
+    };
+
+    const overClick = (day, e) => {
+      onDateClick(toDate(cloneDay), e);
+      setButtonState(false);
+    }
+
     return (
       <div
         className={`column cell ${
@@ -42,10 +69,17 @@ function MyCalendar({ propSetCalendarDateText }) {
             ? "selected"
             : ""
         }`}
+
+        // className="column cell"
+
         key={day}
-        // style={{backgroundColor:'red'}}
-        onClick={(e) => onDateClick(toDate(cloneDay), e)}
-      >
+        // style={buttonState ? buttonStyle : otherStyle}
+        style={{backgroundColor: `${buttonState ? "#fff" : "pink"}`}}
+
+        // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
+        // () => setButtonState(!buttonState)
+        onClick={(e) => overClick(toDate(cloneDay),e)}
+        >
         <span className="number">{formattedDate}</span>
         <span className="bg">{formattedDate}</span>
       </div>
@@ -107,21 +141,21 @@ function MyCalendar({ propSetCalendarDateText }) {
         const cloneDay = day;
 
         days.push(
-        <MyToggleButton 
-          day={day}
-          cloneDay={cloneDay}
-          monthStart={monthStart}
-          formattedDate={formattedDate}
-        />
+          <MyToggleButton
+            day={day}
+            cloneDay={cloneDay}
+            monthStart={monthStart}
+            formattedDate={formattedDate}
+          />
         );
         day = addDays(day, 1);
       }
       rows.push(
         <div className="row" key={day}>
-          {" "}
-          {days}{" "}
+        {days}
         </div>
       );
+      console.log("refreshing rows")
       days = [];
     }
     return <div className="body">{rows}</div>;
@@ -134,21 +168,7 @@ function MyCalendar({ propSetCalendarDateText }) {
     setCurrentDate(subMonths(currentDate, 1));
   };
 
-  const onDateClick = (day, event) => {
-
-    console.log(day);
-    setSelectedDate(day);
-    propSetCalendarDateText(selectedDate.toString());
-    event.target.classList.add("myClass");
-
-    // if (document.documentElement.style.getPropertyValue("--toggled-color") === event.target.style.backgroundColor) {
-    //   event.target.style.backgroundColor = "#fff"
-    // } else {
-    //   console.log(document.documentElement.style.getPropertyValue("--toggled-color"))
-    //   event.target.style.backgroundColor = document.documentElement.style.getPropertyValue("--toggled-color")
-    // }
-  };
-
+  
   return (
     <div className="calendar">
       <div>{header()}</div>
