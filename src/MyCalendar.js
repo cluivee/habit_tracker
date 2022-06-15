@@ -29,27 +29,30 @@ function MyCalendar({ propSetCalendarDateText }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   // date we have most recently clicked on
-  
 
   const [addStyle, setAddStyle] = useState({});
 
   // MyToggleButton component
-  const MyToggleButton = memo(
+  const MyToggleButton =
     ({ day, cloneDay, monthStart, formattedDate }) => {
       const [buttonState, setButtonState] = useState(true);
       const [selectedDate, setSelectedDate] = useState(new Date());
 
       const onDateClick = (dayToChange, event) => {
+        console.log(buttonState);
+
         setButtonState(!buttonState);
 
-        // console.log(buttonState);
-        // console.log(day);
-        // console.log(cloneDay);
-        // console.log(currentDate);
+        console.log(buttonState);
+        console.log(cloneDay);
+        
+        console.log(currentDate);
 
         setSelectedDate(dayToChange);
 
-        propSetCalendarDateText(selectedDate.toString());
+        console.log(selectedDate);
+
+        // propSetCalendarDateText(selectedDate.toString());
         // event.target.classList.add("myClass");
 
         // if (document.documentElement.style.getPropertyValue("--toggled-color") === event.target.style.backgroundColor) {
@@ -65,13 +68,13 @@ function MyCalendar({ propSetCalendarDateText }) {
           className={`column cell ${
             !isSameMonth(day, monthStart)
               ? "disabled"
-              : isSameDay(day, selectedDate)
+              : isSameDay(day, currentDate)
               ? "selected"
               : ""
           }`}
           key={day}
           // style={buttonState ? buttonStyle : otherStyle}
-          style={{ backgroundColor: `${buttonState ? "#fff" : "pink"}` }}
+          style={{ backgroundColor: `${buttonState ? "#fff" : "pink"}`, borderColor: `${buttonState ? "#fff" : "red"}` }}
           // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
           // () => setButtonState(!buttonState)
           onClick={(e) => onDateClick(toDate(cloneDay), e)}
@@ -80,8 +83,7 @@ function MyCalendar({ propSetCalendarDateText }) {
           <span className="bg">{formattedDate}</span>
         </div>
       );
-    }
-  );
+    };
 
   const header = () => {
     const dateFormat = "MMMM yyyy";
