@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, memo } from "react";
+import React, { Component, useState, useEffect, useCallback, memo } from "react";
 import "./MyCalendar.css";
 
 import {
@@ -27,28 +27,32 @@ function MyCalendar({ propSetCalendarDateText }) {
   };
 
   const [currentDate, setCurrentDate] = useState(new Date());
-
-  // date we have most recently clicked on
-
   const [addStyle, setAddStyle] = useState({});
 
+
   // MyToggleButton component
-  const MyToggleButton = ({ day, cloneDay, monthStart, formattedDate }) => {
+  const MyToggleButton = memo(({ day, cloneDay, monthStart, formattedDate, propSetClickedDay, propClickedDay }) => {
     const [buttonState, setButtonState] = useState(true);
+
+    // date we have most recently clicked on
     const [selectedDate, setSelectedDate] = useState(new Date());
+    
+    // I'm using useEffect but actually it's not necessary at this point after I memo'd MyCalendar. I could just call 
+    // propSetCalendarDateText in the onClick method and it would still work
 
     useEffect(() => {
       propSetCalendarDateText(selectedDate.toString());
-    });
+    }, [selectedDate, propClickedDay]);
 
     const onDateClick = (dayToChange, event) => {
-      console.log(buttonState);
 
       setButtonState(!buttonState);
 
-      console.log(buttonState);
-      console.log(cloneDay);
-      console.log(currentDate);
+      propSetClickedDay(dayToChange);
+
+      console.log("clickedDay: " + propClickedDay);
+      console.log("cloneDay: " + cloneDay);
+      console.log("currentDate: " + currentDate);
 
       setSelectedDate(dayToChange);
 
@@ -88,7 +92,7 @@ function MyCalendar({ propSetCalendarDateText }) {
         <span className="bg">{formattedDate}</span>
       </div>
     );
-  };
+  });
 
   const header = () => {
     const dateFormat = "MMMM yyyy";
@@ -126,7 +130,7 @@ function MyCalendar({ propSetCalendarDateText }) {
     return <div className="days row">{daysHeader}</div>;
   };
 
-  const cells = () => {
+  const Cells = memo(() => {
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(monthStart);
     const startDate = startOfWeek(monthStart);
@@ -136,6 +140,8 @@ function MyCalendar({ propSetCalendarDateText }) {
     let days = [];
     let day = startDate;
     let formattedDate = "";
+
+    const [clickedDay, setClickedDay] = useState(new Date());
 
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
@@ -150,6 +156,8 @@ function MyCalendar({ propSetCalendarDateText }) {
               cloneDay={cloneDay}
               monthStart={monthStart}
               formattedDate={formattedDate}
+              propSetClickedDay={setClickedDay}
+              propClickedDay={clickedDay}
             />
         );
         day = addDays(day, 1);
@@ -163,7 +171,7 @@ function MyCalendar({ propSetCalendarDateText }) {
       days = [];
     }
     return <div className="body">{rows}</div>;
-  };
+  });
 
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
@@ -176,11 +184,12 @@ function MyCalendar({ propSetCalendarDateText }) {
     <div className="calendar">
       <div>{header()}</div>
       <div>{days()}</div>
-      <div>{cells()}</div>
+
+      <div>{<Cells/>}</div>
     </div>
   );
 }
 
 export const MemoCalendar = memo(MyCalendar);
 
-// export default MyCalendar;
+export default MyCalendar;

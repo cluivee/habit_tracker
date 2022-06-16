@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import {MyCalendar, MemoCalendar} from './MyCalendar'
+import MyCalendar, {MemoCalendar} from './MyCalendar'
 import Sidebar from "./Sidebar";
 import "./App.css";
 import Calendar from "react-calendar";
