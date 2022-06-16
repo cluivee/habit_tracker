@@ -181,4 +181,6 @@ function MyCalendar({ propSetCalendarDateText }) {
   );
 }
 
-export default MyCalendar;
+export const MemoCalendar = memo(MyCalendar);
+
+// export default MyCalendar;

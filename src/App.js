@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import MyCalendar from './MyCalendar'
+import {MyCalendar, MemoCalendar} from './MyCalendar'
 import Sidebar from "./Sidebar";
 import "./App.css";
 import Calendar from "react-calendar";
@@ -408,7 +408,7 @@ const App = () => {
           />
           <div className="flex-item">
             {/* <TheCalendarContainer /> */}
-            <MyCalendar propSetCalendarDateText={setCalendarDateText}/>
+            <MemoCalendar propSetCalendarDateText={setCalendarDateText}/>
             <h2 style={{color: "black"}}> {calendarDateText} </h2>
             <StyledSlider
               success={success}
