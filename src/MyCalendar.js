@@ -1,4 +1,10 @@
-import React, { Component, useState, useEffect, useCallback, memo } from "react";
+import React, {
+  Component,
+  useState,
+  useEffect,
+  useCallback,
+  memo,
+} from "react";
 import "./MyCalendar.css";
 
 import {
@@ -16,8 +22,19 @@ import {
 } from "date-fns";
 import { ToggleButton } from "@mui/material";
 
+var r = document.querySelector(":root");
+
+console.log(
+  "--main-color value: " +
+    document.documentElement.style.getPropertyValue("--main-color")
+);
+
 // const MyCalendar = ({propSetCalendarDateText,}) => {
-function MyCalendar({ propSetCalendarDateText }) {
+function MyCalendar({
+  propSetCalendarDateText,
+  propSetDatesDict,
+  propDatesDict,
+}) {
   const buttonStyle = {
     backgroundColor: "#fff",
   };
@@ -29,70 +46,102 @@ function MyCalendar({ propSetCalendarDateText }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [addStyle, setAddStyle] = useState({});
 
+  let intermediateDict = {...propDatesDict };
+  let newDict = {};
 
   // MyToggleButton component
-  const MyToggleButton = memo(({ day, cloneDay, monthStart, formattedDate, propSetClickedDay, propClickedDay }) => {
-    const [buttonState, setButtonState] = useState(true);
+  const MyToggleButton = memo(
+    ({
+      day,
+      cloneDay,
+      monthStart,
+      formattedDate,
+      propSetClickedDay,
+      propClickedDay,
+    }) => {
+      const [buttonState, setButtonState] = useState(true);
 
-    // date we have most recently clicked on
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    
-    // I'm using useEffect but actually it's not necessary at this point after I memo'd MyCalendar. I could just call 
-    // propSetCalendarDateText in the onClick method and it would still work
+      // date we have most recently clicked on
+      const [selectedDate, setSelectedDate] = useState(new Date());
 
-    useEffect(() => {
-      propSetCalendarDateText(selectedDate.toString());
-    }, [selectedDate, propClickedDay]);
+      // I'm using useEffect but actually it's not necessary at this point after I memo'd MyCalendar. I could just call
+      // propSetCalendarDateText in the onClick method and it would still work
 
-    const onDateClick = (dayToChange, event) => {
+      useEffect(() => {
+        propSetCalendarDateText(selectedDate.toString());
+      }, [selectedDate, propClickedDay]);
 
-      setButtonState(!buttonState);
+      const onDateClick = (dayToChange, event) => {
+        if (buttonState === false) {
+          console.log("unclicked");
+          // delete intermediateDict[day];
+        }
 
-      propSetClickedDay(dayToChange);
+        if (intermediateDict.hasOwnProperty(day)) {
+          delete intermediateDict[day];
+          console.log("deleted");
+        } else {
+          intermediateDict[day] = 1;
+        }
+        console.log(intermediateDict);
 
-      console.log("clickedDay: " + propClickedDay);
-      console.log("cloneDay: " + cloneDay);
-      console.log("currentDate: " + currentDate);
+        setButtonState(!buttonState);
 
-      setSelectedDate(dayToChange);
+        propSetClickedDay(dayToChange);
 
-      console.log(selectedDate);
+        console.log("clickedDay: " + propClickedDay);
+        console.log("cloneDay: " + cloneDay);
+        console.log("currentDate: " + currentDate);
 
-      // propSetCalendarDateText(selectedDate.toString());
-      // event.target.classList.add("myClass");
+        setSelectedDate(dayToChange);
 
-      // if (document.documentElement.style.getPropertyValue("--toggled-color") === event.target.style.backgroundColor) {
-      //   event.target.style.backgroundColor = "#fff"
-      // } else {
-      //   console.log(document.documentElement.style.getPropertyValue("--toggled-color"))
-      //   event.target.style.backgroundColor = document.documentElement.style.getPropertyValue("--toggled-color")
-      // }
-    };
+        console.log(selectedDate);
+        console.log(
+          getComputedStyle(document.body).getPropertyValue("--toggled-color")
+        );
 
-    return (
-      <div
-        className={`column cell ${
-          !isSameMonth(day, monthStart)
-            ? "disabled"
-            : isSameDay(day, currentDate)
-            ? "selected"
-            : ""
-        }`}
-        key={day}
-        // style={buttonState ? buttonStyle : otherStyle}
-        style={{
-          backgroundColor: `${buttonState ? "#fff" : "pink"}`,
-          borderColor: `${buttonState ? "#fff" : "red"}`,
-        }}
-        // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
-        // () => setButtonState(!buttonState)
-        onClick={(e) => onDateClick(toDate(cloneDay), e)}
-      >
-        <span className="number">{formattedDate}</span>
-        <span className="bg">{formattedDate}</span>
-      </div>
-    );
-  });
+        // propSetCalendarDateText(selectedDate.toString());
+        // event.target.classList.add("myClass");
+
+        // if (document.documentElement.style.getPropertyValue("--toggled-color") === event.target.style.backgroundColor) {
+        //   event.target.style.backgroundColor = "#fff"
+        // } else {
+        //   console.log(document.documentElement.style.getPropertyValue("--toggled-color"))
+        //   event.target.style.backgroundColor = document.documentElement.style.getPropertyValue("--toggled-color")
+        // }
+      };
+
+      return (
+        <div
+          className={`column cell ${
+            !isSameMonth(day, monthStart)
+              ? "disabled"
+              : isSameDay(day, currentDate)
+              ? "selected"
+              : ""
+          }`}
+          key={day}
+          // style={buttonState ? buttonStyle : otherStyle}
+          style={{
+            backgroundColor: `${
+              buttonState
+                ? "#fff"
+                : getComputedStyle(document.body).getPropertyValue(
+                    "--toggled-color"
+                  )
+            }`,
+            borderColor: `${buttonState ? "#fff" : "red"}`,
+          }}
+          // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
+          // () => setButtonState(!buttonState)
+          onClick={(e) => onDateClick(toDate(cloneDay), e)}
+        >
+          <span className="number">{formattedDate}</span>
+          <span className="bg">{formattedDate}</span>
+        </div>
+      );
+    }
+  );
 
   const header = () => {
     const dateFormat = "MMMM yyyy";
@@ -151,15 +200,17 @@ function MyCalendar({ propSetCalendarDateText }) {
         const cloneDay = day;
 
         days.push(
-            <MyToggleButton
-              day={day}
-              cloneDay={cloneDay}
-              monthStart={monthStart}
-              formattedDate={formattedDate}
-              propSetClickedDay={setClickedDay}
-              propClickedDay={clickedDay}
-            />
+          <MyToggleButton
+            day={day}
+            key={day}
+            cloneDay={cloneDay}
+            monthStart={monthStart}
+            formattedDate={formattedDate}
+            propSetClickedDay={setClickedDay}
+            propClickedDay={clickedDay}
+          />
         );
+
         day = addDays(day, 1);
       }
       rows.push(
@@ -170,6 +221,7 @@ function MyCalendar({ propSetCalendarDateText }) {
       console.log("refreshing rows");
       days = [];
     }
+    // propSetDatesArray(intermediateArray);
     return <div className="body">{rows}</div>;
   });
 
@@ -185,7 +237,7 @@ function MyCalendar({ propSetCalendarDateText }) {
       <div>{header()}</div>
       <div>{days()}</div>
 
-      <div>{<Cells/>}</div>
+      <div>{<Cells />}</div>
     </div>
   );
 }

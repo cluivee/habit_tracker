@@ -29,7 +29,7 @@
     --bg-color: #f9f9f9;	
     --neutral-color: #fff;
     --cell-color: #fff;
-    --toggled-color: #fff;
+    --toggled-color: #000;
   }	
   
 /* GENERAL */
@@ -215,7 +215,7 @@ header {
   width: calc(100% / 7);
 }
 
-.myClass{
+/* .myClass{
   background: blue;
-}
+} */
 

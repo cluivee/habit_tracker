@@ -371,6 +371,7 @@ const App = () => {
   }, []); // Empty array means nothing to watch, so only runs once
 
   const [myColorState, setmyColorState] = useState("#ffa726");
+
   const changeColor = () => {
     setmyColorState("#3700B3");
   };
@@ -393,6 +394,8 @@ const App = () => {
 
   const [calendarDateText, setCalendarDateText] = useState("Date Label");
 
+  const [datesDict, setDatesDict] = useState({});
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className="App">
@@ -408,7 +411,7 @@ const App = () => {
           />
           <div className="flex-item">
             {/* <TheCalendarContainer /> */}
-            <MemoCalendar propSetCalendarDateText={setCalendarDateText}/>
+            <MemoCalendar propSetCalendarDateText={setCalendarDateText} propSetDatesDict={setDatesDict} propdatesDict={datesDict}/>
             <h2 style={{color: "black"}}> {calendarDateText} </h2>
             <StyledSlider
               success={success}
