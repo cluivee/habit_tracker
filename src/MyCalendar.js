@@ -32,8 +32,13 @@ console.log(
 // const MyCalendar = ({propSetCalendarDateText,}) => {
 function MyCalendar({
   propSetCalendarDateText,
-  propSetDatesDict,
-  propDatesDict,
+  propSetActiveDict,
+  propCurrentColor,
+  propActiveDict,
+  propSetOrigDict,
+  propSetBlueDict,
+  propSetPurpleDict,
+  propCurrentDict,
 }) {
   const buttonStyle = {
     backgroundColor: "#fff",
@@ -46,8 +51,7 @@ function MyCalendar({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [addStyle, setAddStyle] = useState({});
 
-  let intermediateDict = {...propDatesDict };
-  let newDict = {};
+  let intermediateDict = { ...propActiveDict };
 
   // MyToggleButton component
   const MyToggleButton = memo(
@@ -66,23 +70,31 @@ function MyCalendar({
 
       // I'm using useEffect but actually it's not necessary at this point after I memo'd MyCalendar. I could just call
       // propSetCalendarDateText in the onClick method and it would still work
-
       useEffect(() => {
         propSetCalendarDateText(selectedDate.toString());
       }, [selectedDate, propClickedDay]);
 
       const onDateClick = (dayToChange, event) => {
-        if (buttonState === false) {
-          console.log("unclicked");
-          // delete intermediateDict[day];
-        }
-
         if (intermediateDict.hasOwnProperty(day)) {
           delete intermediateDict[day];
-          console.log("deleted");
         } else {
           intermediateDict[day] = 1;
         }
+
+        propSetActiveDict(intermediateDict);
+
+        // if (intermediateDict.currentColor.indexOf(day) > -1) {
+        //   intermediateDict.currentColor.splice(
+        //     intermediateDict.currentColor.indexOf(day)
+        //   );
+        //   console.log("deleted");
+        // } else {
+        //   if (daysArray.indexOf(day) === -1) {
+        //     daysArray.push(day);
+
+        //   }
+        //   intermediateDict[currentColor] = daysArray;
+        // }
         console.log(intermediateDict);
 
         setButtonState(!buttonState);
@@ -121,10 +133,23 @@ function MyCalendar({
               : ""
           }`}
           key={day}
+          // originally doing it by changing a custom style
           // style={buttonState ? buttonStyle : otherStyle}
+
+          // then doing it based off a boolean state value
+          // style={{
+          //   backgroundColor: `${
+          //     buttonState
+          //       ? "#fff"
+          //       : getComputedStyle(document.body).getPropertyValue(
+          //           "--toggled-color"
+          //         )
+          //   }`,
+
+          // now doing it based on if it exists in the dict or not
           style={{
             backgroundColor: `${
-              buttonState
+              propActiveDict.hasOwnProperty(day)
                 ? "#fff"
                 : getComputedStyle(document.body).getPropertyValue(
                     "--toggled-color"
@@ -227,6 +252,16 @@ function MyCalendar({
 
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
+    if (propCurrentDict === 'orig') {
+      propSetOrigDict(intermediateDict);
+      propSetActiveDict(intermediateDict);
+    } else if (propCurrentDict === 'blue') {
+      propSetBlueDict(intermediateDict);
+      propSetActiveDict(intermediateDict);
+    } else if (propCurrentDict === 'purple') {
+      propSetPurpleDict(intermediateDict);
+      propSetActiveDict(intermediateDict);
+    }
   };
   const prevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));

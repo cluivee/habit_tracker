@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import MyCalendar, {MemoCalendar} from './MyCalendar'
+import MyCalendar, { MemoCalendar } from "./MyCalendar";
 import Sidebar from "./Sidebar";
 import "./App.css";
 import Calendar from "react-calendar";
@@ -33,7 +33,7 @@ import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
-var r = document.querySelector(':root');
+var r = document.querySelector(":root");
 
 const darkTheme = createTheme({
   palette: {
@@ -93,7 +93,7 @@ const AnotherExampleButton = () => {
   function changeButtonColors() {
     buttonColor === "#2764BA" ? setColor("#eb31b3") : setColor("#2764BA");
     // This is the second way of setting css variables in the :root, using querySelector
-    r.style.setProperty('--second-color', buttonColor);
+    r.style.setProperty("--second-color", buttonColor);
   }
   return (
     <div>
@@ -165,6 +165,12 @@ const JustMUIDrawer = ({
   propParentInfo,
   propCount,
   parentCallback,
+  propSetCurrentColor,
+  propSetActiveDict,
+  propOrigDict,
+  propBlueDict,
+  propPurpleDict,
+  propSetCurrentDict,
 }) => {
   const [btnColor, setBtnColor] = useState("myColor");
   const [buttonText, setButtonText] = useState("Not Selected");
@@ -177,10 +183,12 @@ const JustMUIDrawer = ({
     this.props.onHandleChange(e.target.value);
   }
 
-// Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
+  // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
   const handleClick = (event) => {
     cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
-    buttonText === "Selected" ? setButtonText("Not Selected") : setButtonText("Selected")
+    buttonText === "Selected"
+      ? setButtonText("Not Selected")
+      : setButtonText("Selected");
     document.documentElement.style.setProperty("--main-color", cssColor);
     document.documentElement.style.setProperty("--toggled-color", "blue");
     console.log(
@@ -189,12 +197,16 @@ const JustMUIDrawer = ({
     );
     console.log(cssColor);
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
-
+    propSetCurrentColor(cssColor);
+    propSetActiveDict(propBlueDict);
+    propSetCurrentDict('blue');
   };
 
   const handle2Click = (event) => {
     cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
-    button2Text === "Selected" ? setButton2Text("Not Selected") : setButton2Text("Selected")
+    button2Text === "Selected"
+      ? setButton2Text("Not Selected")
+      : setButton2Text("Selected");
     document.documentElement.style.setProperty("--main-color", cssColor);
     document.documentElement.style.setProperty("--toggled-color", "purple");
     console.log(
@@ -203,7 +215,9 @@ const JustMUIDrawer = ({
     );
     console.log(cssColor);
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
-
+    propSetCurrentColor(cssColor);
+    propSetActiveDict(propPurpleDict);
+    propSetCurrentDict('purple');
   };
   return (
     <Drawer
@@ -394,7 +408,14 @@ const App = () => {
 
   const [calendarDateText, setCalendarDateText] = useState("Date Label");
 
-  const [datesDict, setDatesDict] = useState({});
+  const [currentDict, setCurrentDict] = useState("orig");
+  const [origDict, setOrigDict] = useState({});
+  const [blueDict, setBlueDict] = useState({});
+  const [purpleDict, setPurpleDict] = useState({});
+
+  const [activeDict, setActiveDict] = useState(origDict);
+
+  const [currentColor, setCurrentColor] = useState("tiger");
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -408,11 +429,26 @@ const App = () => {
             myColorState={myColorState}
             propSetParentInfo={setParentInfo}
             propParentInfo={parentInfo}
+            propSetCurrentColor={setCurrentColor}
+            propSetActiveDict={setActiveDict}
+            propOrigDict={origDict}
+            propBlueDict={blueDict}
+            propPurpleDict={purpleDict}
+            propSetCurrentDict={setCurrentDict}
           />
           <div className="flex-item">
             {/* <TheCalendarContainer /> */}
-            <MemoCalendar propSetCalendarDateText={setCalendarDateText} propSetDatesDict={setDatesDict} propdatesDict={datesDict}/>
-            <h2 style={{color: "black"}}> {calendarDateText} </h2>
+            <MemoCalendar
+              propSetCalendarDateText={setCalendarDateText}
+              propActiveDict={activeDict}
+              propSetActiveDict={setActiveDict}
+              propSetOrigDict={setOrigDict}
+              propSetBlueDict={setBlueDict}
+              propSetPurpleDict={setPurpleDict}
+              propCurrentDict={currentDict}
+              propCurrentColor={currentColor}
+            />
+            <h2 style={{ color: "black" }}> {calendarDateText} </h2>
             <StyledSlider
               success={success}
               onHandleChange={handleChange}
@@ -437,8 +473,6 @@ const App = () => {
 };
 
 export default App;
-
-
 
 /*
 Notes on React Habit Tracker Project
