@@ -166,10 +166,15 @@ const JustMUIDrawer = ({
   propCount,
   parentCallback,
   propSetCurrentColor,
+  propActiveDict,
   propSetActiveDict,
+  propSetOrigDict,
+  propSetBlueDict,
+  propSetPurpleDict,
   propOrigDict,
   propBlueDict,
   propPurpleDict,
+  propCurrentDict,
   propSetCurrentDict,
 }) => {
   const [btnColor, setBtnColor] = useState("myColor");
@@ -177,6 +182,8 @@ const JustMUIDrawer = ({
   const [button2Text, setButton2Text] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
   const [colorToggle, setColorToggle] = useState(false);
+
+  useEffect(() => console.log("re-render because blueDict changed: ", propBlueDict))
 
   function childHandleChange(e) {
     console.log(e.target.value);
@@ -198,8 +205,21 @@ const JustMUIDrawer = ({
     console.log(cssColor);
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
     propSetCurrentColor(cssColor);
+
+    console.log("blue Sidebar Click: " + propCurrentDict);
+
+    if (propCurrentDict === 'orig') {
+      propSetOrigDict(propActiveDict);
+    } else if (propCurrentDict === 'blue') {
+      console.log(propActiveDict);
+      console.log(propBlueDict);
+      propSetBlueDict(propActiveDict);
+    } else if (propCurrentDict === 'purple') {
+      propSetPurpleDict(propActiveDict);
+    }
+    console.log(propBlueDict);
     propSetActiveDict(propBlueDict);
-    propSetCurrentDict('blue');
+    propSetCurrentDict("blue");
   };
 
   const handle2Click = (event) => {
@@ -216,8 +236,21 @@ const JustMUIDrawer = ({
     console.log(cssColor);
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
     propSetCurrentColor(cssColor);
+
+    console.log("purple Sidebar Click: " + propCurrentDict);
+
+    if (propCurrentDict === 'orig') {
+      propSetOrigDict(propActiveDict);
+    } else if (propCurrentDict === 'blue') {
+      console.log(propActiveDict);
+      console.log(propBlueDict);
+      propSetBlueDict(propActiveDict);
+    } else if (propCurrentDict === 'purple') {
+      propSetPurpleDict(propActiveDict);
+    }
+
     propSetActiveDict(propPurpleDict);
-    propSetCurrentDict('purple');
+    propSetCurrentDict("purple");
   };
   return (
     <Drawer
@@ -430,10 +463,15 @@ const App = () => {
             propSetParentInfo={setParentInfo}
             propParentInfo={parentInfo}
             propSetCurrentColor={setCurrentColor}
+            propActiveDict={activeDict}
             propSetActiveDict={setActiveDict}
+            propSetOrigDict={setOrigDict}
+            propSetBlueDict={setBlueDict}
+            propSetPurpleDict={setPurpleDict}
             propOrigDict={origDict}
             propBlueDict={blueDict}
             propPurpleDict={purpleDict}
+            propCurrentDict={currentDict}
             propSetCurrentDict={setCurrentDict}
           />
           <div className="flex-item">

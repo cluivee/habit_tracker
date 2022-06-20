@@ -252,16 +252,6 @@ function MyCalendar({
 
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
-    if (propCurrentDict === 'orig') {
-      propSetOrigDict(intermediateDict);
-      propSetActiveDict(intermediateDict);
-    } else if (propCurrentDict === 'blue') {
-      propSetBlueDict(intermediateDict);
-      propSetActiveDict(intermediateDict);
-    } else if (propCurrentDict === 'purple') {
-      propSetPurpleDict(intermediateDict);
-      propSetActiveDict(intermediateDict);
-    }
   };
   const prevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
