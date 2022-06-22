@@ -53,19 +53,27 @@ const darkTheme = createTheme({
 const drawerWidth = 240;
 
 // DynamicCSS styledSlider test
-
 const StyledSlider = styled(Slider, {
-  shouldForwardProp: (prop) => prop !== "propParentInfo",
-})(({ propParentInfo, theme }) => ({
+  shouldForwardProp: (prop) => prop !== 'success',
+})(({ success, theme }) => ({
   width: 300,
-  ...(propParentInfo && { color: theme.palette.warning.main }),
+  ...(success && {
+    color: theme.palette.success.main,
+    '& .MuiSlider-thumb': {
+      [`&:hover, &.Mui-focusVisible`]: {
+        boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
+      },
+      [`&.Mui-active`]: {
+        boxShadow: `0px 0px 0px 14px ${alpha(theme.palette.success.main, 0.16)}`,
+      },
+    },
+  }),
 }));
 
 function DynamicCSS() {
   const [success, setSuccess] = useState(false);
+
   const handleChange = (event) => {
-    console.log(event.target);
-    console.log("Then checked is: " + event.target.checked);
     setSuccess(event.target.checked);
   };
 
@@ -185,7 +193,10 @@ const JustMUIDrawer = ({
 
   useEffect(() => {
     console.log("useEffect ran because currentDict changed");
-    if (propCurrentDict === "blue") {
+    if (propCurrentDict === "orig") {
+      console.log("useeffect ran and currentdict is orig");
+      propSetActiveDict(propOrigDict);
+    } else if (propCurrentDict === "blue") {
       console.log("useeffect ran and currentdict is blue");
       propSetActiveDict(propBlueDict);
     } else if (propCurrentDict === "purple") {
@@ -198,6 +209,23 @@ const JustMUIDrawer = ({
     console.log(e.target.value);
     this.props.onHandleChange(e.target.value);
   }
+
+  const origHandleClick = (event) => {
+    document.documentElement.style.setProperty("--toggled-color", "#000");
+
+    // handleclick and setting dicts here
+    console.log("orig Sidebar Click and current dict: " + propCurrentDict);
+
+    if (propCurrentDict === "orig") {
+      propSetOrigDict(propActiveDict);
+    } else if (propCurrentDict === "blue") {
+      propSetBlueDict(propActiveDict);
+    } else if (propCurrentDict === "purple") {
+      propSetPurpleDict(propActiveDict);
+    }
+    propSetCurrentDict("orig");
+    console.log("marked currentdict orig");
+  };
 
   // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
   const handleClick = (event) => {
@@ -213,7 +241,7 @@ const JustMUIDrawer = ({
     );
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
     propSetCurrentColor(cssColor);
-    
+
     // handleclick and setting dicts here
     console.log("blue Sidebar Click and current dict: " + propCurrentDict);
 
@@ -234,7 +262,6 @@ const JustMUIDrawer = ({
     propSetCurrentDict("blue");
     console.log("marked currentdict blue");
   };
-
 
   const handle2Click = (event) => {
     cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
@@ -308,8 +335,21 @@ const JustMUIDrawer = ({
             </ListItemButton>
           </ListItem>
         ))}
-        {/* MUI button tutorial */}
 
+        {/* MUI button tutorial */}
+        <Button
+          variant="outlined"
+          color="inherit"
+          fullWidth
+          size="large"
+          style={{
+            maxHeight: "30px",
+            minHeight: "60px",
+          }}
+          onClick={origHandleClick}
+        >
+          Orig Button
+        </Button>
         <Button
           variant="outlined"
           color="primary"
@@ -343,7 +383,7 @@ const JustMUIDrawer = ({
           {button2Text}
         </Button>
         <Counter parentCallback={parentCallback} />
-      </List>
+      </List> 
     </Drawer>
   );
 };
@@ -439,24 +479,15 @@ const App = () => {
     setmyColorState("#3700B3");
   };
 
-  const [success, setSuccess] = useState(true);
-
-  const handleChange = () => {
-    setSuccess(success);
-  };
-
   const [newCount, setNewCount] = useState(0);
-
+  
   const callback = useCallback((newCount) => {
     setNewCount(newCount);
   }, []);
 
   const [msg, setMsg] = useState("Initial Message");
-
   const [parentInfo, setParentInfo] = useState(true);
-
   const [calendarDateText, setCalendarDateText] = useState("Date Label");
-
   const [currentDict, setCurrentDict] = useState("orig");
   const [origDict, setOrigDict] = useState({});
   const [blueDict, setBlueDict] = useState({});
@@ -503,13 +534,7 @@ const App = () => {
               propCurrentColor={currentColor}
             />
             <h2 style={{ color: "black" }}> {calendarDateText} </h2>
-            <StyledSlider
-              success={success}
-              onHandleChange={handleChange}
-              defaultValue={30}
-              propParentInfo={parentInfo}
-              sx={{ mt: 1 }}
-            />
+
             <Sidebar habits={habits} />
             <BorderTestButton />
             <DynamicCSS />
