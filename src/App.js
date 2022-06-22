@@ -183,7 +183,16 @@ const JustMUIDrawer = ({
   const [cssColor, setCSSColor] = useState("#1affa0");
   const [colorToggle, setColorToggle] = useState(false);
 
-  useEffect(() => console.log("re-render because blueDict changed: ", propBlueDict))
+  useEffect(() => {
+    console.log("useEffect ran because currentDict changed");
+    if (propCurrentDict === "blue") {
+      console.log("useeffect ran and currentdict is blue");
+      propSetActiveDict(propBlueDict);
+    } else if (propCurrentDict === "purple") {
+      console.log("useeffect ran and currentdict is purple");
+      propSetActiveDict(propPurpleDict);
+    }
+  }, [propCurrentDict]);
 
   function childHandleChange(e) {
     console.log(e.target.value);
@@ -202,25 +211,30 @@ const JustMUIDrawer = ({
       "--main-color value: " +
         document.documentElement.style.getPropertyValue("--main-color")
     );
-    console.log(cssColor);
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
     propSetCurrentColor(cssColor);
+    
+    // handleclick and setting dicts here
+    console.log("blue Sidebar Click and current dict: " + propCurrentDict);
 
-    console.log("blue Sidebar Click: " + propCurrentDict);
-
-    if (propCurrentDict === 'orig') {
+    if (propCurrentDict === "orig") {
       propSetOrigDict(propActiveDict);
-    } else if (propCurrentDict === 'blue') {
+    } else if (propCurrentDict === "blue") {
+      console.log("ActiveDict: ");
       console.log(propActiveDict);
+      console.log("blueDict before being set: ");
       console.log(propBlueDict);
       propSetBlueDict(propActiveDict);
-    } else if (propCurrentDict === 'purple') {
+    } else if (propCurrentDict === "purple") {
       propSetPurpleDict(propActiveDict);
     }
+    console.log("blueDict after being set: ");
     console.log(propBlueDict);
-    propSetActiveDict(propBlueDict);
+    // propSetActiveDict(propActiveDict);
     propSetCurrentDict("blue");
+    console.log("marked currentdict blue");
   };
+
 
   const handle2Click = (event) => {
     cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
@@ -237,21 +251,23 @@ const JustMUIDrawer = ({
     propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
     propSetCurrentColor(cssColor);
 
-    console.log("purple Sidebar Click: " + propCurrentDict);
+    // handleclick and setting dicts here
+    console.log("purple Sidebar Click and current dict: " + propCurrentDict);
 
-    if (propCurrentDict === 'orig') {
+    if (propCurrentDict === "orig") {
       propSetOrigDict(propActiveDict);
-    } else if (propCurrentDict === 'blue') {
-      console.log(propActiveDict);
-      console.log(propBlueDict);
+    } else if (propCurrentDict === "blue") {
       propSetBlueDict(propActiveDict);
-    } else if (propCurrentDict === 'purple') {
+    } else if (propCurrentDict === "purple") {
       propSetPurpleDict(propActiveDict);
     }
+    console.log("purpleDict after being set: ");
+    console.log(propPurpleDict);
 
-    propSetActiveDict(propPurpleDict);
     propSetCurrentDict("purple");
+    console.log("marked currentdict purple");
   };
+
   return (
     <Drawer
       sx={{

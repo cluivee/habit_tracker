@@ -108,9 +108,9 @@ function MyCalendar({
         setSelectedDate(dayToChange);
 
         console.log(selectedDate);
-        console.log(
-          getComputedStyle(document.body).getPropertyValue("--toggled-color")
-        );
+        // console.log(
+        //   getComputedStyle(document.body).getPropertyValue("--toggled-color")
+        // );
 
         // propSetCalendarDateText(selectedDate.toString());
         // event.target.classList.add("myClass");
