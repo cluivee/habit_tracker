@@ -468,7 +468,7 @@ const App = () => {
     fetch("http://localhost:3000/habits")
       .then((response) => response.json())
       .then((habits) => {
-        console.log("Success:", habits);
+        console.log("Successful:", habits);
         setHabits(habits);
       });
   }, []); // Empty array means nothing to watch, so only runs once
@@ -480,7 +480,7 @@ const App = () => {
   };
 
   const [newCount, setNewCount] = useState(0);
-  
+
   const callback = useCallback((newCount) => {
     setNewCount(newCount);
   }, []);
