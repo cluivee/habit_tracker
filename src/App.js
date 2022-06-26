@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import MyCalendar, { MemoCalendar } from "./MyCalendar";
 import Sidebar from "./Sidebar";
+import Habit from "./Habit";
 import "./App.css";
 import Calendar from "react-calendar";
 // import 'react-calendar/dist/Calendar.css';
@@ -24,6 +25,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import SendIcon from "@mui/icons-material/Send";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -45,26 +48,50 @@ const darkTheme = createTheme({
     },
     myOtherColor: {
       main: "#3700B3",
+      light: "#3700B3",
+      dark: "#3700B3",
+      contrastText: "#fff",
+    },
+    orange: {
+      main: "#F24E1E4D",
+      contrastText: "#fff",
+    },
+    green: {
+      main: "#fff",
+      light: "#3700B3",
+      dark: "#3700B3",
       contrastText: "#fff",
     },
   },
+  components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#fff",
+        }
+      }
+    }
+  }
 });
 
 const drawerWidth = 240;
 
 // DynamicCSS styledSlider test
 const StyledSlider = styled(Slider, {
-  shouldForwardProp: (prop) => prop !== 'success',
+  shouldForwardProp: (prop) => prop !== "success",
 })(({ success, theme }) => ({
   width: 300,
   ...(success && {
     color: theme.palette.success.main,
-    '& .MuiSlider-thumb': {
+    "& .MuiSlider-thumb": {
       [`&:hover, &.Mui-focusVisible`]: {
         boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
       },
       [`&.Mui-active`]: {
-        boxShadow: `0px 0px 0px 14px ${alpha(theme.palette.success.main, 0.16)}`,
+        boxShadow: `0px 0px 0px 14px ${alpha(
+          theme.palette.success.main,
+          0.16
+        )}`,
       },
     },
   }),
@@ -94,23 +121,6 @@ function DynamicCSS() {
     </React.Fragment>
   );
 }
-
-const AnotherExampleButton = () => {
-  const [buttonColor, setColor] = useState("#2764BA");
-
-  function changeButtonColors() {
-    buttonColor === "#2764BA" ? setColor("#eb31b3") : setColor("#2764BA");
-    // This is the second way of setting css variables in the :root, using querySelector
-    r.style.setProperty("--second-color", buttonColor);
-  }
-  return (
-    <div>
-      <button className="exampleButton" onClick={changeButtonColors}>
-        Second Button
-      </button>
-    </div>
-  );
-};
 
 const BorderTestButton = () => {
   const [check, setCheck] = useState(true);
@@ -145,34 +155,10 @@ const BorderTestButton = () => {
   );
 };
 
-// This example from SO shows how to use useEffect to track the initial State and update change the text back after a timeout, though useEffect isn't actually required and I could just call setTimeout directly, which also worked.
-
-const FancyButton = () => {
-  const initialState = "Next";
-  const [buttonText, setButtonText] = useState("Next");
-  //same as creating your state variable where "Next" is the default value for buttonText and setButtonText is the setter function for your state variable instead of setState
-
-  // the effect
-  useEffect(() => {
-    if (buttonText !== initialState) {
-      setTimeout(() => setButtonText(initialState), [1000]);
-    }
-  }, [buttonText]);
-
-  const changeText = (text) => setButtonText(text);
-
-  return (
-    <button type="button" onClick={() => changeText("newText")}>
-      {buttonText}
-    </button>
-  );
-};
-
 const JustMUIDrawer = ({
   propSetParentInfo,
   propParentInfo,
   propCount,
-  parentCallback,
   propSetCurrentColor,
   propActiveDict,
   propSetActiveDict,
@@ -258,7 +244,6 @@ const JustMUIDrawer = ({
     }
     console.log("blueDict after being set: ");
     console.log(propBlueDict);
-    // propSetActiveDict(propActiveDict);
     propSetCurrentDict("blue");
     console.log("marked currentdict blue");
   };
@@ -309,6 +294,7 @@ const JustMUIDrawer = ({
       variant="permanent"
       anchor="left"
     >
+      <Habit />
       <Toolbar />
       <Divider />
       <List>
@@ -316,7 +302,18 @@ const JustMUIDrawer = ({
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {/* {(index % 2 === 0 ? <InboxIcon /> : <MailIcon />) */}
+                {(() => {
+                  if (index === 0) {
+                    return <InboxIcon />;
+                  } else if (index === 1) {
+                    return <MailIcon />;
+                  } else if (index === 2) {
+                    return <SendIcon />;
+                  } else if (index === 3) {
+                    return <DraftsIcon />;
+                  }
+                })()}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -382,25 +379,8 @@ const JustMUIDrawer = ({
         >
           {button2Text}
         </Button>
-        <Counter parentCallback={parentCallback} />
-      </List> 
+      </List>
     </Drawer>
-  );
-};
-
-const Counter = ({ parentCallback }) => {
-  const [count, setCount] = useState(0);
-
-  return (
-    <button
-      style={{ margin: "10px" }}
-      onClick={() => {
-        setCount((count) => count + 1);
-        parentCallback(count + 1);
-      }}
-    >
-      Click to increment
-    </button>
   );
 };
 
@@ -481,10 +461,6 @@ const App = () => {
 
   const [newCount, setNewCount] = useState(0);
 
-  const callback = useCallback((newCount) => {
-    setNewCount(newCount);
-  }, []);
-
   const [msg, setMsg] = useState("Initial Message");
   const [parentInfo, setParentInfo] = useState(true);
   const [calendarDateText, setCalendarDateText] = useState("Date Label");
@@ -504,7 +480,6 @@ const App = () => {
         <div className="flexcontainer">
           {/* <div id="leftSidebar" className="fixed"> </div> */}
           <JustMUIDrawer
-            parentCallback={callback}
             className="fixed"
             myColorState={myColorState}
             propSetParentInfo={setParentInfo}
@@ -543,7 +518,6 @@ const App = () => {
               <h1>{msg}</h1>
               <ExampleChild propSetMsg={setMsg} />
             </div>
-            <AnotherExampleButton />
           </div>
         </div>
       </div>
@@ -617,5 +591,8 @@ TODO 24.05.2022:
 - How is setdate updating the date? We don't even pass the date into it? Can we just pass anything into setdate? Like potatoes?
 - Ans: apparently the event is somehow being passed into implicitly I think
 
+TODO 26.06.2022:
+- Perhaps try to rewrite the orig/blue/purple dicts using this "derived state" example from this video (webdevsimplified): https://www.youtube.com/watch?v=tz0fDABt67g.
+I'm thinking to have one object that stores all the dicts, perhaps each dict has an id at the front so we can reference them, then the colour, Then we have an array of dates.
 
 */
