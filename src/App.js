@@ -6,13 +6,11 @@ import "./App.css";
 import Calendar from "react-calendar";
 // import 'react-calendar/dist/Calendar.css';
 import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
-import Button from "@mui/material/Button";
+import { Button, Box, Drawer } from "@mui/material";
 import MuiSidebar from "./MuiSidebar";
 import ExampleChild from "./ExampleChild";
 
 // below are imports for mui drawer
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -56,6 +54,26 @@ const darkTheme = createTheme({
       main: "#F24E1ECC",
       contrastText: "#fff",
     },
+    lightorange: {
+      main: "#FF8D24CC",
+      contrastText: "#fff",
+    },
+    purple: {
+      main: "#A259FFCC",
+      contrastText: "#fff",
+    },
+    green: {
+      main: "#0ACF83CC",
+      contrastText: "#fff",
+    },
+    blue: {
+      main: "#1ABCFECC",
+      contrastText: "#fff",
+    },
+    pink: {
+      main: "#FF7262CC",
+      contrastText: "#fff",
+    },
     white: {
       main: "#fff",
       contrastText: "#fff",
@@ -67,10 +85,19 @@ const darkTheme = createTheme({
         paper: {
           backgroundColor: "#fff",
           color: "#000",
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        // Name of the slot
+        root: {
+          fontSize: "1.1rem",
+          color: "#000",
+        },
+      },
+    },
+  },
 });
 
 const drawerWidth = 240;
@@ -175,6 +202,18 @@ const JustMUIDrawer = ({
   const [button2Text, setButton2Text] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
   const [colorToggle, setColorToggle] = useState(false);
+
+  let habitColors = [
+    "orange",
+    "lightorange",
+    "purple",
+    "green",
+    "blue",
+    "pink",
+  ];
+  let habitList = habitColors.map((habitColor, index) => {
+    return <Habit key={index} propColor={habitColor} />;
+  });
 
   useEffect(() => {
     console.log("useEffect ran because currentDict changed");
@@ -293,11 +332,11 @@ const JustMUIDrawer = ({
       variant="permanent"
       anchor="left"
     >
-      <Habit />
+      {habitList}
       <Toolbar />
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {["Inbox"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -321,7 +360,7 @@ const JustMUIDrawer = ({
       </List>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
+        {["All mail"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -475,7 +514,6 @@ const App = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <div className="App">
-        <h1 className="text-center">React Calendar with Range</h1>
         <div className="flexcontainer">
           {/* <div id="leftSidebar" className="fixed"> </div> */}
           <JustMUIDrawer
@@ -496,6 +534,7 @@ const App = () => {
             propSetCurrentDict={setCurrentDict}
           />
           <div className="flex-item">
+            <h1 className="text-center">React Calendar with Range</h1>
             {/* <TheCalendarContainer /> */}
             <MemoCalendar
               propSetCalendarDateText={setCalendarDateText}
@@ -528,6 +567,12 @@ export default App;
 
 /*
 Notes on React Habit Tracker Project
+
+What are my aims for the app?
+1. Damn pretty
+2. Damn performant (fast)
+3. A pleasure to use 
+4. Free, for at least all the features I would want to use. Maybe will do themes or filters (like the facebook filter that StackOverflow did for April Fools) as paid options
 
 Thinking in React
 1. Break UI into a component hierarchy

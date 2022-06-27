@@ -20,7 +20,7 @@ import {
   isSameDay,
   toDate,
 } from "date-fns";
-import { ToggleButton } from "@mui/material";
+import { ToggleButton, Button } from "@mui/material";
 
 var r = document.querySelector(":root");
 
@@ -124,7 +124,10 @@ function MyCalendar({
       };
 
       return (
-        <div
+        <ToggleButton
+          sx={{ borderRadius: 0 }}
+          
+          variant="contained"
           className={`column cell ${
             !isSameMonth(day, monthStart)
               ? "disabled"
@@ -150,12 +153,12 @@ function MyCalendar({
           style={{
             backgroundColor: `${
               propActiveDict.hasOwnProperty(day)
-                ? "#fff"
+                ? "pink"
                 : getComputedStyle(document.body).getPropertyValue(
                     "--toggled-color"
                   )
             }`,
-            borderColor: `${buttonState ? "#fff" : "red"}`,
+            borderColor: `${buttonState ? "#pink" : "red"}`,
           }}
           // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
           // () => setButtonState(!buttonState)
@@ -163,7 +166,7 @@ function MyCalendar({
         >
           <span className="number">{formattedDate}</span>
           <span className="bg">{formattedDate}</span>
-        </div>
+        </ToggleButton>
       );
     }
   );

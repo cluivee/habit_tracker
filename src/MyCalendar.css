@@ -29,7 +29,7 @@
     --bg-color: #f9f9f9;	
     --neutral-color: #fff;
     --cell-color: #fff;
-    --toggled-color: #000;
+    --toggled-color: #ADADAD;
   }	
   
 /* GENERAL */
@@ -58,7 +58,7 @@ header {
 /* GRID */
 .row {
   margin: 0;
-  padding: 0;
+  padding: 0.5em;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -139,7 +139,7 @@ header {
 
 .calendar .body .cell {
   position: relative;
-  height: 5em;
+  height: 7em;
   border: 1px solid var(--border-color);
   overflow: hidden;
   cursor: pointer;
@@ -173,10 +173,11 @@ header {
 
 .calendar .body .cell .number {
   position: absolute;
-  font-size: 82.5%;
+  /* font size is now set in the styleoverrides in App.js darktheme */
+  /* font-size: 1rem; */
   line-height: 1;
-  top: 0.75em;
-  right: 0.75em;
+  top: 0.25em;
+  right: 0.25em;
   font-weight: 700;
 }
 
