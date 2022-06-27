@@ -1,7 +1,7 @@
 import { Button, Checkbox, TextField, ThemeProvider } from "@mui/material";
 import React from "react";
 
-const Habit = ({ habits }) => {
+const Habit = ({ propColor, habits }) => {
   return (
     <div>
       <Button
@@ -91,7 +91,6 @@ const Habit = ({ habits }) => {
         color="orange"
         sx={{
           padding: 0,
-          border: "1px solid green",
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
@@ -102,7 +101,6 @@ const Habit = ({ habits }) => {
       >
         <div
           style={{
-            border: "1px solid red",
             padding: "5px",
             display: "flex",
             flexDirection: "column",
@@ -121,24 +119,17 @@ const Habit = ({ habits }) => {
                 zIndex: 100,
               },
             }}
-            style={{
-              border: "1px solid red",
-              fontWeight: "bold",
-            }}
           ></TextField>
-          {/* this is slightly horrible but to get the textfield and the label to be vertically centered they have to both be the same height, so I added 13px of padding at the bottom of the label so that both are 33px in height */}
+          {/* this is slightly horrible but to get the textfield and the label to be vertically centered they have to both be the same height, so I added 7px of padding at the bottom of the label so that both are 33px in height 
+          padding shorthand: "t r b l"*/}
           <label
             style={{
               color: "white",
               textTransform: "capitalize",
               fontWeight: "300",
               textAlign: "left",
-              border: "1px solid red",
               fontSize: 12,
-              paddingTop: "5px",
-              paddingLeft: "5px",
-              paddingRight: "5px",
-              paddingBottom: "8px",
+              padding: "5px 5px 7px 5px",
             }}
           >
             Streak: 3
