@@ -53,13 +53,11 @@ const darkTheme = createTheme({
       contrastText: "#fff",
     },
     orange: {
-      main: "#F24E1E4D",
+      main: "#F24E1ECC",
       contrastText: "#fff",
     },
-    green: {
+    white: {
       main: "#fff",
-      light: "#3700B3",
-      dark: "#3700B3",
       contrastText: "#fff",
     },
   },
@@ -68,6 +66,7 @@ const darkTheme = createTheme({
       styleOverrides: {
         paper: {
           backgroundColor: "#fff",
+          color: "#000",
         }
       }
     }
