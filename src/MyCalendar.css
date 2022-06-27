@@ -58,7 +58,7 @@ header {
 /* GRID */
 .row {
   margin: 0;
-  padding: 0.5em;
+  padding: 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -137,10 +137,12 @@ header {
   border-bottom: 1px solid var(--border-color);
 }
 
+/* Setting margins here affect the margins between grid cells */
 .calendar .body .cell {
   position: relative;
   height: 7em;
   border: 1px solid var(--border-color);
+  margin: 0.2em;
   overflow: hidden;
   cursor: pointer;
   background: var(--cell-color);
@@ -212,8 +214,10 @@ header {
 
 .calendar .body .column {
   flex-grow: 0;
-  flex-basis: calc(100% / 7);
-  width: calc(100% / 7);
+  /* flex-basis: calc(100% / 7);*/
+  flex-basis: 12%;
+
+  width: calc(100% / 5)
 }
 
 /* .myClass{
