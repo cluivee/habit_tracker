@@ -1,14 +1,14 @@
-/* .container {
+.container {
     display: grid;
     grid-template-columns:repeat(7, 1fr);
     grid-gap: 50px;
   }
   .container div {
     aspect-ratio: 1;
-  } */
+  }
 
 
-  .container {
+  /* .container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 5px;
@@ -16,4 +16,4 @@
   .container div {
     background-color: red;
     aspect-ratio: 1;
-  }
+  } */

@@ -28,11 +28,11 @@ export default function RowAndColumnSpacing() {
 
   let buttonList = years.map((year, index) => {
     return (
-      <Grid item xs={1}>
-        <Button fullWidth style={{ height: "100px" }} variant="contained">
+      <div>
+        <Button fullWidth style={{ height: something }} variant="contained">
           {year}
         </Button>
-      </Grid>
+      </div>
     );
   });
 
@@ -52,32 +52,37 @@ export default function RowAndColumnSpacing() {
 
     let j = 0;
     while (j <= years.length) {
-        
-        days.push(<Button fullWidth style={{ height: something }} variant="contained">{years[j]}</Button>);
+      days.push(
+        <div>
+          <Button fullWidth style={{ height: something }} variant="contained">
+            {years[j]}
+          </Button>
+        </div>
+      );
 
-    //   for (let i = 0; i < 7; i++) {
+      //   for (let i = 0; i < 7; i++) {
 
+      //     days.push(<Button variant="contained">{years[i]}</Button>);
+      //     // day = addDays(day, 1);
+      //   }
 
-    //     days.push(<Button variant="contained">{years[i]}</Button>);
-    //     // day = addDays(day, 1);
-    //   }
-
-    //   rows.push(
-    //     <div className="row" key={years[j]}>
-    //       {days}
-    //     </div>
-    //   );
-    //   console.log("refreshing rows");
-    //   days = [];
+      //   rows.push(
+      //     <div className="row" key={years[j]}>
+      //       {days}
+      //     </div>
+      //   );
+      //   console.log("refreshing rows");
+      //   days = [];
       j++;
     }
-    console.log(days)
+    console.log(days);
     // propSetDatesArray(intermediateArray);
-    return days
+    return days;
   });
 
   return (
     <div class="container"><Cells/></div>
+    // <div class="container">{buttonList}</div>
 
     // <Box sx={{ width: '100%' }}>
     //   <Grid container rowSpacing={1} spacing={10} columnSpacing={{ xs: 1, sm: 2, md: 3 }} columns={7}>

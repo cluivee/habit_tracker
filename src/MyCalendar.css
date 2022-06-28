@@ -55,6 +55,18 @@ header {
   background: var(--neutral-color);
 }
 
+/* CSS Grid container styles */
+
+.container {
+  display: grid;
+  grid-template-columns:repeat(7, 1fr);
+  grid-gap: 50px;
+}
+.container div {
+  aspect-ratio: 1;
+}
+
+
 /* GRID */
 .row {
   margin: 0;
