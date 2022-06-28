@@ -1,5 +1,6 @@
 import React from 'react'
 import "./GridBoard.css";
+import GridSquare from './GridSquare'
 
 // Represents a 10 x 18 grid of grid squares
 
@@ -11,7 +12,7 @@ export default function GridBoard(props) {
     for (let row = 0; row < 18; row++) {
         grid.push([])
         for (let col = 0; col < 10; col ++) {
-            grid[row].push(<div style={{ border:'1px solid black', backgroundColor:"pink", height:"10px", width:"10px"}} key={`${col}${row}`} color="1" />)
+            grid[row].push(<GridSquare key={`${col}${row}`} color="1" />)
         }
     }
 

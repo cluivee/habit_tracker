@@ -29,7 +29,7 @@
     --tile-size: 20px for example will set size of the grid squares. */
     --cols: 10;
     --rows: 18;
-    --tile-size: 50px;
+    --tile-size: 20px;
     --border-width: 5px;
   }
 

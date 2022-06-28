@@ -126,7 +126,7 @@ function MyCalendar({
       return (
         <ToggleButton
           sx={{ borderRadius: 0 }}
-          
+
           variant="contained"
           className={`column cell ${
             !isSameMonth(day, monthStart)
@@ -264,7 +264,6 @@ function MyCalendar({
     <div className="calendar">
       <div>{header()}</div>
       <div>{days()}</div>
-
       <div>{<Cells />}</div>
     </div>
   );

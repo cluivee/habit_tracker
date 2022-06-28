@@ -5,11 +5,12 @@ import App from './App';
 import MyCalendar from './MyCalendar'
 import GridBoard from './GridBoard';
 import reportWebVitals from './reportWebVitals';
+import MUIGridExample from './MUIGridExample';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <GridBoard />
+    <MUIGridExample />
   </React.StrictMode>
 );
 
