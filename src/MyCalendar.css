@@ -60,10 +60,67 @@ header {
 .container {
   display: grid;
   grid-template-columns:repeat(7, 1fr);
-  grid-gap: 50px;
+  gap: 1em;
 }
+
 .container div {
   aspect-ratio: 1;
+}
+
+.container div .number {
+  position: absolute;
+  /* font size is now set in the styleoverrides in App.js darktheme */
+  /* font-size: 1rem; */
+  line-height: 1;
+  top: 0.25em;
+  right: 0.25em;
+  font-weight: 700;
+}
+
+.container div:hover .number,
+.container div .selected .number {
+  visibility: hidden;
+}
+
+.container div .bg {
+  font-weight: 700;
+  line-height: 1;
+  color: var(--main-color);
+  opacity: 0;
+  font-size: 5em;
+  position: absolute;
+  top: -0.2em;
+  right: -0.05em;
+  transition: 0.25s ease-out;
+  letter-spacing: -0.07em;
+}
+
+.container div :hover .bg,
+.container div .selected .bg {
+  opacity: 0.2;
+  transition: 0.5s ease-in;
+}
+
+.selected {
+  border-left: 10px solid transparent;
+  border-image: linear-gradient(45deg, var(--main-color) 0%, var(--upper-gradient-color) 40%);
+  border-image-slice: 1;
+  opacity: 0.2;
+  transition: 0.5s ease-in;
+}
+
+#disabledID {
+  color: var(--text-color-light);
+  pointer-events: none;
+}
+
+/* specifing an id selector to override borders in MUIButtonbase as they were taking over .selected classname */
+#selectedID {
+  border-left: 10px solid transparent;
+  border-image: linear-gradient(45deg, var(--main-color) 0%, var(--upper-gradient-color) 40%);
+  border-image-slice: 1;
+  opacity: 0.2;
+  transition: 0.5s ease-in;
 }
 
 

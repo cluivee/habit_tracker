@@ -5,6 +5,7 @@ import React, {
   useCallback,
   memo,
 } from "react";
+
 import "./MyCalendar.css";
 
 import {
@@ -125,14 +126,22 @@ function MyCalendar({
 
       return (
         <ToggleButton
-          sx={{ borderRadius: 0 }}
-
+          sx={{ borderRadius: 0, height: "100%"}}
           variant="contained"
-          className={`column cell ${
+          fullWidth
+          className={`${
             !isSameMonth(day, monthStart)
               ? "disabled"
               : isSameDay(day, currentDate)
               ? "selected"
+              : ""
+          }`}
+          // Using id to override the borders in the MUIButtonBase root
+          id={`${
+            !isSameMonth(day, monthStart)
+              ? "disabledID"
+              : isSameDay(day, currentDate)
+              ? "selectedID"
               : ""
           }`}
           key={day}
@@ -213,7 +222,6 @@ function MyCalendar({
     const startDate = startOfWeek(monthStart);
     const endDate = endOfWeek(monthEnd);
     const dateFormat = "dd";
-    const rows = [];
     let days = [];
     let day = startDate;
     let formattedDate = "";
@@ -221,13 +229,13 @@ function MyCalendar({
     const [clickedDay, setClickedDay] = useState(new Date());
 
     while (day <= endDate) {
-      for (let i = 0; i < 7; i++) {
-        formattedDate = format(day, dateFormat);
+      formattedDate = format(day, dateFormat);
 
-        // ok apparently cloneDay is necessary otherwise if we just passed in 'day' into the onDateClick method it would just be keep using the startDate which is at the beginning on the month
-        const cloneDay = day;
+      // ok apparently cloneDay is necessary otherwise if we just passed in 'day' into the onDateClick method it would just be keep using the startDate which is at the beginning on the month
+      const cloneDay = day;
 
-        days.push(
+      days.push(
+        <div key={day}>
           <MyToggleButton
             day={day}
             key={day}
@@ -237,20 +245,12 @@ function MyCalendar({
             propSetClickedDay={setClickedDay}
             propClickedDay={clickedDay}
           />
-        );
-
-        day = addDays(day, 1);
-      }
-      rows.push(
-        <div className="row" key={day}>
-          {days}
         </div>
       );
-      console.log("refreshing rows");
-      days = [];
+      day = addDays(day, 1);
     }
     // propSetDatesArray(intermediateArray);
-    return <div className="body">{rows}</div>;
+    return days;
   });
 
   const nextMonth = () => {
@@ -264,7 +264,7 @@ function MyCalendar({
     <div className="calendar">
       <div>{header()}</div>
       <div>{days()}</div>
-      <div>{<Cells />}</div>
+      <div className="container">{<Cells />}</div>
     </div>
   );
 }

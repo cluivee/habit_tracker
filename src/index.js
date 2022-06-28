@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom/client';
 // import './index.css';
 import App from './App';
 import MyCalendar from './MyCalendar'
-import GridBoard from './GridBoard';
 import reportWebVitals from './reportWebVitals';
 import MUIGridExample from './MUIGridExample';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <MUIGridExample />
+    <App />
   </React.StrictMode>
 );
 
