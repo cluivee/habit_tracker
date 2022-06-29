@@ -32,7 +32,7 @@ console.log(
 
 // const MyCalendar = ({propSetCalendarDateText,}) => {
 function MyCalendar({
-  propSetCalendarDateText,
+  propSetCalendarDate,
   propSetActiveDict,
   propCurrentColor,
   propActiveDict,
@@ -55,6 +55,7 @@ function MyCalendar({
   let intermediateDict = { ...propActiveDict };
 
   // MyToggleButton component
+  
   const MyToggleButton = memo(
     ({
       day,
@@ -72,7 +73,7 @@ function MyCalendar({
       // I'm using useEffect but actually it's not necessary at this point after I memo'd MyCalendar. I could just call
       // propSetCalendarDateText in the onClick method and it would still work
       useEffect(() => {
-        propSetCalendarDateText(selectedDate.toString());
+        propSetCalendarDate(selectedDate);
       }, [selectedDate, propClickedDay]);
 
       const onDateClick = (dayToChange, event) => {
@@ -126,7 +127,7 @@ function MyCalendar({
 
       return (
         <ToggleButton
-          sx={{ borderRadius: 0, height: "100%"}}
+          sx={{ borderRadius: 0, height: "100%" }}
           variant="contained"
           fullWidth
           className={`${
@@ -181,7 +182,7 @@ function MyCalendar({
   );
 
   const header = () => {
-    const dateFormat = "MMMM yyyy";
+    const dateFormat = "dd MMMM yyyy";
     return (
       <div className="header row flex-middle">
         <div className="column col-start">
@@ -208,12 +209,12 @@ function MyCalendar({
     let startDate = startOfWeek(currentDate);
     for (let i = 0; i < 7; i++) {
       daysHeader.push(
-        <div className="column col-center" key={i}>
+        <div className="days-headings" key={i}>
           {format(addDays(startDate, i), dateFormat)}
         </div>
       );
     }
-    return <div className="days row">{daysHeader}</div>;
+    return <div className="container">{daysHeader}</div>;
   };
 
   const Cells = memo(() => {
@@ -260,11 +261,33 @@ function MyCalendar({
     setCurrentDate(subMonths(currentDate, 1));
   };
 
+  // buttonList Grid example
+  const something = "100%";
+  let newCount = 1;
+  let years = Array(31)
+    .fill()
+    .map(() => newCount++);
+
+  let buttonList = years.map((year, index) => {
+    return (
+      <div>
+        <Button fullWidth style={{ height: something }} variant="contained">
+          {year}
+        </Button>
+      </div>
+    );
+  });
+
   return (
     <div className="calendar">
       <div>{header()}</div>
       <div>{days()}</div>
-      <div className="container">{<Cells />}</div>
+      <div className="container">{<MyToggleButton />}</div>
+      <div className="container" 
+        // style={{ marginTop: "20px" }}
+      >
+        {buttonList}
+      </div>
     </div>
   );
 }

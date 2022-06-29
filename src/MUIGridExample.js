@@ -17,14 +17,16 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function RowAndColumnSpacing() {
+
+
+  let buttonTexts = ["1", "2", "3", "4"];
+
+  // buttonList Grid example
+  const something = "100%";
   let newCount = 1;
   let years = Array(31)
     .fill()
     .map(() => newCount++);
-
-  let buttonTexts = ["1", "2", "3", "4"];
-
-  const something = "100%";
 
   let buttonList = years.map((year, index) => {
     return (
@@ -36,7 +38,6 @@ export default function RowAndColumnSpacing() {
     );
   });
 
-  console.log(buttonList);
 
   const Cells = memo(() => {
     // const monthStart = startOfMonth(currentDate);
@@ -81,7 +82,7 @@ export default function RowAndColumnSpacing() {
   });
 
   return (
-    <div class="container"><Cells/></div>
+    <div class="container">{buttonList}</div>
     // <div class="container">{buttonList}</div>
 
     // <Box sx={{ width: '100%' }}>

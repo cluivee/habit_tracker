@@ -114,6 +114,18 @@ header {
   pointer-events: none;
 }
 
+/* centering for the days of the week headings */
+.days-headings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;  
+  font-weight: 700;
+  color: black;
+  ;
+}
+
+
 /* specifing an id selector to override borders in MUIButtonbase as they were taking over .selected classname */
 #selectedID {
   border-left: 10px solid transparent;
@@ -150,8 +162,11 @@ header {
 }
 
 .col-center {
+  display: flex;
   justify-content: center;
-  text-align: center;
+  align-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .col-end {
@@ -285,7 +300,6 @@ header {
   flex-grow: 0;
   /* flex-basis: calc(100% / 7);*/
   flex-basis: 12%;
-
   width: calc(100% / 5)
 }
 

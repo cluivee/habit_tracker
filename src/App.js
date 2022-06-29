@@ -34,6 +34,10 @@ import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
+import {
+  format,
+} from "date-fns";
+
 var r = document.querySelector(":root");
 
 const darkTheme = createTheme({
@@ -501,7 +505,7 @@ const App = () => {
 
   const [msg, setMsg] = useState("Initial Message");
   const [parentInfo, setParentInfo] = useState(true);
-  const [calendarDateText, setCalendarDateText] = useState("Date Label");
+  const [calendarDate, setCalendarDate] = useState(new Date());
   const [currentDict, setCurrentDict] = useState("orig");
   const [origDict, setOrigDict] = useState({});
   const [blueDict, setBlueDict] = useState({});
@@ -510,6 +514,8 @@ const App = () => {
   const [activeDict, setActiveDict] = useState(origDict);
 
   const [currentColor, setCurrentColor] = useState("tiger");
+
+  const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy")
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -534,10 +540,10 @@ const App = () => {
             propSetCurrentDict={setCurrentDict}
           />
           <div className="flex-item">
-            <h1 className="text-center">React Calendar with Range</h1>
+            <h1 className="days-headings">React Calendar with Range</h1>
             {/* <TheCalendarContainer /> */}
             <MemoCalendar
-              propSetCalendarDateText={setCalendarDateText}
+              propSetCalendarDate={setCalendarDate}
               propActiveDict={activeDict}
               propSetActiveDict={setActiveDict}
               propSetOrigDict={setOrigDict}
@@ -546,7 +552,7 @@ const App = () => {
               propCurrentDict={currentDict}
               propCurrentColor={currentColor}
             />
-            <h2 style={{ color: "black" }}> {calendarDateText} </h2>
+            <h2 style={{ color: "black" }}> {formattedCalendarDay} </h2>
 
             <Sidebar habits={habits} />
             <BorderTestButton />
