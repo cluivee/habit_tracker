@@ -5,7 +5,10 @@
 .icon {
   font-family: "Material Icons", serif;
   font-style: normal;
-  display: inline-block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  /* display: inline-block;
   vertical-align: middle;
   line-height: 1;
   text-transform: none;
@@ -16,7 +19,7 @@
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "liga";
+  font-feature-settings: "liga"; */
 }
 
 /* VARIABLES */
@@ -29,7 +32,7 @@
   --bg-color: #f9f9f9;
   --neutral-color: #fff;
   --cell-color: #fff;
-  --toggled-color: #adadad;
+  --toggled-color: #f8f8f8;
 }
 
 /* GENERAL */
@@ -47,13 +50,14 @@ body {
   background: var(--bg-color);
 }
 
-header {
+/* not used anymore */
+/* header {
   display: block;
   width: 100%;
   padding: 1.75em 0;
   border-bottom: 1px solid var(--border-color);
   background: var(--neutral-color);
-}
+} */
 
 .toggleButtonClass {
   -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -210,22 +214,30 @@ header {
   max-width: 100%;
 }
 
-.col-start {
-  justify-content: flex-start;
-  text-align: left;
+.container.col-start {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.col-center {
+.container.col-center {
+  aspect-ratio: auto;
   display: flex;
   justify-content: center;
   align-content: center;
   align-items: center;
   flex-direction: column;
+  grid-column-start: 2;
+  grid-column-end: 7;
+  font-size: 2rem;
+  font-weight: 700;
+  color: black;
 }
 
 .col-end {
-  justify-content: flex-end;
-  text-align: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Calendar */
@@ -238,8 +250,9 @@ header {
   margin: 0 auto;
 }
 
-.calendar .header {
-  /* text-transform: uppercase; */
+/* not used anymore */
+/* .calendar .header {
+  text-transform: uppercase;
   font-weight: 700;
   font-size: 115%;
   padding: 1.5em 0;
@@ -247,24 +260,24 @@ header {
   font-size: 2rem;
   font-weight: 700;
   color: black;
-}
+} */
 
-.calendar .header .icon {
+.calendar .container .icon {
   cursor: pointer;
   transition: 0.15s ease-out;
 }
 
-.calendar .header .icon:hover {
+.calendar .container .icon:hover {
   transform: scale(1.75);
   transition: 0.25s ease-out;
   color: var(--main-color);
 }
 
-.calendar .header .icon:first-of-type {
+.calendar .container .icon:first-of-type {
   margin-left: 1em;
 }
 
-.calendar .header .icon:last-of-type {
+.calendar .container .icon:last-of-type {
   margin-right: 1em;
 }
 

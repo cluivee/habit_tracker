@@ -3,24 +3,12 @@ import MyCalendar, { MemoCalendar } from "./MyCalendar";
 import Sidebar from "./Sidebar";
 import Habit from "./Habit";
 import "./App.css";
-import Calendar from "react-calendar";
-// import 'react-calendar/dist/Calendar.css';
 import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
-import { Button, Box, Drawer } from "@mui/material";
-import MuiSidebar from "./MuiSidebar";
 import ExampleChild from "./ExampleChild";
 
-// below are imports for mui drawer
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+// below are imports for mui 
+import {Button, Box, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
+
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import DraftsIcon from "@mui/icons-material/Drafts";
@@ -104,86 +92,8 @@ const darkTheme = createTheme({
   },
 });
 
+// width of the MUI drawer sidebar
 const drawerWidth = 240;
-
-// DynamicCSS styledSlider test
-const StyledSlider = styled(Slider, {
-  shouldForwardProp: (prop) => prop !== "success",
-})(({ success, theme }) => ({
-  width: 300,
-  ...(success && {
-    color: theme.palette.success.main,
-    "& .MuiSlider-thumb": {
-      [`&:hover, &.Mui-focusVisible`]: {
-        boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
-      },
-      [`&.Mui-active`]: {
-        boxShadow: `0px 0px 0px 14px ${alpha(
-          theme.palette.success.main,
-          0.16
-        )}`,
-      },
-    },
-  }),
-}));
-
-function DynamicCSS() {
-  const [success, setSuccess] = useState(false);
-
-  const handleChange = (event) => {
-    setSuccess(event.target.checked);
-  };
-
-  return (
-    <React.Fragment>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={success}
-            onChange={handleChange}
-            color="primary"
-            value="dynamic-class-name"
-          />
-        }
-        label="Success"
-      />
-      <StyledSlider success={success} defaultValue={30} sx={{ mt: 1 }} />
-    </React.Fragment>
-  );
-}
-
-const BorderTestButton = () => {
-  const [check, setCheck] = useState(true);
-  const [buttonColor, setColor] = useState("yellow");
-  const [borders, setBorders] = useState("black");
-
-  function changeButtonColors() {
-    if (check === true) {
-      setColor("black");
-      setCheck(false);
-      setBorders("#0ACF83");
-    } else {
-      setColor("yellow");
-      setCheck(true);
-      setBorders("black");
-    }
-  }
-  return (
-    <button
-      style={{
-        background: buttonColor,
-        color: "newColor",
-        height: "100px",
-        width: "200px",
-        border: "5px solid",
-        borderColor: borders,
-      }}
-      onClick={changeButtonColors}
-    >
-      Click here
-    </button>
-  );
-};
 
 const JustMUIDrawer = ({
   propSetParentInfo,
@@ -201,11 +111,10 @@ const JustMUIDrawer = ({
   propCurrentDict,
   propSetCurrentDict,
 }) => {
-  const [btnColor, setBtnColor] = useState("myColor");
+
   const [buttonText, setButtonText] = useState("Not Selected");
   const [button2Text, setButton2Text] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
-  const [colorToggle, setColorToggle] = useState(false);
 
   let habitColors = [
     "orange",
@@ -337,6 +246,9 @@ const JustMUIDrawer = ({
       anchor="left"
     >
       {habitList}
+     
+{/* Example of the original contents of the MUI sidebar drawer, including dividers */}
+      {/* 
       <Toolbar />
       <Divider />
       <List>
@@ -344,7 +256,6 @@ const JustMUIDrawer = ({
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {/* {(index % 2 === 0 ? <InboxIcon /> : <MailIcon />) */}
                 {(() => {
                   if (index === 0) {
                     return <InboxIcon />;
@@ -363,6 +274,8 @@ const JustMUIDrawer = ({
         ))}
       </List>
       <Divider />
+       */}
+       
       <List>
         {["All mail"].map((text, index) => (
           <ListItem key={text} disablePadding>
@@ -398,12 +311,6 @@ const JustMUIDrawer = ({
             maxHeight: "30px",
             minHeight: "60px",
           }}
-          // onClick={() => {
-          //   btnColor === "myColor" ? setBtnColor("myOtherColor") : setBtnColor("myColor");
-          //   buttonText === "Hello World"
-          //     ? setButtonText("Purple Active")
-          //     : setButtonText("Hello World");
-          // }}
           onClick={handleClick}
         >
           {buttonText}
@@ -426,61 +333,86 @@ const JustMUIDrawer = ({
   );
 };
 
-const TheCalendarContainer = () => {
-  const [date, setDate] = useState(new Date());
 
-  const d = new Date(2018, 11, 24, 10, 33, 30, 0);
+// Examples for dynamic css slider and button which changes border color onclick
 
-  function isSameDay(a, b) {
-    return a.getTime() === b.getTime();
-  }
+// const StyledSlider = styled(Slider, {
+//   shouldForwardProp: (prop) => prop !== "success",
+// })(({ success, theme }) => ({
+//   width: 300,
+//   ...(success && {
+//     color: theme.palette.success.main,
+//     "& .MuiSlider-thumb": {
+//       [`&:hover, &.Mui-focusVisible`]: {
+//         boxShadow: `0px 0px 0px 8px ${alpha(theme.palette.success.main, 0.16)}`,
+//       },
+//       [`&.Mui-active`]: {
+//         boxShadow: `0px 0px 0px 14px ${alpha(
+//           theme.palette.success.main,
+//           0.16
+//         )}`,
+//       },
+//     },
+//   }),
+// }));
 
-  Date.prototype.addDays = function (days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-  };
+// function DynamicCSS() {
+//   const [success, setSuccess] = useState(false);
 
-  const datesToAddClassTo = [date, date.addDays(1)];
+//   const handleChange = (event) => {
+//     setSuccess(event.target.checked);
+//   };
 
-  function functileClassName({ date, view }) {
-    // Add class to tiles in month view only
-    if (view === "month") {
-      // Check if a date React-Calendar wants to check is on the list of dates to add class to
-      if (datesToAddClassTo.find((dDate) => isSameDay(dDate, date))) {
-        return "react-calendar__newtile";
-      }
-    }
-  }
+//   return (
+//     <React.Fragment>
+//       <FormControlLabel
+//         control={
+//           <Switch
+//             checked={success}
+//             onChange={handleChange}
+//             color="primary"
+//             value="dynamic-class-name"
+//           />
+//         }
+//         label="Success"
+//       />
+//       <StyledSlider success={success} defaultValue={30} sx={{ mt: 1 }} />
+//     </React.Fragment>
+//   );
+// }
 
-  return (
-    <div className="calendar-container">
-      {date.length > 0 ? (
-        <p className="text-center">
-          <span className="bold">Start:</span> {date[0].toDateString()}
-          &nbsp;|&nbsp;
-          <span className="bold">End:</span> {date[1].toDateString()}
-        </p>
-      ) : (
-        <p className="text-center">
-          <span className="bold">Default selected date:</span>{" "}
-          {date.toDateString()}
-        </p>
-      )}
+// const BorderTestButton = () => {
+//   const [check, setCheck] = useState(true);
+//   const [buttonColor, setColor] = useState("yellow");
+//   const [borders, setBorders] = useState("black");
 
-      <Calendar
-        onChange={setDate}
-        // onClickDay= {() => alert('New date pot is: ' + date)}
-        value={date}
-        tileClassName={functileClassName}
-        // selectRange={true}
-        // defaultValue={date}
-        showFixedNumberOfWeeks={true}
-        defaultActiveStartDate={date}
-      />
-    </div>
-  );
-};
+//   function changeButtonColors() {
+//     if (check === true) {
+//       setColor("black");
+//       setCheck(false);
+//       setBorders("#0ACF83");
+//     } else {
+//       setColor("yellow");
+//       setCheck(true);
+//       setBorders("black");
+//     }
+//   }
+//   return (
+//     <button
+//       style={{
+//         background: buttonColor,
+//         color: "newColor",
+//         height: "100px",
+//         width: "200px",
+//         border: "5px solid",
+//         borderColor: borders,
+//       }}
+//       onClick={changeButtonColors}
+//     >
+//       Click here
+//     </button>
+//   );
+// };
 
 const App = () => {
   const [habits, setHabits] = useState([]);
@@ -494,14 +426,6 @@ const App = () => {
         setHabits(habits);
       });
   }, []); // Empty array means nothing to watch, so only runs once
-
-  const [myColorState, setmyColorState] = useState("#ffa726");
-
-  const changeColor = () => {
-    setmyColorState("#3700B3");
-  };
-
-  const [newCount, setNewCount] = useState(0);
 
   const [msg, setMsg] = useState("Initial Message");
   const [parentInfo, setParentInfo] = useState(true);
@@ -521,10 +445,8 @@ const App = () => {
     <ThemeProvider theme={darkTheme}>
       <div className="App">
         <div className="flexcontainer">
-          {/* <div id="leftSidebar" className="fixed"> </div> */}
           <JustMUIDrawer
             className="fixed"
-            myColorState={myColorState}
             propSetParentInfo={setParentInfo}
             propParentInfo={parentInfo}
             propSetCurrentColor={setCurrentColor}
@@ -540,7 +462,6 @@ const App = () => {
             propSetCurrentDict={setCurrentDict}
           />
           <div className="flex-item">
-            {/* <TheCalendarContainer /> */}
             <MemoCalendar
               propSetCalendarDate={setCalendarDate}
               propActiveDict={activeDict}
@@ -552,10 +473,7 @@ const App = () => {
               propCurrentColor={currentColor}
             />
             <h2 style={{ color: "black" }}> {formattedCalendarDay} </h2>
-
             <Sidebar habits={habits} />
-            <BorderTestButton />
-            <DynamicCSS />
             <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
               <h1>{msg}</h1>

@@ -23,8 +23,6 @@ import {
 } from "date-fns";
 import { ToggleButton, Button } from "@mui/material";
 
-import Habit from "./Habit";
-
 var r = document.querySelector(":root");
 
 console.log(
@@ -32,7 +30,6 @@ console.log(
     document.documentElement.style.getPropertyValue("--main-color")
 );
 
-// const MyCalendar = ({propSetCalendarDateText,}) => {
 function MyCalendar({
   propSetCalendarDate,
   propSetActiveDict,
@@ -43,6 +40,7 @@ function MyCalendar({
   propSetPurpleDict,
   propCurrentDict,
 }) {
+  
   const buttonStyle = {
     backgroundColor: "#fff",
   };
@@ -99,6 +97,7 @@ function MyCalendar({
         //   }
         //   intermediateDict[currentColor] = daysArray;
         // }
+
         console.log(intermediateDict);
 
         setButtonState(!buttonState);
@@ -182,13 +181,13 @@ function MyCalendar({
   const header = () => {
     const dateFormat = "dd MMMM yyyy";
     return (
-      <div className="header row">
-        <div className="column col-start">
+      <div className="container">
+        <div className="container col-start">
           <div className="icon" onClick={prevMonth}>
             chevron_left
           </div>
         </div>
-        <div className="column col-center">
+        <div className="container col-center">
           <span>{format(currentDate, dateFormat)}</span>
         </div>
         <div className="column col-end">
@@ -259,29 +258,11 @@ function MyCalendar({
     setCurrentDate(subMonths(currentDate, 1));
   };
 
-  // buttonList Grid example
-  const something = "100%";
-  let newCount = 1;
-  let years = Array(31)
-    .fill()
-    .map(() => newCount++);
-
-  let buttonList = years.map((year, index) => {
-    return (
-      <div>
-        <Button fullWidth style={{ height: something,}} variant="contained">
-          {year}
-        </Button>
-      </div>
-    );
-  });
-
   return (
     <div className="calendar">
       <div>{header()}</div>
       <div>{days()}</div>
       <div className="container">{<Cells />}</div>
-
     </div>
   );
 }
