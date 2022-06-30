@@ -540,7 +540,6 @@ const App = () => {
             propSetCurrentDict={setCurrentDict}
           />
           <div className="flex-item">
-            <h1 className="days-headings">React Calendar with Range</h1>
             {/* <TheCalendarContainer /> */}
             <MemoCalendar
               propSetCalendarDate={setCalendarDate}

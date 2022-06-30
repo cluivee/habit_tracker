@@ -23,6 +23,8 @@ import {
 } from "date-fns";
 import { ToggleButton, Button } from "@mui/material";
 
+import Habit from "./Habit";
+
 var r = document.querySelector(":root");
 
 console.log(
@@ -55,7 +57,7 @@ function MyCalendar({
   let intermediateDict = { ...propActiveDict };
 
   // MyToggleButton component
-  
+
   const MyToggleButton = memo(
     ({
       day,
@@ -127,23 +129,19 @@ function MyCalendar({
 
       return (
         <ToggleButton
-          sx={{ borderRadius: 0, height: "100%" }}
+          sx={{
+            borderRadius: 0,
+            height: "100%",
+            border: 0,
+          }}
           variant="contained"
           fullWidth
           className={`${
             !isSameMonth(day, monthStart)
-              ? "disabled"
+              ? "toggleButtonClass disabled"
               : isSameDay(day, currentDate)
-              ? "selected"
-              : ""
-          }`}
-          // Using id to override the borders in the MUIButtonBase root
-          id={`${
-            !isSameMonth(day, monthStart)
-              ? "disabledID"
-              : isSameDay(day, currentDate)
-              ? "selectedID"
-              : ""
+              ? "toggleButtonClass selected"
+              : "toggleButtonClass"
           }`}
           key={day}
           // originally doing it by changing a custom style
@@ -184,7 +182,7 @@ function MyCalendar({
   const header = () => {
     const dateFormat = "dd MMMM yyyy";
     return (
-      <div className="header row flex-middle">
+      <div className="header row">
         <div className="column col-start">
           <div className="icon" onClick={prevMonth}>
             chevron_left
@@ -271,7 +269,7 @@ function MyCalendar({
   let buttonList = years.map((year, index) => {
     return (
       <div>
-        <Button fullWidth style={{ height: something }} variant="contained">
+        <Button fullWidth style={{ height: something,}} variant="contained">
           {year}
         </Button>
       </div>
@@ -282,12 +280,8 @@ function MyCalendar({
     <div className="calendar">
       <div>{header()}</div>
       <div>{days()}</div>
-      <div className="container">{<MyToggleButton />}</div>
-      <div className="container" 
-        // style={{ marginTop: "20px" }}
-      >
-        {buttonList}
-      </div>
+      <div className="container">{<Cells />}</div>
+
     </div>
   );
 }
