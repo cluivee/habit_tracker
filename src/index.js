@@ -5,11 +5,12 @@ import App from './App';
 import MyCalendar from './MyCalendar'
 import reportWebVitals from './reportWebVitals';
 import MUIGridExample from './MUIGridExample';
+import ExampleDerivedState from './ExampleDerivedState';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ExampleDerivedState />
   </React.StrictMode>
 );
 
