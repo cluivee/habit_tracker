@@ -54,9 +54,9 @@ function MyCalendar({
 
   let intermediateDict = { ...propActiveDict };
 
-  // MyToggleButton component
+  // CalendarToggleButton component
 
-  const MyToggleButton = memo(
+  const CalendarToggleButton = memo(
     ({
       day,
       cloneDay,
@@ -178,7 +178,7 @@ function MyCalendar({
     }
   );
 
-  const header = () => {
+  const CalendarHeader = () => {
     const dateFormat = "dd MMMM yyyy";
     return (
       <div className="container">
@@ -200,7 +200,7 @@ function MyCalendar({
   };
 
   // This is the header bar for days of the week
-  const days = () => {
+  const DaysOfWeek = () => {
     const dateFormat = "iii";
     const daysHeader = [];
     let startDate = startOfWeek(currentDate);
@@ -214,7 +214,7 @@ function MyCalendar({
     return <div className="container">{daysHeader}</div>;
   };
 
-  const Cells = memo(() => {
+  const CalendarGrid = memo(() => {
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(monthStart);
     const startDate = startOfWeek(monthStart);
@@ -234,7 +234,7 @@ function MyCalendar({
 
       days.push(
         <div key={day}>
-          <MyToggleButton
+          <CalendarToggleButton
             day={day}
             key={day}
             cloneDay={cloneDay}
@@ -260,9 +260,9 @@ function MyCalendar({
 
   return (
     <div className="calendar">
-      <div>{header()}</div>
-      <div>{days()}</div>
-      <div className="container">{<Cells />}</div>
+      <div>{<CalendarHeader/>}</div>
+      <div>{<DaysOfWeek/>}</div>
+      <div className="container">{<CalendarGrid />}</div>
     </div>
   );
 }
