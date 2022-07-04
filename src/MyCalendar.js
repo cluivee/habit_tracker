@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useCallback,
   memo,
+  useMemo,
 } from "react";
 
 import "./MyCalendar.css";
@@ -32,7 +33,6 @@ console.log(
 
 function MyCalendar({
   propSetCalendarDate,
-  // propAddDate,
   propCurrentColor,
   propActiveDict,
   propSetActiveDict,
@@ -52,9 +52,6 @@ function MyCalendar({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [addStyle, setAddStyle] = useState({});
 
-  // we don't have to do this anymore, we can use the spread syntax and passing the previous state to update the dict of tickedDates
-  let intermediateDict = { ...propActiveDict };
-
   console.log(propActiveDict);
 
   // CalendarToggleButton component
@@ -72,33 +69,40 @@ function MyCalendar({
       // date we have most recently clicked on
       const [selectedDate, setSelectedDate] = useState(new Date());
 
-      // I'm using useEffect but actually it's not necessary at this point after I memo'd MyCalendar. I could just call
-      // propSetCalendarDateText in the onClick method and it would still work
-      useEffect(() => {
-        propSetCalendarDate(selectedDate);
-      }, [selectedDate, propClickedDay]);
+      const [selectedDictId, setSelectedDictId] = useState(1);
 
+      const selectedDict = useMemo(
+        () => propActiveDict.find((dict) => dict.id === selectedDictId),
+        [propActiveDict, selectedDictId]
+      );
 
-  // function I got off StackOverflow to check if date object is in array
-  function isInArray(array, value) {
-    return !!array.find(item => {return item.getTime() === value.getTime()});
-  }
+      // function I got off StackOverflow to check if date object is in array
+      function isInArray(array, value) {
+        return !!array.find((item) => {
+          return item.getTime() === value.getTime();
+        });
+      }
+      
 
-  function addDate(id, tickedDate) {
-    propSetActiveDict(currActiveDict => {
-        return currActiveDict.map(dict => {
+      function addDate(id, tickedDate) {
+        propSetActiveDict((currActiveDict) => {
+          return currActiveDict.map((dict) => {
             if (dict.id === id) {
-                return {...dict, ticked: isInArray(dict.ticked, tickedDate) ? dict.ticked : [...dict.ticked, tickedDate]}
+              return {
+                ...dict,
+                ticked: isInArray(dict.ticked, tickedDate)
+                  ? dict.ticked.filter(item => item.getTime() !== tickedDate.getTime())
+                  : [...dict.ticked, tickedDate],
+              };
             } else {
-                return dict
+              return dict;
             }
-        })
-    })
-  }
+          });
+        });
+      }
 
       const onDateClick = (dayToChange, event) => {
-        // propAddDate(1, day);
-        addDate(1,day);
+        addDate(selectedDictId, day);
 
         // if (intermediateDict.hasOwnProperty(day)) {
         //   delete intermediateDict[day];
@@ -121,11 +125,9 @@ function MyCalendar({
         //   intermediateDict[currentColor] = daysArray;
         // }
 
-        console.log(intermediateDict);
-
         setButtonState(!buttonState);
-
         propSetClickedDay(dayToChange);
+        propSetCalendarDate(dayToChange);
 
         console.log("clickedDay: " + propClickedDay);
         console.log("cloneDay: " + cloneDay);
@@ -181,7 +183,7 @@ function MyCalendar({
 
           style={{
             backgroundColor: `${
-              propActiveDict.hasOwnProperty(day)
+              isInArray(selectedDict.ticked, day)
                 ? "pink"
                 : getComputedStyle(document.body).getPropertyValue(
                     "--toggled-color"
@@ -189,7 +191,6 @@ function MyCalendar({
             }`,
             borderColor: `${buttonState ? "#pink" : "red"}`,
           }}
-
           // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
           // () => setButtonState(!buttonState)
           onClick={(e) => onDateClick(toDate(cloneDay), e)}
@@ -252,7 +253,7 @@ function MyCalendar({
     while (day <= endDate) {
       formattedDate = format(day, dateFormat);
 
-      // ok apparently cloneDay is necessary otherwise if we just passed in 'day' into the onDateClick method it would just be keep using the startDate which is at the beginning on the month
+      // ok apparently cloneDay is necessary otherwise if we just passed in 'day' into the onDateClick method it would just keep using the startDate which is at the beginning on the month
       const cloneDay = day;
 
       days.push(
@@ -270,7 +271,6 @@ function MyCalendar({
       );
       day = addDays(day, 1);
     }
-    // propSetDatesArray(intermediateArray);
     return days;
   });
 

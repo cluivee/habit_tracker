@@ -453,9 +453,7 @@ const App = () => {
     {id: 3, color: "purple", ticked: []},
   ])
 
-
   const [currentColor, setCurrentColor] = useState("tiger");
-
   const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy")
 
   return (
