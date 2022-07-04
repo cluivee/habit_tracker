@@ -32,15 +32,15 @@ console.log(
 
 function MyCalendar({
   propSetCalendarDate,
-  propSetActiveDict,
+  // propAddDate,
   propCurrentColor,
   propActiveDict,
+  propSetActiveDict,
   propSetOrigDict,
   propSetBlueDict,
   propSetPurpleDict,
   propCurrentDict,
 }) {
-  
   const buttonStyle = {
     backgroundColor: "#fff",
   };
@@ -52,10 +52,12 @@ function MyCalendar({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [addStyle, setAddStyle] = useState({});
 
+  // we don't have to do this anymore, we can use the spread syntax and passing the previous state to update the dict of tickedDates
   let intermediateDict = { ...propActiveDict };
 
-  // CalendarToggleButton component
+  console.log(propActiveDict);
 
+  // CalendarToggleButton component
   const CalendarToggleButton = memo(
     ({
       day,
@@ -76,14 +78,35 @@ function MyCalendar({
         propSetCalendarDate(selectedDate);
       }, [selectedDate, propClickedDay]);
 
-      const onDateClick = (dayToChange, event) => {
-        if (intermediateDict.hasOwnProperty(day)) {
-          delete intermediateDict[day];
-        } else {
-          intermediateDict[day] = 1;
-        }
 
-        propSetActiveDict(intermediateDict);
+  // function I got off StackOverflow to check if date object is in array
+  function isInArray(array, value) {
+    return !!array.find(item => {return item.getTime() === value.getTime()});
+  }
+
+  function addDate(id, tickedDate) {
+    propSetActiveDict(currActiveDict => {
+        return currActiveDict.map(dict => {
+            if (dict.id === id) {
+                return {...dict, ticked: isInArray(dict.ticked, tickedDate) ? dict.ticked : [...dict.ticked, tickedDate]}
+            } else {
+                return dict
+            }
+        })
+    })
+  }
+
+      const onDateClick = (dayToChange, event) => {
+        // propAddDate(1, day);
+        addDate(1,day);
+
+        // if (intermediateDict.hasOwnProperty(day)) {
+        //   delete intermediateDict[day];
+        // } else {
+        //   intermediateDict[day] = 1;
+        // }
+
+        // propSetActiveDict(intermediateDict);
 
         // if (intermediateDict.currentColor.indexOf(day) > -1) {
         //   intermediateDict.currentColor.splice(
@@ -156,7 +179,6 @@ function MyCalendar({
           //         )
           //   }`,
 
-          // now doing it based on if it exists in the dict or not
           style={{
             backgroundColor: `${
               propActiveDict.hasOwnProperty(day)
@@ -167,6 +189,7 @@ function MyCalendar({
             }`,
             borderColor: `${buttonState ? "#pink" : "red"}`,
           }}
+
           // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
           // () => setButtonState(!buttonState)
           onClick={(e) => onDateClick(toDate(cloneDay), e)}
@@ -235,8 +258,8 @@ function MyCalendar({
       days.push(
         <div key={day}>
           <CalendarToggleButton
-            day={day}
             key={day}
+            day={day}
             cloneDay={cloneDay}
             monthStart={monthStart}
             formattedDate={formattedDate}
@@ -260,8 +283,8 @@ function MyCalendar({
 
   return (
     <div className="calendar">
-      <div>{<CalendarHeader/>}</div>
-      <div>{<DaysOfWeek/>}</div>
+      <div>{<CalendarHeader />}</div>
+      <div>{<DaysOfWeek />}</div>
       <div className="container">{<CalendarGrid />}</div>
     </div>
   );

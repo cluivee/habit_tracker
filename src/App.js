@@ -128,19 +128,20 @@ const JustMUIDrawer = ({
     return <Habit key={index} propColor={habitColor} />;
   });
 
-  useEffect(() => {
-    console.log("useEffect ran because currentDict changed");
-    if (propCurrentDict === "orig") {
-      console.log("useeffect ran and currentdict is orig");
-      propSetActiveDict(propOrigDict);
-    } else if (propCurrentDict === "blue") {
-      console.log("useeffect ran and currentdict is blue");
-      propSetActiveDict(propBlueDict);
-    } else if (propCurrentDict === "purple") {
-      console.log("useeffect ran and currentdict is purple");
-      propSetActiveDict(propPurpleDict);
-    }
-  }, [propCurrentDict]);
+  // 04/07/2022 disabling this for the moment so that activedict doesn't keep changing
+  // useEffect(() => {
+  //   console.log("useEffect ran because currentDict changed");
+  //   if (propCurrentDict === "orig") {
+  //     console.log("useeffect ran and currentdict is orig");
+  //     propSetActiveDict(propOrigDict);
+  //   } else if (propCurrentDict === "blue") {
+  //     console.log("useeffect ran and currentdict is blue");
+  //     propSetActiveDict(propBlueDict);
+  //   } else if (propCurrentDict === "purple") {
+  //     console.log("useeffect ran and currentdict is purple");
+  //     propSetActiveDict(propPurpleDict);
+  //   }
+  // }, [propCurrentDict]);
 
   function childHandleChange(e) {
     console.log(e.target.value);
@@ -275,7 +276,7 @@ const JustMUIDrawer = ({
       </List>
       <Divider />
        */}
-       
+
       <List>
         {["All mail"].map((text, index) => (
           <ListItem key={text} disablePadding>
@@ -429,13 +430,29 @@ const App = () => {
 
   const [msg, setMsg] = useState("Initial Message");
   const [parentInfo, setParentInfo] = useState(true);
+
+
+  // States for the whole app, there ought to be only 3.
+  const [habitDicts, setHabitDicts] = useState([
+    {id: 1, color: "orange", ticked: []},
+  ])
+  const [selectedHabitButtonId, setSelectedHabitButtonId] = useState('');
   const [calendarDate, setCalendarDate] = useState(new Date());
+
+  // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component 
+  // const [tickedDates, setTickedDates] = useState({});
+
   const [currentDict, setCurrentDict] = useState("orig");
   const [origDict, setOrigDict] = useState({});
   const [blueDict, setBlueDict] = useState({});
   const [purpleDict, setPurpleDict] = useState({});
 
-  const [activeDict, setActiveDict] = useState(origDict);
+  const [activeDict, setActiveDict] = useState([
+    {id: 1, color: "orange", ticked: [(new Date()), ]},
+    {id: 2, color: "lightOrange", ticked: []},
+    {id: 3, color: "purple", ticked: []},
+  ])
+
 
   const [currentColor, setCurrentColor] = useState("tiger");
 
@@ -471,6 +488,7 @@ const App = () => {
               propSetPurpleDict={setPurpleDict}
               propCurrentDict={currentDict}
               propCurrentColor={currentColor}
+              // propAddDate={addDate}
             />
             <h2 style={{ color: "black" }}> {formattedCalendarDay} </h2>
             <Sidebar habits={habits} />
