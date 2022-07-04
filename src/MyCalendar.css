@@ -84,7 +84,7 @@ body {
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 
-.toggleButtonClass.selected {
+.toggleButtonClass.today {
   border-left: 10px solid transparent;
   border-image: linear-gradient(
     45deg,
@@ -94,11 +94,20 @@ body {
   border-image-slice: 1;
   opacity: 0.2;
   transition: 0.5s ease-in;
+
 }
 
 .toggleButtonClass.disabled {
   color: var(--text-color-light);
   pointer-events: none;
+}
+
+.toggleButtonClass.selected {
+  border: 3px solid red;
+
+  font-size: 100;
+  transition: 0.5s ease-in;
+
 }
 
 /* testing button by copying and pasting css from muibuttonbase */

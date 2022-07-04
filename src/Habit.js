@@ -1,7 +1,7 @@
 import { Button, Checkbox, TextField, ThemeProvider } from "@mui/material";
 import React from "react";
 
-const Habit = ({ propColor, habits }) => {
+const Habit = ({ propColor }) => {
 
   return (
     <div>

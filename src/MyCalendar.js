@@ -22,7 +22,8 @@ import {
   isSameDay,
   toDate,
 } from "date-fns";
-import { ToggleButton, Button } from "@mui/material";
+import { ToggleButton, Button, } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 var r = document.querySelector(":root");
 
@@ -61,13 +62,8 @@ function MyCalendar({
       cloneDay,
       monthStart,
       formattedDate,
-      propSetClickedDay,
-      propClickedDay,
     }) => {
       const [buttonState, setButtonState] = useState(true);
-
-      // date we have most recently clicked on
-      const [selectedDate, setSelectedDate] = useState(new Date());
 
       const [selectedDictId, setSelectedDictId] = useState(1);
 
@@ -104,6 +100,8 @@ function MyCalendar({
       const onDateClick = (dayToChange, event) => {
         addDate(selectedDictId, day);
 
+        setCurrentDate(dayToChange);
+
         // if (intermediateDict.hasOwnProperty(day)) {
         //   delete intermediateDict[day];
         // } else {
@@ -126,21 +124,16 @@ function MyCalendar({
         // }
 
         setButtonState(!buttonState);
-        propSetClickedDay(dayToChange);
         propSetCalendarDate(dayToChange);
 
-        console.log("clickedDay: " + propClickedDay);
         console.log("cloneDay: " + cloneDay);
         console.log("currentDate: " + currentDate);
 
-        setSelectedDate(dayToChange);
 
-        console.log(selectedDate);
         // console.log(
         //   getComputedStyle(document.body).getPropertyValue("--toggled-color")
         // );
 
-        // propSetCalendarDateText(selectedDate.toString());
         // event.target.classList.add("myClass");
 
         // if (document.documentElement.style.getPropertyValue("--toggled-color") === event.target.style.backgroundColor) {
@@ -151,18 +144,29 @@ function MyCalendar({
         // }
       };
 
+      const theme = useTheme();
+
       return (
         <ToggleButton
           sx={{
             borderRadius: 0,
             height: "100%",
             border: 0,
+            backgroundColor: `${
+              isInArray(selectedDict.ticked, day)
+                ? 'orange.main'
+                : getComputedStyle(document.body).getPropertyValue(
+                    "--toggled-color"
+                  )
+            }`,
           }}
           variant="contained"
           fullWidth
           className={`${
             !isSameMonth(day, monthStart)
               ? "toggleButtonClass disabled"
+              : isSameDay(day, (new Date()))
+              ? "toggleButtonClass today"
               : isSameDay(day, currentDate)
               ? "toggleButtonClass selected"
               : "toggleButtonClass"
@@ -172,6 +176,7 @@ function MyCalendar({
           // style={buttonState ? buttonStyle : otherStyle}
 
           // then doing it based off a boolean state value
+
           // style={{
           //   backgroundColor: `${
           //     buttonState
@@ -184,7 +189,7 @@ function MyCalendar({
           style={{
             backgroundColor: `${
               isInArray(selectedDict.ticked, day)
-                ? "pink"
+                ? theme.palette.orange.main
                 : getComputedStyle(document.body).getPropertyValue(
                     "--toggled-color"
                   )
@@ -248,8 +253,6 @@ function MyCalendar({
     let day = startDate;
     let formattedDate = "";
 
-    const [clickedDay, setClickedDay] = useState(new Date());
-
     while (day <= endDate) {
       formattedDate = format(day, dateFormat);
 
@@ -264,8 +267,6 @@ function MyCalendar({
             cloneDay={cloneDay}
             monthStart={monthStart}
             formattedDate={formattedDate}
-            propSetClickedDay={setClickedDay}
-            propClickedDay={clickedDay}
           />
         </div>
       );
