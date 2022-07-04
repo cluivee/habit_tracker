@@ -25,6 +25,7 @@ import Switch from "@mui/material/Switch";
 import {
   format,
 } from "date-fns";
+import { orange } from "@mui/material/colors";
 
 var r = document.querySelector(":root");
 
@@ -436,7 +437,7 @@ const App = () => {
   const [habitDicts, setHabitDicts] = useState([
     {id: 1, color: "orange", ticked: []},
   ])
-  const [selectedHabitButtonId, setSelectedHabitButtonId] = useState('');
+  const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
   const [calendarDate, setCalendarDate] = useState(new Date());
 
   // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component 
@@ -448,9 +449,9 @@ const App = () => {
   const [purpleDict, setPurpleDict] = useState({});
 
   const [activeDict, setActiveDict] = useState([
-    {id: 1, color: "orange", ticked: [(new Date()), ]},
-    {id: 2, color: "lightOrange", ticked: []},
-    {id: 3, color: "purple", ticked: []},
+    {id: 1, color: "orange", colorHex: "#F24E1ECC", ticked: [(new Date()), ]},
+    {id: 2, color: "lightOrange", colorHex: "#FF8D24CC", ticked: []},
+    {id: 3, color: "purple", colorHex: "#A259FFCC", ticked: []},
   ])
 
   const [currentColor, setCurrentColor] = useState("tiger");
@@ -486,6 +487,7 @@ const App = () => {
               propSetPurpleDict={setPurpleDict}
               propCurrentDict={currentDict}
               propCurrentColor={currentColor}
+              propSelectedHabitButtonId={selectedHabitButtonId}
               // propAddDate={addDate}
             />
             <h2 style={{ color: "black" }}> {formattedCalendarDay} </h2>

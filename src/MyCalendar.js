@@ -37,6 +37,7 @@ function MyCalendar({
   propCurrentColor,
   propActiveDict,
   propSetActiveDict,
+  propSelectedHabitButtonId,
   propSetOrigDict,
   propSetBlueDict,
   propSetPurpleDict,
@@ -65,11 +66,10 @@ function MyCalendar({
     }) => {
       const [buttonState, setButtonState] = useState(true);
 
-      const [selectedDictId, setSelectedDictId] = useState(1);
 
       const selectedDict = useMemo(
-        () => propActiveDict.find((dict) => dict.id === selectedDictId),
-        [propActiveDict, selectedDictId]
+        () => propActiveDict.find((dict) => dict.id === propSelectedHabitButtonId),
+        [propActiveDict, propSelectedHabitButtonId]
       );
 
       // function I got off StackOverflow to check if date object is in array
@@ -98,7 +98,7 @@ function MyCalendar({
       }
 
       const onDateClick = (dayToChange, event) => {
-        addDate(selectedDictId, day);
+        addDate(propSelectedHabitButtonId, day);
 
         setCurrentDate(dayToChange);
 
@@ -145,6 +145,7 @@ function MyCalendar({
       };
 
       const theme = useTheme();
+      console.log(selectedDict.colorHex);
 
       return (
         <ToggleButton
@@ -152,13 +153,6 @@ function MyCalendar({
             borderRadius: 0,
             height: "100%",
             border: 0,
-            backgroundColor: `${
-              isInArray(selectedDict.ticked, day)
-                ? 'orange.main'
-                : getComputedStyle(document.body).getPropertyValue(
-                    "--toggled-color"
-                  )
-            }`,
           }}
           variant="contained"
           fullWidth
@@ -189,7 +183,8 @@ function MyCalendar({
           style={{
             backgroundColor: `${
               isInArray(selectedDict.ticked, day)
-                ? theme.palette.orange.main
+                // ? eval("theme.palette."+selectedDict.color+".main")
+                ? selectedDict.colorHex
                 : getComputedStyle(document.body).getPropertyValue(
                     "--toggled-color"
                   )
