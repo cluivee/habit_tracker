@@ -34,14 +34,9 @@ console.log(
 
 function MyCalendar({
   propSetCalendarDate,
-  propCurrentColor,
   propActiveDict,
   propSetActiveDict,
   propSelectedHabitButtonId,
-  propSetOrigDict,
-  propSetBlueDict,
-  propSetPurpleDict,
-  propCurrentDict,
 }) {
   const buttonStyle = {
     backgroundColor: "#fff",

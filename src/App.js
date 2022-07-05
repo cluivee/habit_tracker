@@ -109,35 +109,13 @@ const darkTheme = createTheme({
 const drawerWidth = 240;
 
 const JustMUIDrawer = ({
-  propSetParentInfo,
-  propParentInfo,
-  propCount,
-  propSetCurrentColor,
   propActiveDict,
   propSetActiveDict,
-  propSetOrigDict,
-  propSetBlueDict,
-  propSetPurpleDict,
-  propOrigDict,
-  propBlueDict,
-  propPurpleDict,
-  propCurrentDict,
-  propSetCurrentDict,
   propSelectedHabitButtonId,
   propSetSelectedHabitButtonId,
 }) => {
   const [buttonText, setButtonText] = useState("Not Selected");
-  const [button2Text, setButton2Text] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
-
-  let habitColors = [
-    "orange",
-    "lightorange",
-    "purple",
-    "green",
-    "blue",
-    "pink",
-  ];
 
   let habitList = propActiveDict.map((dict) => (
     <Habit
@@ -149,109 +127,42 @@ const JustMUIDrawer = ({
     />
   ));
 
-  // 04/07/2022 disabling this for the moment so that activedict doesn't keep changing
-  // useEffect(() => {
-  //   console.log("useEffect ran because currentDict changed");
-  //   if (propCurrentDict === "orig") {
-  //     console.log("useeffect ran and currentdict is orig");
-  //     propSetActiveDict(propOrigDict);
-  //   } else if (propCurrentDict === "blue") {
-  //     console.log("useeffect ran and currentdict is blue");
-  //     propSetActiveDict(propBlueDict);
-  //   } else if (propCurrentDict === "purple") {
-  //     console.log("useeffect ran and currentdict is purple");
-  //     propSetActiveDict(propPurpleDict);
-  //   }
-  // }, [propCurrentDict]);
-
   function childHandleChange(e) {
     console.log(e.target.value);
     this.props.onHandleChange(e.target.value);
   }
 
-  const origHandleClick = (event) => {
-    document.documentElement.style.setProperty("--toggled-color", "#000");
-
-    // handleclick and setting dicts here
-    console.log("orig Sidebar Click and current dict: " + propCurrentDict);
-
-    if (propCurrentDict === "orig") {
-      propSetOrigDict(propActiveDict);
-    } else if (propCurrentDict === "blue") {
-      propSetBlueDict(propActiveDict);
-    } else if (propCurrentDict === "purple") {
-      propSetPurpleDict(propActiveDict);
-    }
-    propSetCurrentDict("orig");
-    console.log("marked currentdict orig");
-  };
-
   // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
-  const handleClick = (event) => {
-    cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
-    buttonText === "Selected"
-      ? setButtonText("Not Selected")
-      : setButtonText("Selected");
-    document.documentElement.style.setProperty("--main-color", cssColor);
-    document.documentElement.style.setProperty("--toggled-color", "blue");
-    console.log(
-      "--main-color value: " +
-        document.documentElement.style.getPropertyValue("--main-color")
-    );
-    propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
-    propSetCurrentColor(cssColor);
+  // 05/07/2022: Keeping this as an example of how to change the css variable colors
+  
+  // const handleClick = (event) => {
+  //   cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
+  //   buttonText === "Selected"
+  //     ? setButtonText("Not Selected")
+  //     : setButtonText("Selected");
+  //   document.documentElement.style.setProperty("--main-color", cssColor);
+  //   document.documentElement.style.setProperty("--toggled-color", "blue");
+  //   console.log(
+  //     "--main-color value: " +
+  //       document.documentElement.style.getPropertyValue("--main-color")
+  //   );
+  //   propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
+  //   propSetCurrentColor(cssColor);
 
-    // handleclick and setting dicts here
-    console.log("blue Sidebar Click and current dict: " + propCurrentDict);
+  //   console.log("blue Sidebar Click and current dict: " + propCurrentDict);
 
-    if (propCurrentDict === "orig") {
-      propSetOrigDict(propActiveDict);
-    } else if (propCurrentDict === "blue") {
-      console.log("ActiveDict: ");
-      console.log(propActiveDict);
-      console.log("blueDict before being set: ");
-      console.log(propBlueDict);
-      propSetBlueDict(propActiveDict);
-    } else if (propCurrentDict === "purple") {
-      propSetPurpleDict(propActiveDict);
-    }
-    console.log("blueDict after being set: ");
-    console.log(propBlueDict);
-    propSetCurrentDict("blue");
-    console.log("marked currentdict blue");
-  };
-
-  const handle2Click = (event) => {
-    cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
-    button2Text === "Selected"
-      ? setButton2Text("Not Selected")
-      : setButton2Text("Selected");
-    document.documentElement.style.setProperty("--main-color", cssColor);
-    document.documentElement.style.setProperty("--toggled-color", "purple");
-    console.log(
-      "--main-color value: " +
-        document.documentElement.style.getPropertyValue("--main-color")
-    );
-    console.log(cssColor);
-    propParentInfo ? propSetParentInfo(false) : propSetParentInfo(true);
-    propSetCurrentColor(cssColor);
-
-    // handleclick and setting dicts here
-    console.log("purple Sidebar Click and current dict: " + propCurrentDict);
-
-    if (propCurrentDict === "orig") {
-      propSetOrigDict(propActiveDict);
-    } else if (propCurrentDict === "blue") {
-      propSetBlueDict(propActiveDict);
-    } else if (propCurrentDict === "purple") {
-      propSetPurpleDict(propActiveDict);
-    }
-    console.log("purpleDict after being set: ");
-    console.log(propPurpleDict);
-
-    propSetCurrentDict("purple");
-    console.log("marked currentdict purple");
-  };
+  //   if (propCurrentDict === "orig") {
+  //     propSetOrigDict(propActiveDict);
+  //   } else if (propCurrentDict === "blue") {
+  //     propSetBlueDict(propActiveDict);
+  //   } else if (propCurrentDict === "purple") {
+  //     propSetPurpleDict(propActiveDict);
+  //   }
+  //   console.log("blueDict after being set: ");
+  //   console.log(propBlueDict);
+  //   propSetCurrentDict("blue");
+  //   console.log("marked currentdict blue");
+  // };
 
   return (
     <Drawer
@@ -311,20 +222,7 @@ const JustMUIDrawer = ({
         ))}
 
         {/* MUI button tutorial */}
-        <Button
-          variant="outlined"
-          color="inherit"
-          fullWidth
-          size="large"
-          style={{
-            maxHeight: "30px",
-            minHeight: "60px",
-          }}
-          onClick={origHandleClick}
-        >
-          Orig Button
-        </Button>
-        <Button
+        {/* <Button
           variant="outlined"
           color="primary"
           fullWidth
@@ -336,20 +234,8 @@ const JustMUIDrawer = ({
           onClick={handleClick}
         >
           {buttonText}
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          size="large"
-          style={{
-            maxHeight: "30px",
-            minHeight: "60px",
-          }}
-          onClick={handle2Click}
-        >
-          {button2Text}
-        </Button>
+        </Button> */}
+        
       </List>
     </Drawer>
   );
@@ -449,7 +335,6 @@ const App = () => {
   }, []); // Empty array means nothing to watch, so only runs once
 
   const [msg, setMsg] = useState("Initial Message");
-  const [parentInfo, setParentInfo] = useState(true);
 
   // States for the whole app, there ought to be only 3.
   const [habitDicts, setHabitDicts] = useState([
@@ -461,18 +346,15 @@ const App = () => {
   // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component
   // const [tickedDates, setTickedDates] = useState({});
 
-  const [currentDict, setCurrentDict] = useState("orig");
-  const [origDict, setOrigDict] = useState({});
-  const [blueDict, setBlueDict] = useState({});
-  const [purpleDict, setPurpleDict] = useState({});
-
   const [activeDict, setActiveDict] = useState([
     { id: 1, color: "orange", colorHex: "#F24E1ECC", ticked: [new Date()] },
     { id: 2, color: "lightorange", colorHex: "#FF8D24CC", ticked: [] },
     { id: 3, color: "purple", colorHex: "#A259FFCC", ticked: [] },
+    { id: 4, color: "green", colorHex: "#0ACF83CC", ticked: [] },
+    { id: 5, color: "blue", colorHex: "#1ABCFECC", ticked: [] },
+    { id: 6, color: "pink", colorHex: "#FF7262CC", ticked: [] },
   ]);
 
-  const [currentColor, setCurrentColor] = useState("tiger");
   const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy");
 
   return (
@@ -481,19 +363,8 @@ const App = () => {
         <div className="flexcontainer">
           <JustMUIDrawer
             className="fixed"
-            propSetParentInfo={setParentInfo}
-            propParentInfo={parentInfo}
-            propSetCurrentColor={setCurrentColor}
             propActiveDict={activeDict}
             propSetActiveDict={setActiveDict}
-            propSetOrigDict={setOrigDict}
-            propSetBlueDict={setBlueDict}
-            propSetPurpleDict={setPurpleDict}
-            propOrigDict={origDict}
-            propBlueDict={blueDict}
-            propPurpleDict={purpleDict}
-            propCurrentDict={currentDict}
-            propSetCurrentDict={setCurrentDict}
             propSelectedHabitButtonId={selectedHabitButtonId}
             propSetSelectedHabitButtonId={setSelectedHabitButtonId}
           />
@@ -502,13 +373,7 @@ const App = () => {
               propSetCalendarDate={setCalendarDate}
               propActiveDict={activeDict}
               propSetActiveDict={setActiveDict}
-              propSetOrigDict={setOrigDict}
-              propSetBlueDict={setBlueDict}
-              propSetPurpleDict={setPurpleDict}
-              propCurrentDict={currentDict}
-              propCurrentColor={currentColor}
               propSelectedHabitButtonId={selectedHabitButtonId}
-              // propAddDate={addDate}
             />
             <h2 style={{ color: "black" }}> {formattedCalendarDay} </h2>
             <Sidebar habits={habits} />
