@@ -34,8 +34,8 @@ console.log(
 
 function MyCalendar({
   propSetCalendarDate,
-  propActiveDict,
-  propSetActiveDict,
+  propHabitDict,
+  propSetHabitDict,
   propSelectedHabitButtonId,
 }) {
   const buttonStyle = {
@@ -49,7 +49,7 @@ function MyCalendar({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [addStyle, setAddStyle] = useState({});
 
-  console.log(propActiveDict);
+  console.log(propHabitDict);
 
   // CalendarToggleButton component
   const CalendarToggleButton = memo(
@@ -62,8 +62,8 @@ function MyCalendar({
       const [buttonState, setButtonState] = useState(true);
 
       const selectedDict = useMemo(
-        () => propActiveDict.find((dict) => dict.id === propSelectedHabitButtonId),
-        [propActiveDict, propSelectedHabitButtonId]
+        () => propHabitDict.find((dict) => dict.id === propSelectedHabitButtonId),
+        [propHabitDict, propSelectedHabitButtonId]
       );
 
       // function I got off StackOverflow to check if date object is in array
@@ -74,7 +74,7 @@ function MyCalendar({
       }
       
       function addDate(id, tickedDate) {
-        propSetActiveDict((currActiveDict) => {
+        propSetHabitDict((currActiveDict) => {
           return currActiveDict.map((dict) => {
             if (dict.id === id) {
               return {

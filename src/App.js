@@ -109,15 +109,15 @@ const darkTheme = createTheme({
 const drawerWidth = 240;
 
 const JustMUIDrawer = ({
-  propActiveDict,
-  propSetActiveDict,
+  propHabitDict,
+  propSetHabitDict,
   propSelectedHabitButtonId,
   propSetSelectedHabitButtonId,
 }) => {
   const [buttonText, setButtonText] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
 
-  let habitList = propActiveDict.map((dict) => (
+  let habitList = propHabitDict.map((dict) => (
     <Habit
       key={dict.color}
       id={dict.id}
@@ -337,16 +337,7 @@ const App = () => {
   const [msg, setMsg] = useState("Initial Message");
 
   // States for the whole app, there ought to be only 3.
-  const [habitDicts, setHabitDicts] = useState([
-    { id: 1, color: "orange", ticked: [] },
-  ]);
-  const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
-  const [calendarDate, setCalendarDate] = useState(new Date());
-
-  // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component
-  // const [tickedDates, setTickedDates] = useState({});
-
-  const [activeDict, setActiveDict] = useState([
+  const [habitDict, setHabitDict] = useState([
     { id: 1, color: "orange", colorHex: "#F24E1ECC", ticked: [new Date()] },
     { id: 2, color: "lightorange", colorHex: "#FF8D24CC", ticked: [] },
     { id: 3, color: "purple", colorHex: "#A259FFCC", ticked: [] },
@@ -354,6 +345,13 @@ const App = () => {
     { id: 5, color: "blue", colorHex: "#1ABCFECC", ticked: [] },
     { id: 6, color: "pink", colorHex: "#FF7262CC", ticked: [] },
   ]);
+
+  const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
+  const [calendarDate, setCalendarDate] = useState(new Date());
+
+  // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component
+  // const [tickedDates, setTickedDates] = useState({});
+
 
   const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy");
 
@@ -363,19 +361,18 @@ const App = () => {
         <div className="flexcontainer">
           <JustMUIDrawer
             className="fixed"
-            propActiveDict={activeDict}
-            propSetActiveDict={setActiveDict}
+            propHabitDict={habitDict}
+            propSetHabitDict={setHabitDict}
             propSelectedHabitButtonId={selectedHabitButtonId}
             propSetSelectedHabitButtonId={setSelectedHabitButtonId}
           />
           <div className="flex-item">
             <MemoCalendar
               propSetCalendarDate={setCalendarDate}
-              propActiveDict={activeDict}
-              propSetActiveDict={setActiveDict}
+              propHabitDict={habitDict}
+              propSetHabitDict={setHabitDict}
               propSelectedHabitButtonId={selectedHabitButtonId}
             />
-            <h2 style={{ color: "black" }}> {formattedCalendarDay} </h2>
             <Sidebar habits={habits} />
             <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
