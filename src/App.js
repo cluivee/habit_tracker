@@ -6,8 +6,22 @@ import "./App.css";
 import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
 import ExampleChild from "./ExampleChild";
 
-// below are imports for mui 
-import {Button, Box, Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
+// below are imports for mui
+import {
+  Button,
+  Box,
+  Drawer,
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  List,
+  Typography,
+  Divider,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
@@ -22,9 +36,7 @@ import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
-import {
-  format,
-} from "date-fns";
+import { format } from "date-fns";
 import { orange } from "@mui/material/colors";
 
 var r = document.querySelector(":root");
@@ -111,8 +123,9 @@ const JustMUIDrawer = ({
   propPurpleDict,
   propCurrentDict,
   propSetCurrentDict,
+  propSelectedHabitButtonId,
+  propSetSelectedHabitButtonId,
 }) => {
-
   const [buttonText, setButtonText] = useState("Not Selected");
   const [button2Text, setButton2Text] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
@@ -125,9 +138,16 @@ const JustMUIDrawer = ({
     "blue",
     "pink",
   ];
-  let habitList = habitColors.map((habitColor, index) => {
-    return <Habit key={index} propColor={habitColor} />;
-  });
+
+  let habitList = propActiveDict.map((dict) => (
+    <Habit
+      key={dict.color}
+      id={dict.id}
+      propColor={dict.color}
+      propSetHabitId={propSetSelectedHabitButtonId}
+      propSelectedHabitButtonId={propSelectedHabitButtonId}
+    />
+  ));
 
   // 04/07/2022 disabling this for the moment so that activedict doesn't keep changing
   // useEffect(() => {
@@ -248,8 +268,8 @@ const JustMUIDrawer = ({
       anchor="left"
     >
       {habitList}
-     
-{/* Example of the original contents of the MUI sidebar drawer, including dividers */}
+
+      {/* Example of the original contents of the MUI sidebar drawer, including dividers */}
       {/* 
       <Toolbar />
       <Divider />
@@ -334,7 +354,6 @@ const JustMUIDrawer = ({
     </Drawer>
   );
 };
-
 
 // Examples for dynamic css slider and button which changes border color onclick
 
@@ -432,15 +451,14 @@ const App = () => {
   const [msg, setMsg] = useState("Initial Message");
   const [parentInfo, setParentInfo] = useState(true);
 
-
   // States for the whole app, there ought to be only 3.
   const [habitDicts, setHabitDicts] = useState([
-    {id: 1, color: "orange", ticked: []},
-  ])
+    { id: 1, color: "orange", ticked: [] },
+  ]);
   const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
   const [calendarDate, setCalendarDate] = useState(new Date());
 
-  // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component 
+  // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component
   // const [tickedDates, setTickedDates] = useState({});
 
   const [currentDict, setCurrentDict] = useState("orig");
@@ -449,13 +467,13 @@ const App = () => {
   const [purpleDict, setPurpleDict] = useState({});
 
   const [activeDict, setActiveDict] = useState([
-    {id: 1, color: "orange", colorHex: "#F24E1ECC", ticked: [(new Date()), ]},
-    {id: 2, color: "lightOrange", colorHex: "#FF8D24CC", ticked: []},
-    {id: 3, color: "purple", colorHex: "#A259FFCC", ticked: []},
-  ])
+    { id: 1, color: "orange", colorHex: "#F24E1ECC", ticked: [new Date()] },
+    { id: 2, color: "lightorange", colorHex: "#FF8D24CC", ticked: [] },
+    { id: 3, color: "purple", colorHex: "#A259FFCC", ticked: [] },
+  ]);
 
   const [currentColor, setCurrentColor] = useState("tiger");
-  const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy")
+  const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy");
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -476,6 +494,8 @@ const App = () => {
             propPurpleDict={purpleDict}
             propCurrentDict={currentDict}
             propSetCurrentDict={setCurrentDict}
+            propSelectedHabitButtonId={selectedHabitButtonId}
+            propSetSelectedHabitButtonId={setSelectedHabitButtonId}
           />
           <div className="flex-item">
             <MemoCalendar

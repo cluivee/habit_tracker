@@ -1,17 +1,15 @@
 import { Button, Checkbox, TextField, ThemeProvider } from "@mui/material";
 import React from "react";
 
-const Habit = ({ propColor }) => {
+const Habit = ({ id, propColor, propSetHabitId, propSelectedHabitButtonId }) => {
 
   return (
     <div>
-
       {/* MUI button habit */}
       <Button
         variant="contained"
-        onClick={() => {
-          console.log("clicked");
-        }}
+        onClick={() => {propSetHabitId(id);
+        console.log(id)}}
         color={propColor}
         sx={{
           padding: 0,

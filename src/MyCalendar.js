@@ -66,7 +66,6 @@ function MyCalendar({
     }) => {
       const [buttonState, setButtonState] = useState(true);
 
-
       const selectedDict = useMemo(
         () => propActiveDict.find((dict) => dict.id === propSelectedHabitButtonId),
         [propActiveDict, propSelectedHabitButtonId]
@@ -79,7 +78,6 @@ function MyCalendar({
         });
       }
       
-
       function addDate(id, tickedDate) {
         propSetActiveDict((currActiveDict) => {
           return currActiveDict.map((dict) => {
@@ -145,7 +143,6 @@ function MyCalendar({
       };
 
       const theme = useTheme();
-      console.log(selectedDict.colorHex);
 
       return (
         <ToggleButton
