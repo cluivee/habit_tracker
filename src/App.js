@@ -213,6 +213,7 @@ const JustMUIDrawer = ({
       <Divider />
        */}
 
+
       <List>
       {/* Example of the second half of the drawer */}
         {/* {["All mail"].map((text, index) => (
