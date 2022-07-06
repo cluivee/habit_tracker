@@ -92,9 +92,7 @@ body {
     var(--upper-gradient-color) 40%
   );
   border-image-slice: 1;
-  opacity: 0.2;
   transition: 0.5s ease-in;
-
 }
 
 .toggleButtonClass.disabled {
@@ -105,7 +103,6 @@ body {
 
 .toggleButtonClass.selected {
   border: 3px solid red;
-
   font-size: 100;
   transition: 0.5s ease-in;
 
@@ -164,12 +161,17 @@ body {
 .container div .bg {
   font-weight: 700;
   line-height: 1;
-  color: var(--main-color);
+  /* the old color for the hover number */
+  /* color: var(--main-color); */
+  color: black;
   opacity: 0;
   font-size: 5em;
   position: absolute;
-  top: -0.2em;
-  right: -0.05em;
+  /* the old offsets for the hover number */
+  /* top: -0.2em;
+  right: -0.05em; */
+  top: 0.0em;
+  right: 0.05em;
   transition: 0.25s ease-out;
   letter-spacing: -0.07em;
 }

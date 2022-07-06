@@ -214,7 +214,8 @@ const JustMUIDrawer = ({
        */}
 
       <List>
-        {["All mail"].map((text, index) => (
+      {/* Example of the second half of the drawer */}
+        {/* {["All mail"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -223,7 +224,7 @@ const JustMUIDrawer = ({
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
-        ))}
+        ))} */}
 
         {/* MUI button tutorial */}
         {/* <Button
