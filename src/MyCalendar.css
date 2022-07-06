@@ -98,6 +98,7 @@ body {
 }
 
 .toggleButtonClass.disabled {
+  opacity: 0.5;
   color: var(--text-color-light);
   pointer-events: none;
 }

@@ -1,7 +1,14 @@
 import { Button, Checkbox, TextField, ThemeProvider } from "@mui/material";
-import React from "react";
+import React, {useMemo, useEffect} from "react";
 
-const Habit = ({ id, propColor, propSetHabitId, propSelectedHabitButtonId }) => {
+import {
+  addDays,
+  subDays,
+  isSameDay,
+  toDate,
+} from "date-fns";
+
+const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propSelectedHabitButtonId }) => {
 
   return (
     <div>
@@ -54,7 +61,7 @@ const Habit = ({ id, propColor, propSetHabitId, propSelectedHabitButtonId }) => 
               padding: "5px 5px 7px 5px",
             }}
           >
-            Streak: 3
+            Streak: {propStreak}
           </label>
         </div>
         <Checkbox

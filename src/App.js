@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import MyCalendar, { MemoCalendar } from "./MyCalendar";
 import Sidebar from "./Sidebar";
 import Habit from "./Habit";
@@ -38,6 +38,8 @@ import Switch from "@mui/material/Switch";
 
 import { format } from "date-fns";
 import { orange } from "@mui/material/colors";
+
+import { addDays, subDays, isSameDay, toDate } from "date-fns";
 
 var r = document.querySelector(":root");
 
@@ -122,6 +124,8 @@ const JustMUIDrawer = ({
       key={dict.color}
       id={dict.id}
       propColor={dict.color}
+      propStreak={dict.streak}
+      propHabitDict={propHabitDict}
       propSetHabitId={propSetSelectedHabitButtonId}
       propSelectedHabitButtonId={propSelectedHabitButtonId}
     />
@@ -134,7 +138,7 @@ const JustMUIDrawer = ({
 
   // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
   // 05/07/2022: Keeping this as an example of how to change the css variable colors
-  
+
   // const handleClick = (event) => {
   //   cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
   //   buttonText === "Selected"
@@ -235,7 +239,6 @@ const JustMUIDrawer = ({
         >
           {buttonText}
         </Button> */}
-        
       </List>
     </Drawer>
   );
@@ -338,20 +341,122 @@ const App = () => {
 
   // States for the whole app, there ought to be only 3.
   const [habitDict, setHabitDict] = useState([
-    { id: 1, color: "orange", colorHex: "#F24E1ECC", ticked: [new Date()] },
-    { id: 2, color: "lightorange", colorHex: "#FF8D24CC", ticked: [] },
-    { id: 3, color: "purple", colorHex: "#A259FFCC", ticked: [] },
-    { id: 4, color: "green", colorHex: "#0ACF83CC", ticked: [] },
-    { id: 5, color: "blue", colorHex: "#1ABCFECC", ticked: [] },
-    { id: 6, color: "pink", colorHex: "#FF7262CC", ticked: [] },
+    {
+      id: 1,
+      color: "orange",
+      colorHex: "#F24E1ECC",
+      maxStreak: 0,
+      streak: 0,
+      ticked: [],
+    },
+    {
+      id: 2,
+      color: "lightorange",
+      colorHex: "#FF8D24CC",
+      maxStreak: 0,
+      streak: 0,
+      ticked: [],
+    },
+    {
+      id: 3,
+      color: "purple",
+      colorHex: "#A259FFCC",
+      maxStreak: 0,
+      streak: 0,
+      ticked: [],
+    },
+    {
+      id: 4,
+      color: "green",
+      colorHex: "#0ACF83CC",
+      maxStreak: 0,
+      streak: 0,
+      ticked: [],
+    },
+    {
+      id: 5,
+      color: "blue",
+      colorHex: "#1ABCFECC",
+      maxStreak: 0,
+      streak: 0,
+      ticked: [],
+    },
+    {
+      id: 6,
+      color: "pink",
+      colorHex: "#FF7262CC",
+      maxStreak: 0,
+      streak: 0,
+      ticked: [],
+    },
   ]);
 
   const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
   const [calendarDate, setCalendarDate] = useState(new Date());
 
+  let currentStreak = 0;
+
+  // this doesn't feel like the correct way to tell if a button was clicked, but it works for now, it also adds an extra state
+  const [calendarButtonBoolean, setCalendarButtonBoolean] = useState(false);
+
+  const selectedDict = useMemo(
+    () => habitDict.find((dict) => dict.id === selectedHabitButtonId),
+    [habitDict, selectedHabitButtonId]
+  );
+
+  useEffect(() => {
+    console.log("Habit Streak updated");
+
+    const posToday = selectedDict.ticked.findIndex((item) => {
+      return isSameDay(item, new Date());
+    });
+
+    const posYesterday = selectedDict.ticked.findIndex((item) => {
+      return isSameDay(item, subDays(new Date(), 1));
+    });
+
+    // logic to calculate the current streak. Streak can start from today or yesterday
+    if (posToday !== -1) {
+      currentStreak++;
+      for (var i = posToday; i > 0; i--) {
+        if (
+          !isSameDay(
+            subDays(selectedDict.ticked[i], 1),
+            selectedDict.ticked[i - 1]
+          )
+        ) {
+          break;
+        }
+        currentStreak++;
+      }
+    } else if (posYesterday !== -1) {
+      currentStreak++;
+      for (var i = posYesterday; i > 0; i--) {
+        if (
+          !isSameDay(
+            subDays(selectedDict.ticked[i], 1),
+            selectedDict.ticked[i - 1]
+          )
+        ) {
+          break;
+        }
+        currentStreak++;
+      }
+    }
+
+    setHabitDict((currActiveDict) => {
+      return currActiveDict.map((dict) => {
+        if (dict.id === selectedHabitButtonId) {
+          return { ...dict, streak: currentStreak };
+        } else {
+          return dict;
+        }
+      });
+    });
+  }, [calendarButtonBoolean]);
+
   // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component
   // const [tickedDates, setTickedDates] = useState({});
-
 
   const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy");
 
@@ -372,6 +477,8 @@ const App = () => {
               propHabitDict={habitDict}
               propSetHabitDict={setHabitDict}
               propSelectedHabitButtonId={selectedHabitButtonId}
+              propCalendarButtonBoolean={calendarButtonBoolean}
+              propSetCalendarButtonBoolean={setCalendarButtonBoolean}
             />
             <Sidebar habits={habits} />
             <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>

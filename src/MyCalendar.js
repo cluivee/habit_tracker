@@ -15,6 +15,7 @@ import {
   format,
   startOfWeek,
   addDays,
+  subDays,
   startOfMonth,
   endOfMonth,
   endOfWeek,
@@ -22,7 +23,7 @@ import {
   isSameDay,
   toDate,
 } from "date-fns";
-import { ToggleButton, Button, } from "@mui/material";
+import { ToggleButton, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 var r = document.querySelector(":root");
@@ -37,6 +38,8 @@ function MyCalendar({
   propHabitDict,
   propSetHabitDict,
   propSelectedHabitButtonId,
+  propCalendarButtonBoolean,
+  propSetCalendarButtonBoolean,
 }) {
   const buttonStyle = {
     backgroundColor: "#fff",
@@ -51,20 +54,15 @@ function MyCalendar({
 
   console.log(propHabitDict);
 
+  const selectedDict = useMemo(
+    () => propHabitDict.find((dict) => dict.id === propSelectedHabitButtonId),
+    [propHabitDict, propSelectedHabitButtonId]
+  );
+
   // CalendarToggleButton component
   const CalendarToggleButton = memo(
-    ({
-      day,
-      cloneDay,
-      monthStart,
-      formattedDate,
-    }) => {
+    ({ day, cloneDay, monthStart, formattedDate }) => {
       const [buttonState, setButtonState] = useState(true);
-
-      const selectedDict = useMemo(
-        () => propHabitDict.find((dict) => dict.id === propSelectedHabitButtonId),
-        [propHabitDict, propSelectedHabitButtonId]
-      );
 
       // function I got off StackOverflow to check if date object is in array
       function isInArray(array, value) {
@@ -72,7 +70,8 @@ function MyCalendar({
           return item.getTime() === value.getTime();
         });
       }
-      
+
+      // function to add a date to ticked array. We now sort the ticked array every time to make it easier to count the streak, but it might be better if we could just place the dates in sorted order from the start
       function addDate(id, tickedDate) {
         propSetHabitDict((currActiveDict) => {
           return currActiveDict.map((dict) => {
@@ -80,8 +79,13 @@ function MyCalendar({
               return {
                 ...dict,
                 ticked: isInArray(dict.ticked, tickedDate)
-                  ? dict.ticked.filter(item => item.getTime() !== tickedDate.getTime())
-                  : [...dict.ticked, tickedDate],
+                  ? dict.ticked.filter(
+                      (item) => item.getTime() !== tickedDate.getTime()
+                    )
+                  : [...dict.ticked, tickedDate].sort((a, b) => {
+                      // to get a value that is either negative, positive, or zero.
+                      return a - b;
+                    }),
               };
             } else {
               return dict;
@@ -92,8 +96,13 @@ function MyCalendar({
 
       const onDateClick = (dayToChange, event) => {
         addDate(propSelectedHabitButtonId, day);
-
         setCurrentDate(dayToChange);
+
+        if (propCalendarButtonBoolean === false) {
+          propSetCalendarButtonBoolean(true);
+        } else {
+          propSetCalendarButtonBoolean(false);
+        }
 
         // if (intermediateDict.hasOwnProperty(day)) {
         //   delete intermediateDict[day];
@@ -121,7 +130,6 @@ function MyCalendar({
 
         console.log("cloneDay: " + cloneDay);
         console.log("currentDate: " + currentDate);
-
 
         // console.log(
         //   getComputedStyle(document.body).getPropertyValue("--toggled-color")
@@ -151,7 +159,7 @@ function MyCalendar({
           className={`${
             !isSameMonth(day, monthStart)
               ? "toggleButtonClass disabled"
-              : isSameDay(day, (new Date()))
+              : isSameDay(day, new Date())
               ? "toggleButtonClass today"
               : isSameDay(day, currentDate)
               ? "toggleButtonClass selected"
@@ -175,8 +183,8 @@ function MyCalendar({
           style={{
             backgroundColor: `${
               isInArray(selectedDict.ticked, day)
-                // ? eval("theme.palette."+selectedDict.color+".main")
-                ? selectedDict.colorHex
+                ? // ? eval("theme.palette."+selectedDict.color+".main")
+                  selectedDict.colorHex
                 : getComputedStyle(document.body).getPropertyValue(
                     "--toggled-color"
                   )
