@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/alpha-beta-thing/static/css/main.19a68a59.css",
+    "main.js": "/alpha-beta-thing/static/js/main.8a1c0d04.js",
+    "static/js/787.41be8c11.chunk.js": "/alpha-beta-thing/static/js/787.41be8c11.chunk.js",
+    "index.html": "/alpha-beta-thing/index.html",
+    "main.19a68a59.css.map": "/alpha-beta-thing/static/css/main.19a68a59.css.map",
+    "main.8a1c0d04.js.map": "/alpha-beta-thing/static/js/main.8a1c0d04.js.map",
+    "787.41be8c11.chunk.js.map": "/alpha-beta-thing/static/js/787.41be8c11.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.19a68a59.css",
+    "static/js/main.8a1c0d04.js"
+  ]
+}
