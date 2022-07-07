@@ -83,7 +83,6 @@ function MyCalendar({
                       (item) => item.getTime() !== tickedDate.getTime()
                     )
                   : [...dict.ticked, tickedDate].sort((a, b) => {
-                      // to get a value that is either negative, positive, or zero.
                       return a - b;
                     }),
               };

@@ -184,6 +184,43 @@ const JustMUIDrawer = ({
     >
       {habitList}
 
+      {/* setHabitDict((currActiveDict) => {
+      return currActiveDict.map((dict) => {
+        if (dict.id === selectedHabitButtonId) {
+          return { ...dict, streak: currentStreak };
+        } else {
+          return dict;
+        }
+      });
+    }); */}
+      <Button
+        variant="contained"
+        onClick={() =>
+          propSetHabitDict((propHabitDict) => [
+            ...propHabitDict,
+            {
+              id: 1,
+              color: "orange",
+              colorHex: "#F24E1ECC",
+              maxStreak: 0,
+              streak: 0,
+              ticked: [],
+            },
+          ])
+        }
+        sx={{
+          margin: "10px",
+          textTransform: "none",
+          color: "#fff",
+          minHeight: "50px",
+          fontWeight: "400",
+          fontSize: "1rem",
+          letterSpacing: "0.00938em",
+        }}
+      >
+        + Add Habit
+      </Button>
+
       {/* Example of the original contents of the MUI sidebar drawer, including dividers */}
       {/* 
       <Toolbar />
@@ -213,9 +250,8 @@ const JustMUIDrawer = ({
       <Divider />
        */}
 
-
       <List>
-      {/* Example of the second half of the drawer */}
+        {/* Example of the second half of the drawer */}
         {/* {["All mail"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
@@ -545,17 +581,20 @@ Learn react, learn hooks, usestate,useeffect
 learn react, understand what components I will build, what data will flow through the components and how, where you keep state and API requests
 
 Break down into chucks
+Done:
 - Make front end in react
 - make calendar
 - make buttons that are clickable
+- sidebar of habits
+- count streak
+- make it look good/ material ui
+
 - save the state of buttons
 - save the database of the days that have been clicked
 - have lots of colours on one square
-- sidebar of habits
 - save preferences
 - logins
-- count streak
-- make it look good/ material ui
+
 
 TODO 24.05.2022:
 - We can do the css at the end, let's get the buttons working first
