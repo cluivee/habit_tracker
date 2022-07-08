@@ -97,6 +97,14 @@ function MyCalendar({
         addDate(propSelectedHabitButtonId, day);
         setCurrentDate(dayToChange);
 
+        let a = addDays(new Date(), 1)
+
+        // issue is that if you select a habit and then delete it, selectedDict doesn't exist.
+        console.log(selectedDict)
+        
+        // console.log(typeof a);
+        // console.log(isInArray([1,3], (new Date())))
+
         if (propCalendarButtonBoolean === false) {
           propSetCalendarButtonBoolean(true);
         } else {
@@ -127,7 +135,6 @@ function MyCalendar({
         setButtonState(!buttonState);
         propSetCalendarDate(dayToChange);
 
-        console.log("cloneDay: " + cloneDay);
         console.log("currentDate: " + currentDate);
 
         // console.log(

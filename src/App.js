@@ -121,7 +121,7 @@ const JustMUIDrawer = ({
 
   let habitList = propHabitDict.map((dict) => (
     <Habit
-      key={dict.color}
+      key={dict.id}
       id={dict.id}
       propColor={dict.color}
       propStreak={dict.streak}
@@ -183,25 +183,15 @@ const JustMUIDrawer = ({
       anchor="left"
     >
       {habitList}
-
-      {/* setHabitDict((currActiveDict) => {
-      return currActiveDict.map((dict) => {
-        if (dict.id === selectedHabitButtonId) {
-          return { ...dict, streak: currentStreak };
-        } else {
-          return dict;
-        }
-      });
-    }); */}
       <Button
         variant="contained"
         onClick={() =>
           propSetHabitDict((propHabitDict) => [
             ...propHabitDict,
             {
-              id: 1,
-              color: "orange",
-              colorHex: "#F24E1ECC",
+              id: propHabitDict.length + 1,
+              color: propHabitDict[propHabitDict.length - 6].color,
+              colorHex: propHabitDict[propHabitDict.length - 6].colorHex,
               maxStreak: 0,
               streak: 0,
               ticked: [],
@@ -219,6 +209,29 @@ const JustMUIDrawer = ({
         }}
       >
         + Add Habit
+      </Button>
+
+      <Button
+        variant="contained"
+        onClick={() => {
+          propSetHabitDict((propHabitDict) =>
+            propHabitDict.filter((item) => item.id !== propHabitDict.length)
+          );
+          if (propSelectedHabitButtonId === propHabitDict.length) {
+            propSetSelectedHabitButtonId(propHabitDict.length - 1);
+          }
+        }}
+        sx={{
+          margin: "10px",
+          textTransform: "none",
+          color: "#fff",
+          minHeight: "50px",
+          fontWeight: "400",
+          fontSize: "1rem",
+          letterSpacing: "0.00938em",
+        }}
+      >
+        - Delete Habit
       </Button>
 
       {/* Example of the original contents of the MUI sidebar drawer, including dividers */}
