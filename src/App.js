@@ -206,8 +206,10 @@ const JustMUIDrawer = ({
           fontWeight: "400",
           fontSize: "1rem",
           letterSpacing: "0.00938em",
+          
         }}
       >
+      
         + Add Habit
       </Button>
 
@@ -587,7 +589,8 @@ Jest for testing 10%
 
 https://github.com/typicode/json-server
 
-For real users - backend, can use postgresSQL, express, (knex, framework for ORM with express, can be easier), set up database connection, then other than that making queries with knex. 
+For real users - backend, can use postgresSQL, express, (knex, framework for ORM with express, can be easier), 
+set up database connection, then other than that making queries with knex. 
 
 Stick with official react docs
 Learn react, learn hooks, usestate,useeffect

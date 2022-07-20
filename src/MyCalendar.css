@@ -33,6 +33,7 @@
   --neutral-color: #fff;
   --cell-color: #fff;
   --toggled-color: #f8f8f8;
+  --firebase-auth-darktheme-color: 'transparent';
 }
 
 /* GENERAL */

@@ -6,11 +6,12 @@ import MyCalendar from './MyCalendar'
 import reportWebVitals from './reportWebVitals';
 import MUIGridExample from './MUIGridExample';
 import ExampleDerivedState from './ExampleDerivedState';
+import FirebaseAuthenticationComponent from './FirebaseAuthenticationComponent';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <FirebaseAuthenticationComponent />
   </React.StrictMode>
 );
 

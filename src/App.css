@@ -14,10 +14,6 @@ it directly in the JS */
 
 @import url('https://fonts.googleapis.com/css2?family=Sofia&display=swap');
 
-h1 {
-  color: coral;
-}
-
 .exampleButton {
   font-size: 10px;
   color: red;
