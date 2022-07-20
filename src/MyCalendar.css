@@ -43,7 +43,6 @@
 
 
 
-
 body {
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-size: 1em;
@@ -261,7 +260,7 @@ body {
   display: block;
   position: relative;
   width: 80%;
-  background: var(--neutral-color);
+  background: var(--firebase-auth-darktheme-color);
   height: auto;
   margin: 0 auto;
 }

@@ -69,7 +69,7 @@ it directly in the JS */
 
 
 .flex-item {
-  background-color:#fff;
+  background-color:var(--firebase-auth-darktheme-color);
   flex-grow: 1;
 }
 

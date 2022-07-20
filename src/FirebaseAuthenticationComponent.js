@@ -802,6 +802,7 @@ function SwitchLabels() {
 
   const onSwitchChange = () => {
     if (labelText === "Dark Theme Off") {
+        console.log('dark theme On loggged')
       setlabelText("Dark Theme On");
 
       document.documentElement.style.setProperty(
@@ -809,6 +810,7 @@ function SwitchLabels() {
         "#7F8487"
       );
     } else {
+        console.log('dark theme off')
       setlabelText("Dark Theme Off");
       document.documentElement.style.setProperty(
         "--firebase-auth-darktheme-color",
