@@ -40,6 +40,7 @@ import { format } from "date-fns";
 import { orange } from "@mui/material/colors";
 
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
+import FirebaseAuthenticationComponent from "./FirebaseAuthenticationComponent";
 
 var r = document.querySelector(":root");
 
@@ -206,10 +207,8 @@ const JustMUIDrawer = ({
           fontWeight: "400",
           fontSize: "1rem",
           letterSpacing: "0.00938em",
-          
         }}
       >
-      
         + Add Habit
       </Button>
 
@@ -444,6 +443,9 @@ const App = () => {
     },
   ]);
 
+  // adding another state for the firebase user state (similar to onauthstatechanged)
+  const [myUserAuthState, setmyUserAuthState] = useState(null);
+
   const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
   const [calendarDate, setCalendarDate] = useState(new Date());
 
@@ -525,20 +527,25 @@ const App = () => {
             propSetSelectedHabitButtonId={setSelectedHabitButtonId}
           />
           <div className="flex-item">
-            <MemoCalendar
+            <FirebaseAuthenticationComponent
+              setmyUserAuthState={setmyUserAuthState}
+              myUserAuthState={myUserAuthState}
+            />
+            {myUserAuthState ? <MemoCalendar
               propSetCalendarDate={setCalendarDate}
               propHabitDict={habitDict}
               propSetHabitDict={setHabitDict}
               propSelectedHabitButtonId={selectedHabitButtonId}
               propCalendarButtonBoolean={calendarButtonBoolean}
               propSetCalendarButtonBoolean={setCalendarButtonBoolean}
-            />
-            <Sidebar habits={habits} />
+            /> : null}            
+            {/* Ignore this "Sidebar" for the moment, and in fact ignore everything after this point*/}
+            {/* <Sidebar habits={habits} />
             <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
               <h1>{msg}</h1>
               <ExampleChild propSetMsg={setMsg} />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

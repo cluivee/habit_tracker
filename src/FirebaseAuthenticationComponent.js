@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import './App.css'
+import "./App.css";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -30,7 +30,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Switch from '@mui/material/Switch';
+import Switch from "@mui/material/Switch";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -45,9 +45,6 @@ import {
   GoogleLoginButton,
 } from "react-social-login-buttons";
 import { FormGroup } from "@mui/material";
-
-
-
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -188,18 +185,18 @@ if (isSignInWithEmailLink(auth, window.location.href)) {
 
 // simple default Home component
 function Home() {
-  const [homeText, sethomeText] = useState("You are not logged in");
   return (
-
     <ThemeProvider theme={theme}>
       <Container component="main">
         <CssBaseline />
-        <h1>Home Page</h1>
-      {currentUser !== null ? <h2>You are logged in so this is visible</h2> : null }
-      {currentUser !== null ? <h2>{`Welcome back, ${currentUser.email}`}</h2>: null }
+        {currentUser !== null ? (
+          <h2>You are logged in so home calendar is visible</h2>
+        ) : <h2>You do not have access to the Home page. Please sign in</h2>}
+        {currentUser !== null ? (
+          <h2>{`Welcome back, ${currentUser.email}`}</h2>
+        ) : null}
       </Container>
     </ThemeProvider>
-
   );
 }
 
@@ -392,7 +389,10 @@ function SignIn(props) {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode);
-          if (errorCode === "auth/user-not-found" || errorCode === "auth/wrong-password" ) {
+          if (
+            errorCode === "auth/user-not-found" ||
+            errorCode === "auth/wrong-password"
+          ) {
             setsignInErrorText("No user with these credentials exists");
           } else {
             setsignInErrorText("Something went wrong with sign in");
@@ -787,14 +787,10 @@ function DeleteUser() {
               {deleteUserErrorText}
             </Typography>
           </Box>
-          <Typography
-              component="h1"
-              variant="h5"
-              align="center"
-            >
-              Dark Theme
-            </Typography>
-            <SwitchLabels />
+          <Typography component="h1" variant="h5" align="center">
+            Dark Theme
+          </Typography>
+          <SwitchLabels />
         </Box>
       </Container>
     </ThemeProvider>
@@ -802,28 +798,36 @@ function DeleteUser() {
 }
 
 function SwitchLabels() {
-  const [labelText, setlabelText] = useState('Dark Theme Off')
+  const [labelText, setlabelText] = useState("Dark Theme Off");
 
   const onSwitchChange = () => {
-    if (labelText === 'Dark Theme Off'){
-      setlabelText('Dark Theme On')
+    if (labelText === "Dark Theme Off") {
+      setlabelText("Dark Theme On");
 
-      document.documentElement.style.setProperty('--firebase-auth-darktheme-color', '#7F8487')
-
+      document.documentElement.style.setProperty(
+        "--firebase-auth-darktheme-color",
+        "#7F8487"
+      );
     } else {
-      setlabelText('Dark Theme Off')
-      document.documentElement.style.setProperty('--firebase-auth-darktheme-color', 'transparent')
+      setlabelText("Dark Theme Off");
+      document.documentElement.style.setProperty(
+        "--firebase-auth-darktheme-color",
+        "transparent"
+      );
     }
-  }
+  };
 
   return (
     <FormGroup>
-      <FormControlLabel control={<Switch onChange={onSwitchChange}/>} label={labelText} />
+      <FormControlLabel
+        control={<Switch onChange={onSwitchChange} />}
+        label={labelText}
+      />
     </FormGroup>
   );
 }
 
-function FirebaseAuthenticationComponent() {
+function FirebaseAuthenticationComponent(props) {
   console.log("App rerendered");
   const [signedInUsername, setsignedInUsername] = useState("Logged Out");
 
@@ -842,16 +846,20 @@ function FirebaseAuthenticationComponent() {
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
         currentUser = user;
+
+        //updating the current auth user here, that is passed back to App component. Technically only need one of 'currentUser' and 'myUserAuthState'
+        props.setmyUserAuthState(user);
         console.log(
           "Auth state changed, user is: " + uid + " username: " + user.email
         );
         setsignedInUsername("Signed In: " + user.email);
-        setshowComponent('Home');
+        setshowComponent("Home");
         // ...
       } else {
         console.log("Auth state changed, Logged Out");
         setsignedInUsername("Logged Out");
         currentUser = user;
+        props.setmyUserAuthState(user);
         // User is signed out
         // ...
       }
@@ -879,73 +887,70 @@ function FirebaseAuthenticationComponent() {
   };
 
   return (
-    <div >
-      <header
-        style={{
-          backgroundColor: "lightBlue",
-          height: "3rem",
-          textAlign: "center",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <Button color="primary" onClick={() => setshowComponent("Home")}>
-          Home
-        </Button>
-        <Button color="primary" onClick={() => setshowComponent("SignUp")}>
-          Sign Up
-        </Button>
-        <Button color="primary" onClick={() => setshowComponent("SignIn")}>
-          Log In
-        </Button>
-        <Button color="primary" onClick={() => setshowComponent("DeleteUser")}>
-          Profile
-        </Button>
-        <Button
-          color="primary"
-          onClick={() => setshowComponent("ForgotPassword")}
-          style={{marginRight: 'auto'}}
-        >
-          Forgot Password
-        </Button>
-        <div style={{marginRight: '8px', fontWeight:'700'}}>{signedInUsername}</div>
-
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{
-            width: "10%",
-            justifyContent: "center",
-            float: "right",
-
-            marginRight: "8px",
-          }}
-          onClick={() => {
-            signOut(auth)
-              .then(() => {
-                // Sign-out successful.
-                console.log("Sign out successful");
-              })
-              .catch((error) => {
-                // An error happened.
-              });
+    <ThemeProvider theme={theme}>
+      <div>
+        <header
+          style={{
+            backgroundColor: "lightBlue",
+            height: "3rem",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          Log Out
-        </Button>
-      </header>
-      
-      <Box textAlign="center"></Box>
+          <Button color="primary" onClick={() => setshowComponent("Home")}>
+            Home
+          </Button>
+          <Button color="primary" onClick={() => setshowComponent("SignUp")}>
+            Sign Up
+          </Button>
+          <Button color="primary" onClick={() => setshowComponent("SignIn")}>
+            Log In
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => setshowComponent("DeleteUser")}
+          >
+            Profile
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => setshowComponent("ForgotPassword")}
+            style={{ marginRight: "auto" }}
+          >
+            Forgot Password
+          </Button>
+          <div style={{ marginRight: "8px", fontWeight: "700" }}>
+            {signedInUsername}
+          </div>
 
-      <Switcher />
-
-      {/* <SignUp />
-      <SignIn />
-      <EmailLink />
-      <ForgotPassword />
-      <DeleteUser currentUser={currentUser} />
-      */}
-    </div>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              width: "10%",
+              justifyContent: "center",
+              float: "right",
+              marginRight: "8px",
+            }}
+            onClick={() => {
+              signOut(auth)
+                .then(() => {
+                  // Sign-out successful.
+                  console.log("Sign out successful");
+                })
+                .catch((error) => {
+                  // An error happened.
+                });
+            }}
+          >
+            Log Out
+          </Button>
+        </header>
+        <Box textAlign="center"></Box>
+        <Switcher />
+      </div>
+    </ThemeProvider>
   );
 }
 
