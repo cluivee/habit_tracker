@@ -49,6 +49,7 @@ import { orange } from "@mui/material/colors";
 
 // imports for date-fns
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
+import axios from 'axios'
 
 var r = document.querySelector(":root");
 
@@ -417,14 +418,25 @@ const App = () => {
   const [habits, setHabits] = useState([]);
   // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
   // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call function again (dependency array)
+  // Empty dependency array means nothing to watch, so only runs once
+  // useEffect(() => {
+  //   fetch("http://localhost:3000/habits")
+  //     .then((response) => response.json())
+  //     .then((habits) => {
+  //       console.log("Successful:", habits);
+  //       setHabits(habits);
+  //     });
+  // }, []); 
+
   useEffect(() => {
-    fetch("http://localhost:3000/habits")
-      .then((response) => response.json())
-      .then((habits) => {
-        console.log("Successful:", habits);
-        setHabits(habits);
-      });
-  }, []); // Empty array means nothing to watch, so only runs once
+    console.log('effect')
+    axios
+      .get('http://localhost:3000/habits')
+      .then(response => {
+        console.log("Successful:", response.data);
+        setHabits(response.data)
+      })
+  }, [])
 
   // const [msg, setMsg] = useState("Initial Message");
 
@@ -587,8 +599,8 @@ const App = () => {
             ) : null}
             {/* Ignore everything after this point*/}
 
-            {/* <Sidebar habits={habits} />
-            <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
+            <Sidebar habits={habits} />
+            {/* <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
               <h1>{msg}</h1>
               <ExampleChild propSetMsg={setMsg} />
