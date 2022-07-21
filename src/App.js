@@ -116,14 +116,17 @@ const darkTheme = createTheme({
 // width of the MUI drawer sidebar
 const drawerWidth = 240;
 
+// This is the left sidebar
 const JustMUIDrawer = ({
   propHabitDict,
   propSetHabitDict,
   propSelectedHabitButtonId,
   propSetSelectedHabitButtonId,
 }) => {
-  const [buttonText, setButtonText] = useState("Not Selected");
-  const [cssColor, setCSSColor] = useState("#1affa0");
+
+  // 21.07.2022: this was used in some examples
+  // const [buttonText, setButtonText] = useState("Not Selected");
+  // const [cssColor, setCSSColor] = useState("#1affa0");
 
   const habitColorHexArray = [
     "#F24E1ECC",
@@ -154,13 +157,14 @@ const JustMUIDrawer = ({
     />
   ));
 
-  function childHandleChange(e) {
-    console.log(e.target.value);
-    this.props.onHandleChange(e.target.value);
-  }
+  // 21.07.2022: Example of how to handle event change
+  // function childHandleChange(e) {
+  //   console.log(e.target.value);
+  //   this.props.onHandleChange(e.target.value);
+  // }
 
-  // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
   // 05/07/2022: Keeping this as an example of how to change the css variable colors
+  // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow  
 
   // const handleClick = (event) => {
   //   cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
@@ -419,7 +423,7 @@ const App = () => {
 
   const [msg, setMsg] = useState("Initial Message");
 
-  // States for the whole app, there ought to be only 3.
+  // States for the whole app, there ought to be only 4.
   const [habitDict, setHabitDict] = useState([
     {
       id: 1,
@@ -479,7 +483,7 @@ const App = () => {
 
   let currentStreak = 0;
 
-  // this doesn't feel like the correct way to tell if a button was clicked, but it works for now, it also adds an extra state
+  // this doesn't feel like the correct way to tell if a button was clicked, but it works for now, it also adds an extra state unfortunately
   const [calendarButtonBoolean, setCalendarButtonBoolean] = useState(false);
 
   const selectedDict = useMemo(
@@ -538,9 +542,6 @@ const App = () => {
     });
   }, [calendarButtonBoolean]);
 
-  // Actually - does this even get used at all? // this state probably goes into the MyCalendar Component
-  // const [tickedDates, setTickedDates] = useState({});
-
   const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy");
 
   return (
@@ -569,7 +570,8 @@ const App = () => {
                 propSetCalendarButtonBoolean={setCalendarButtonBoolean}
               />
             ) : null}
-            {/* Ignore this "Sidebar" for the moment, and in fact ignore everything after this point*/}
+            {/* Ignore everything after this point*/}
+
             {/* <Sidebar habits={habits} />
             <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
