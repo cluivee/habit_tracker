@@ -15,9 +15,11 @@ const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propS
       {/* MUI button habit */}
       <Button
         variant="contained"
-        onClick={() => {propSetHabitId(id);
-        console.log(id)}}
         color={propColor}
+        onClick={() => {propSetHabitId(id);
+        console.log(id);
+        console.log(propColor);}}
+        
         sx={{
           padding: 0,
           display: "flex",

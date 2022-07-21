@@ -120,6 +120,23 @@ const JustMUIDrawer = ({
   const [buttonText, setButtonText] = useState("Not Selected");
   const [cssColor, setCSSColor] = useState("#1affa0");
 
+  const habitColorHexArray = [
+    "#F24E1ECC",
+    "#FF8D24CC",
+    "#A259FFCC",
+    "#0ACF83CC",
+    "#1ABCFECC",
+    "#FF7262CC",
+  ];
+  const habitColorArray = [
+    "orange",
+    "lightorange",
+    "purple",
+    "green",
+    "blue",
+    "pink",
+  ];
+
   let habitList = propHabitDict.map((dict) => (
     <Habit
       key={dict.id}
@@ -191,8 +208,9 @@ const JustMUIDrawer = ({
             ...propHabitDict,
             {
               id: propHabitDict.length + 1,
-              color: propHabitDict[propHabitDict.length - 6].color,
-              colorHex: propHabitDict[propHabitDict.length - 6].colorHex,
+              // color: propHabitDict[propHabitDict.length - 6].color,
+              color: habitColorArray[propHabitDict.length % 6],
+              colorHex: habitColorHexArray[propHabitDict.length % 6],
               maxStreak: 0,
               streak: 0,
               ticked: [],
@@ -215,11 +233,16 @@ const JustMUIDrawer = ({
       <Button
         variant="contained"
         onClick={() => {
-          propSetHabitDict((propHabitDict) =>
-            propHabitDict.filter((item) => item.id !== propHabitDict.length)
-          );
-          if (propSelectedHabitButtonId === propHabitDict.length) {
-            propSetSelectedHabitButtonId(propHabitDict.length - 1);
+          console.log(propHabitDict.length)
+          if (
+            propHabitDict.length > 1
+          ) {
+            propSetHabitDict((propHabitDict) =>
+              propHabitDict.filter((item) => item.id !== propHabitDict.length)
+            );
+            if (propSelectedHabitButtonId === propHabitDict.length) {
+              propSetSelectedHabitButtonId(propHabitDict.length - 1);
+            }
           }
         }}
         sx={{
@@ -531,14 +554,16 @@ const App = () => {
               setmyUserAuthState={setmyUserAuthState}
               myUserAuthState={myUserAuthState}
             />
-            {myUserAuthState ? <MemoCalendar
-              propSetCalendarDate={setCalendarDate}
-              propHabitDict={habitDict}
-              propSetHabitDict={setHabitDict}
-              propSelectedHabitButtonId={selectedHabitButtonId}
-              propCalendarButtonBoolean={calendarButtonBoolean}
-              propSetCalendarButtonBoolean={setCalendarButtonBoolean}
-            /> : null}            
+            {myUserAuthState ? (
+              <MemoCalendar
+                propSetCalendarDate={setCalendarDate}
+                propHabitDict={habitDict}
+                propSetHabitDict={setHabitDict}
+                propSelectedHabitButtonId={selectedHabitButtonId}
+                propCalendarButtonBoolean={calendarButtonBoolean}
+                propSetCalendarButtonBoolean={setCalendarButtonBoolean}
+              />
+            ) : null}
             {/* Ignore this "Sidebar" for the moment, and in fact ignore everything after this point*/}
             {/* <Sidebar habits={habits} />
             <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
