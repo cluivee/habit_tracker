@@ -55,7 +55,7 @@ const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propS
           padding shorthand: "t r b l"*/}
           <label
             style={{
-              color: "white",
+              color: "#fff",
               textTransform: "capitalize",
               fontWeight: "300",
               textAlign: "left",
