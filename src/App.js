@@ -1,8 +1,13 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import MyCalendar, { MemoCalendar } from "./MyCalendar";
-import Sidebar from "./Sidebar";
-import Habit from "./Habit";
 import "./App.css";
+
+// imports for files that are used
+import MyCalendar, { MemoCalendar } from "./MyCalendar";
+import Habit from "./Habit";
+import FirebaseAuthenticationComponent from "./FirebaseAuthenticationComponent";
+
+// imports for unused files
+import Sidebar from "./Sidebar";
 import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
 import ExampleChild from "./ExampleChild";
 
@@ -40,7 +45,7 @@ import { format } from "date-fns";
 import { orange } from "@mui/material/colors";
 
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
-import FirebaseAuthenticationComponent from "./FirebaseAuthenticationComponent";
+
 
 var r = document.querySelector(":root");
 
