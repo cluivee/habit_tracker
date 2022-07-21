@@ -11,7 +11,7 @@ import Sidebar from "./Sidebar";
 import SimpleHTMLSidebarTest from "./SimpleHTMLSidebarTest";
 import ExampleChild from "./ExampleChild";
 
-// below are imports for mui
+// imports for mui
 import {
   Button,
   Box,
@@ -44,11 +44,12 @@ import Switch from "@mui/material/Switch";
 import { format } from "date-fns";
 import { orange } from "@mui/material/colors";
 
+// imports for date-fns
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
-
 
 var r = document.querySelector(":root");
 
+// Mui custom theme that we use for some colors and component style overrides
 const darkTheme = createTheme({
   palette: {
     // I can change this to light to change the theme
@@ -123,7 +124,6 @@ const JustMUIDrawer = ({
   propSelectedHabitButtonId,
   propSetSelectedHabitButtonId,
 }) => {
-
   // 21.07.2022: this was used in some examples
   // const [buttonText, setButtonText] = useState("Not Selected");
   // const [cssColor, setCSSColor] = useState("#1affa0");
@@ -164,7 +164,7 @@ const JustMUIDrawer = ({
   // }
 
   // 05/07/2022: Keeping this as an example of how to change the css variable colors
-  // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow  
+  // Eventually I've stopped wondering why changing the css variable --main-color which sets the border color of the active tile, whites out the border onClick. The border is actually set in a hover state which may be messing it up somehow
 
   // const handleClick = (event) => {
   //   cssColor === "#1affa0" ? setCSSColor("#eb31b3") : setCSSColor("#1affa0");
@@ -210,6 +210,8 @@ const JustMUIDrawer = ({
       anchor="left"
     >
       {habitList}
+
+      {/* "Add Habit" button */}
       <Button
         variant="contained"
         onClick={() =>
@@ -239,13 +241,12 @@ const JustMUIDrawer = ({
         + Add Habit
       </Button>
 
+      {/* "Delete Habit" button */}
       <Button
         variant="contained"
         onClick={() => {
-          console.log(propHabitDict.length)
-          if (
-            propHabitDict.length > 1
-          ) {
+          console.log(propHabitDict.length);
+          if (propHabitDict.length > 1) {
             propSetHabitDict((propHabitDict) =>
               propHabitDict.filter((item) => item.id !== propHabitDict.length)
             );
@@ -409,6 +410,8 @@ const JustMUIDrawer = ({
 // };
 
 const App = () => {
+
+  // habits/sethabits was an example for testing a JSON server database. You can ignore this.
   const [habits, setHabits] = useState([]);
   // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
   // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call function again (dependency array)
@@ -421,9 +424,11 @@ const App = () => {
       });
   }, []); // Empty array means nothing to watch, so only runs once
 
-  const [msg, setMsg] = useState("Initial Message");
+  // const [msg, setMsg] = useState("Initial Message");
 
-  // States for the whole app, there ought to be only 4.
+  // States for the whole app, there ought to be only 5.
+
+  // This state is to store the variables for all the habits in the sidebar
   const [habitDict, setHabitDict] = useState([
     {
       id: 1,
@@ -478,19 +483,24 @@ const App = () => {
   // adding another state for the firebase user state (similar to onauthstatechanged)
   const [myUserAuthState, setmyUserAuthState] = useState(null);
 
+  // state for the id of the button of the currently selected habit
   const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
-  const [calendarDate, setCalendarDate] = useState(new Date());
 
-  let currentStreak = 0;
+  // state for the currently selected date
+  const [calendarDate, setCalendarDate] = useState(new Date());
 
   // this doesn't feel like the correct way to tell if a button was clicked, but it works for now, it also adds an extra state unfortunately
   const [calendarButtonBoolean, setCalendarButtonBoolean] = useState(false);
 
+  // The currently selected habit
   const selectedDict = useMemo(
     () => habitDict.find((dict) => dict.id === selectedHabitButtonId),
     [habitDict, selectedHabitButtonId]
   );
 
+  let currentStreak = 0;
+  
+  // This effect runs each time a date on the calendar is clicked, and calculates the current streak of consecutive dates clicked from today backwards.
   useEffect(() => {
     console.log("Habit Streak updated");
 
@@ -541,8 +551,6 @@ const App = () => {
       });
     });
   }, [calendarButtonBoolean]);
-
-  const formattedCalendarDay = format(calendarDate, "dd MMMM yyyy");
 
   return (
     <ThemeProvider theme={darkTheme}>

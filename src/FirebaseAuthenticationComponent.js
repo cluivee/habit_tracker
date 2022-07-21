@@ -1,5 +1,5 @@
-// Import the functions you need from the SDKs you need
 import "./App.css";
+import { createContext, useEffect, useRef, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -21,6 +21,7 @@ import {
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+// Imports from MUI
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -37,7 +38,6 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import validator, { isEmail, isStrongPassword } from "validator";
-import { createContext, useEffect, useRef, useState } from "react";
 
 // npm package "React Social Login Buttons" widgets
 import {
@@ -46,7 +46,7 @@ import {
 } from "react-social-login-buttons";
 import { FormGroup } from "@mui/material";
 
-// Your web app's Firebase configuration
+// configuration and apikeys for firebase
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -70,12 +70,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
-
 const auth = getAuth();
 
 // the current logged in user
 let currentUser = auth.currentUser;
 
+// function for when the "log in with Google" button is clicked
 function GoogleHandleClick(event) {
   console.log("Google Sign in clicked: ");
 
@@ -102,6 +102,7 @@ function GoogleHandleClick(event) {
     });
 }
 
+// function for when the "log in with Facebook" button is clicked
 function FacebookHandleClick() {
   console.log("Facebook Sign in clicked: ");
   const provider = new FacebookAuthProvider();
@@ -154,6 +155,7 @@ function FacebookHandleClick() {
 // 18.07.2022 this is slightly buggy, as it won't say "sign in successful" on successful login here, but I'm keeping this method outside
 // the App component because it causes problems with asking for the email 4 times if I put it in the app component.
 
+// This method checks for if the user has just been redirected via a 'verify email' link. Not used at the moment as I'm not using Email link authentication.
 if (isSignInWithEmailLink(auth, window.location.href)) {
   // Additional state parameters can also be passed via URL.
   // This can be used to continue the user's intended action before triggering
@@ -183,7 +185,7 @@ if (isSignInWithEmailLink(auth, window.location.href)) {
     });
 }
 
-// simple default Home component
+// simple default Home Page component
 function Home() {
   return (
     <ThemeProvider theme={theme}>
@@ -200,7 +202,8 @@ function Home() {
   );
 }
 
-// Create New Account Component MUI
+// Create New Account Component from MUI
+
 function Copyright(props) {
   return (
     <Typography
@@ -495,7 +498,7 @@ function SignIn(props) {
   );
 }
 
-// Email Link Verification Component
+// Email Link Verification Component, not used currently
 
 function EmailLink() {
   const [emailLinkErrorText, setemailLinkErrorText] = useState("");
@@ -613,6 +616,7 @@ function EmailLink() {
 }
 
 // Forgot Password form (created by copying Sign In component)
+
 function ForgotPassword(props) {
   const [forgotErrorText, setforgotErrorText] = useState("");
 
@@ -797,6 +801,7 @@ function DeleteUser() {
   );
 }
 
+// The dark theme switch
 function SwitchLabels() {
   const [labelText, setlabelText] = useState("Dark Theme Off");
 
@@ -831,8 +836,10 @@ function SwitchLabels() {
 
 function FirebaseAuthenticationComponent(props) {
   console.log("App rerendered");
+  // state for the username of the currently signed in user
   const [signedInUsername, setsignedInUsername] = useState("Logged Out");
 
+  // state for which component we want to show (works like React Router I think)
   const [showComponent, setshowComponent] = useState("SignUp");
 
   /* putting onAuthStateChanged in useEffect sets the onauthstate listener only once when App is first rendered, preventing
@@ -868,9 +875,7 @@ function FirebaseAuthenticationComponent(props) {
     });
   }, []);
 
-  // this may get moved to a global scope again in the future, as I prefer all the firebase methods being global, and I don't like this function
-  // getting rerun again when the App component rerenders
-
+  // This switches between which component we want to show
   const Switcher = () => {
     switch (showComponent) {
       case "Home":

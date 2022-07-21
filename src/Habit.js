@@ -8,6 +8,8 @@ import {
   toDate,
 } from "date-fns";
 
+// This reusable component is the habit button in the left sidebar.
+
 const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propSelectedHabitButtonId }) => {
 
   return (
@@ -17,8 +19,7 @@ const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propS
         variant="contained"
         color={propColor}
         onClick={() => {propSetHabitId(id);
-        console.log(id);
-        console.log(propColor);}}
+        console.log(id);}}
         
         sx={{
           padding: 0,
