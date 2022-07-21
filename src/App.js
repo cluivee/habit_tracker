@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./App.css";
 
-// The App component imports MyCalendar which is the main calendar/habit tracker component, Habit which is one of the buttons in the sidebar, 
+// The App component imports MyCalendar which is the main calendar/habit tracker component, Habit which is one of the buttons in the sidebar,
 // and FirebaseAuthenticationComponent which is where I keep most of the components and functions for the sign in/sign out authentication.
 
 // imports for files that are used
@@ -413,7 +413,6 @@ const JustMUIDrawer = ({
 // };
 
 const App = () => {
-
   // habits/sethabits was an example for testing a JSON server database. You can ignore this.
   const [habits, setHabits] = useState([]);
   // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
@@ -430,7 +429,6 @@ const App = () => {
   // const [msg, setMsg] = useState("Initial Message");
 
   // States for the whole app, there ought to be only 5.
-
   // This state is to store the variables for all the habits in the sidebar
   const [habitDict, setHabitDict] = useState([
     {
@@ -501,8 +499,12 @@ const App = () => {
     [habitDict, selectedHabitButtonId]
   );
 
+
   let currentStreak = 0;
-  
+
+  // state for which component we want to show (works like React Router I think). This has been moved up to App from FirebaseAuthenticationComponent, though I may want to move it back down to prevent rerenderings
+  const [showComponent, setshowComponent] = useState("SignUp");
+
   // This effect runs each time a date on the calendar is clicked, and calculates the current streak of consecutive dates clicked from today backwards.
   useEffect(() => {
     console.log("Habit Streak updated");
@@ -570,8 +572,10 @@ const App = () => {
             <FirebaseAuthenticationComponent
               setmyUserAuthState={setmyUserAuthState}
               myUserAuthState={myUserAuthState}
+              showComponent={showComponent}
+              setshowComponent={setshowComponent}
             />
-            {myUserAuthState ? (
+            {myUserAuthState && showComponent === 'Home' ? (
               <MemoCalendar
                 propSetCalendarDate={setCalendarDate}
                 propHabitDict={habitDict}

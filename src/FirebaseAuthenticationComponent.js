@@ -188,22 +188,21 @@ if (isSignInWithEmailLink(auth, window.location.href)) {
 // simple default Home Page component
 function Home() {
   return (
-    <ThemeProvider theme={theme}>
       <Container component="main">
         <CssBaseline />
         {currentUser !== null ? (
           <h2>You are logged in so home calendar is visible</h2>
-        ) : <h2>You do not have access to the Home page. Please sign in</h2>}
+        ) : (
+          <h2>You do not have access to the Home page. Please sign in</h2>
+        )}
         {currentUser !== null ? (
           <h2>{`Welcome back, ${currentUser.email}`}</h2>
         ) : null}
       </Container>
-    </ThemeProvider>
   );
 }
 
 // Create New Account Component from MUI
-
 function Copyright(props) {
   return (
     <Typography
@@ -224,7 +223,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-function SignUp(props) {
+function SignUp({ setshowComponent }) {
   const [signUpErrorText, setsignUpErrorText] = useState("");
 
   const handleSubmit = (event) => {
@@ -344,7 +343,7 @@ function SignUp(props) {
                 <Link
                   href="#"
                   variant="body2"
-                  onClick={() => props.setshowComponent("SignIn")}
+                  onClick={() => setshowComponent("SignIn")}
                 >
                   Already have an account? Sign in
                 </Link>
@@ -807,7 +806,7 @@ function SwitchLabels() {
 
   const onSwitchChange = () => {
     if (labelText === "Dark Theme Off") {
-        console.log('dark theme On loggged')
+      console.log("dark theme On loggged");
       setlabelText("Dark Theme On");
 
       document.documentElement.style.setProperty(
@@ -815,7 +814,7 @@ function SwitchLabels() {
         "#7F8487"
       );
     } else {
-        console.log('dark theme off')
+      console.log("dark theme off");
       setlabelText("Dark Theme Off");
       document.documentElement.style.setProperty(
         "--firebase-auth-darktheme-color",
@@ -834,13 +833,32 @@ function SwitchLabels() {
   );
 }
 
-function FirebaseAuthenticationComponent(props) {
+// This switches between which component we want to show
+const Switcher = ({setshowComponent, showComponent}) => {
+  switch (showComponent) {
+    case "Home":
+      return <Home setshowComponent={setshowComponent} />;
+    case "SignUp":
+      return <SignUp setshowComponent={setshowComponent} />;
+    case "SignIn":
+      return <SignIn setshowComponent={setshowComponent} />;
+    case "DeleteUser":
+      return <DeleteUser setshowComponent={setshowComponent} />;
+    case "ForgotPassword":
+      return <ForgotPassword setshowComponent={setshowComponent} />;
+    default:
+      return <SignUp setshowComponent={setshowComponent} />;
+  }
+};
+
+function FirebaseAuthenticationComponent({
+  setshowComponent,
+  showComponent,
+  setmyUserAuthState,
+}) {
   console.log("App rerendered");
   // state for the username of the currently signed in user
   const [signedInUsername, setsignedInUsername] = useState("Logged Out");
-
-  // state for which component we want to show (works like React Router I think)
-  const [showComponent, setshowComponent] = useState("SignUp");
 
   /* putting onAuthStateChanged in useEffect sets the onauthstate listener only once when App is first rendered, preventing
   another listener being added when App is rerendered, thereby preventing infinite loops when we change the state in onauthstatechanged.
@@ -857,7 +875,7 @@ function FirebaseAuthenticationComponent(props) {
         currentUser = user;
 
         //updating the current auth user here, that is passed back to App component. Technically only need one of 'currentUser' and 'myUserAuthState'
-        props.setmyUserAuthState(user);
+        setmyUserAuthState(user);
         console.log(
           "Auth state changed, user is: " + uid + " username: " + user.email
         );
@@ -868,30 +886,12 @@ function FirebaseAuthenticationComponent(props) {
         console.log("Auth state changed, Logged Out");
         setsignedInUsername("Logged Out");
         currentUser = user;
-        props.setmyUserAuthState(user);
+        setmyUserAuthState(user);
         // User is signed out
         // ...
       }
     });
   }, []);
-
-  // This switches between which component we want to show
-  const Switcher = () => {
-    switch (showComponent) {
-      case "Home":
-        return <Home setshowComponent={setshowComponent} />;
-      case "SignUp":
-        return <SignUp setshowComponent={setshowComponent} />;
-      case "SignIn":
-        return <SignIn setshowComponent={setshowComponent} />;
-      case "DeleteUser":
-        return <DeleteUser setshowComponent={setshowComponent} />;
-      case "ForgotPassword":
-        return <ForgotPassword setshowComponent={setshowComponent} />;
-      default:
-        return <SignUp setshowComponent={setshowComponent} />;
-    }
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -955,7 +955,10 @@ function FirebaseAuthenticationComponent(props) {
           </Button>
         </header>
         <Box textAlign="center"></Box>
-        <Switcher />
+        <Switcher
+          setshowComponent={setshowComponent}
+          showComponent={showComponent}
+        />
       </div>
     </ThemeProvider>
   );
