@@ -6,7 +6,6 @@ import React, {
   memo,
   useMemo,
 } from "react";
-
 import "./MyCalendar.css";
 
 import {
@@ -26,8 +25,10 @@ import {
 import { ToggleButton, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-var r = document.querySelector(":root");
+// This is the main calendar / habit tracker component.
 
+// These were for css variables but not used anymore
+var r = document.querySelector(":root");
 console.log(
   "--main-color value: " +
     document.documentElement.style.getPropertyValue("--main-color")
@@ -41,27 +42,30 @@ function MyCalendar({
   propCalendarButtonBoolean,
   propSetCalendarButtonBoolean,
 }) {
-  const buttonStyle = {
-    backgroundColor: "#fff",
-  };
+  // const buttonStyle = {
+  //   backgroundColor: "#fff",
+  // };
+  // const otherStyle = {
+  //   backgroundColor: "green",
+  // };
+  // const [addStyle, setAddStyle] = useState({});
 
-  const otherStyle = {
-    backgroundColor: "green",
-  };
-
+  // state for the currently selected date. There is already a state for this in the parent App component, so potentially I could only have one state variable for this, but I may move the date into only the MyCalendar component in the future to prevent some rerendering issues.
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [addStyle, setAddStyle] = useState({});
 
   console.log(propHabitDict);
 
+  // the currently select habit
   const selectedDict = useMemo(
     () => propHabitDict.find((dict) => dict.id === propSelectedHabitButtonId),
     [propHabitDict, propSelectedHabitButtonId]
   );
 
-  // CalendarToggleButton component
+  // CalendarToggleButton component. Each of these represents one date on the calendar.
   const CalendarToggleButton = memo(
     ({ day, cloneDay, monthStart, formattedDate }) => {
+
+      // buttonstate is not really used anymore, but I would one day want to use a state variable for each date button to toggle the color, as this would prevent some rerendering.
       const [buttonState, setButtonState] = useState(true);
 
       // function I got off StackOverflow to check if date object is in array
@@ -93,6 +97,7 @@ function MyCalendar({
         });
       }
 
+      // onClick function each date button
       const onDateClick = (dayToChange, event) => {
         addDate(propSelectedHabitButtonId, day);
         setCurrentDate(dayToChange);
@@ -143,7 +148,7 @@ function MyCalendar({
         // }
       };
 
-      const theme = useTheme();
+      // const theme = useTheme();
 
       return (
         <ToggleButton
@@ -200,6 +205,7 @@ function MyCalendar({
     }
   );
 
+  // The top header of the calendar
   const CalendarHeader = () => {
     const dateFormat = "dd MMMM yyyy";
     return (
@@ -236,6 +242,7 @@ function MyCalendar({
     return <div className="container">{daysHeader}</div>;
   };
 
+  // The Calendar Grid with the buttons of dates
   const CalendarGrid = memo(() => {
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(monthStart);
@@ -284,6 +291,7 @@ function MyCalendar({
   );
 }
 
+// I memo'd the calendar to prevent some rerenderings, but it still rerenders more than I'd like.
 export const MemoCalendar = memo(MyCalendar);
 
 export default MyCalendar;
