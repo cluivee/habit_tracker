@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./App.css";
 
+// The App component imports MyCalendar which is the main calendar/habit tracker component, Habit which is one of the buttons in the sidebar, 
+// and FirebaseAuthenticationComponent which is where I keep most of the components and functions for the sign in/sign out authentication.
+
 // imports for files that are used
 import MyCalendar, { MemoCalendar } from "./MyCalendar";
 import Habit from "./Habit";
