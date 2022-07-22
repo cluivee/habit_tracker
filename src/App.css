@@ -14,6 +14,31 @@ it directly in the JS */
 
 @import url('https://fonts.googleapis.com/css2?family=Sofia&display=swap');
 
+/* Styles for fullstackopen tutorial, improved error messages tutorial  */
+
+h6 {
+  color: green;
+  font-style: italic;
+}
+
+.habitListItem {
+  color: grey;
+  padding-top: 5px;
+  font-size: 15px;
+}
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* End of Styles  for fullstackopen tutorial, improved error messages tutorial  */
+
+
 .exampleButton {
   font-size: 10px;
   color: red;

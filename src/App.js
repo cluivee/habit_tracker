@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./App.css";
-import iCanCallThisWhateverILikeDefaultExport from './services/habits'
+import habitsservice from "./services/habitsservice";
 
 // The App component imports MyCalendar which is the main calendar/habit tracker component, Habit which is one of the buttons in the sidebar,
 // and FirebaseAuthenticationComponent which is where I keep most of the components and functions for the sign in/sign out authentication.
@@ -414,21 +414,17 @@ const JustMUIDrawer = ({
 //   );
 // };
 
-const JSONTestButton = () => {
-  const jsonOnClick = () => {
-    const habitObject = {title: "push", color: "limegreen" };
-
-    axios.post("http://localhost:3000/habits", habitObject).then((response) => {
-      console.log(response);
-    });
-  };
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
 
   return (
-    <>
-      <Button variant="contained" onClick={jsonOnClick}> This Button</Button>
-    </>
-  );
-};
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   // habits/sethabits was an example for testing a JSON server database. You can ignore this.
@@ -447,21 +443,47 @@ const App = () => {
 
   useEffect(() => {
     console.log("effect");
-    axios.get("http://localhost:3000/habits").then((response) => {
-      console.log("Successful:", response.data);
-      setHabits(response.data);
+    habitsservice.getAll().then((response) => {
+      console.log("Successful:", response);
+      setHabits(response);
     });
   }, []);
 
-  const toggleImportanceOf = id => {
-    const url = `http://localhost:3000/habits/${id}`
-    const habit = habits.find(n => n.id === id)
-    const changedHabit = { ...habit, important: !habit.important }
-  
-    axios.put(url, changedHabit).then(response => {
-      setHabits(habits.map(habit => habit.id !== id ? habit : response.data))
-    })
+  const toggleImportanceOf = (id) => {
+    const url = `http://localhost:3000/habits/${id}`;
+    const habit = habits.find((n) => n.id === id);
+    const changedHabit = { ...habit, important: !habit.important };
+
+    habitsservice.update(id, changedHabit).then((returnedHabit) => {
+      setHabits(
+        habits.map((habit) => (habit.id !== id ? habit : returnedHabit))
+      );
+    }).catch(error => {
+
+      setErrorMessage(
+        `Note '${habit.color}' was already removed from server`
+      )
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 3000)
+      
+      setHabits(habits.filter(n => n.id !== id))
+    });
+  };
+
+  const addJsonOnClick = () => {
+    const habitObject = { title: "push", color: "limegreen" };
+
+    habitsservice.create(habitObject).then((returnedNote) => {
+      setHabits(habits.concat(returnedNote));
+    });
+  };
+
+  const deleteJsonOnClick = () => {
+    
   }
+
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   // const [msg, setMsg] = useState("Initial Message");
 
@@ -622,9 +644,11 @@ const App = () => {
               />
             ) : null}
             {/* Ignore everything after this point*/}
-
+            <Notification message={errorMessage} />
             <Sidebar habits={habits} toggleImportanceOf={toggleImportanceOf} />
-            <JSONTestButton/>
+            <Button variant="contained" onClick={addJsonOnClick}>
+              Add To Server
+            </Button>
             {/* <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
               <h1>{msg}</h1>
@@ -702,6 +726,10 @@ Done:
 - save preferences
 - logins
 
+TODO 22.06.2022:
+- Remove all the selectors like h1 from CSS files, as they might be clashing with MUI styles. The specific classnames can probably stay as they're unlikely to clash with other things, unless they wrap child components that are affected by the positioning
+- checkboxes don't work at all.
+- perhaps log out button could say 'sign in' when you log in successfully?
 
 TODO 24.05.2022:
 - We can do the css at the end, let's get the buttons working first
