@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./App.css";
+import iCanCallThisWhateverILikeDefaultExport from './services/habits'
 
 // The App component imports MyCalendar which is the main calendar/habit tracker component, Habit which is one of the buttons in the sidebar,
 // and FirebaseAuthenticationComponent which is where I keep most of the components and functions for the sign in/sign out authentication.
@@ -49,7 +50,7 @@ import { orange } from "@mui/material/colors";
 
 // imports for date-fns
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
-import axios from 'axios'
+import axios from "axios";
 
 var r = document.querySelector(":root");
 
@@ -413,6 +414,22 @@ const JustMUIDrawer = ({
 //   );
 // };
 
+const JSONTestButton = () => {
+  const jsonOnClick = () => {
+    const habitObject = {title: "push", color: "limegreen" };
+
+    axios.post("http://localhost:3000/habits", habitObject).then((response) => {
+      console.log(response);
+    });
+  };
+
+  return (
+    <>
+      <Button variant="contained" onClick={jsonOnClick}> This Button</Button>
+    </>
+  );
+};
+
 const App = () => {
   // habits/sethabits was an example for testing a JSON server database. You can ignore this.
   const [habits, setHabits] = useState([]);
@@ -426,17 +443,25 @@ const App = () => {
   //       console.log("Successful:", habits);
   //       setHabits(habits);
   //     });
-  // }, []); 
+  // }, []);
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3000/habits')
-      .then(response => {
-        console.log("Successful:", response.data);
-        setHabits(response.data)
-      })
-  }, [])
+    console.log("effect");
+    axios.get("http://localhost:3000/habits").then((response) => {
+      console.log("Successful:", response.data);
+      setHabits(response.data);
+    });
+  }, []);
+
+  const toggleImportanceOf = id => {
+    const url = `http://localhost:3000/habits/${id}`
+    const habit = habits.find(n => n.id === id)
+    const changedHabit = { ...habit, important: !habit.important }
+  
+    axios.put(url, changedHabit).then(response => {
+      setHabits(habits.map(habit => habit.id !== id ? habit : response.data))
+    })
+  }
 
   // const [msg, setMsg] = useState("Initial Message");
 
@@ -510,7 +535,6 @@ const App = () => {
     () => habitDict.find((dict) => dict.id === selectedHabitButtonId),
     [habitDict, selectedHabitButtonId]
   );
-
 
   let currentStreak = 0;
 
@@ -587,7 +611,7 @@ const App = () => {
               showComponent={showComponent}
               setshowComponent={setshowComponent}
             />
-            {myUserAuthState && showComponent === 'Home' ? (
+            {myUserAuthState && showComponent === "Home" ? (
               <MemoCalendar
                 propSetCalendarDate={setCalendarDate}
                 propHabitDict={habitDict}
@@ -599,7 +623,8 @@ const App = () => {
             ) : null}
             {/* Ignore everything after this point*/}
 
-            <Sidebar habits={habits} />
+            <Sidebar habits={habits} toggleImportanceOf={toggleImportanceOf} />
+            <JSONTestButton/>
             {/* <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
               <h1>{msg}</h1>

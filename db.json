@@ -1,14 +1,79 @@
 {
-    "habits": [
-      { "id": 1, "title": "eat", "color": "blue"},
-      { "id": 2, "title": "sleep", "color": "orange" },
-      { "id": 3, "title": "dance", "color": "green" },
-      { "id": 4, "title": "meditation", "color": "purple" },
-      { "id": 5, "title": "study stuff", "color": "pink" }
-    ],
-    "comments": [
-      { "id": 1, "body": "some comment", "postId": 1 },
-      { "id": 2, "body": "new comm", "postId": 2 }
-    ],
-    "profile": { "name": "typicode" }
+  "habits": [
+    {
+      "id": 1,
+      "title": "eat",
+      "color": "blue",
+      "important": false
+    },
+    {
+      "id": 2,
+      "title": "sleep",
+      "color": "orange",
+      "important": false
+    },
+    {
+      "id": 3,
+      "title": "dance",
+      "color": "green",
+      "important": true
+    },
+    {
+      "id": 4,
+      "title": "meditation",
+      "color": "purple",
+      "important": true
+    },
+    {
+      "id": 5,
+      "title": "study stuff",
+      "color": "pink",
+      "important": false
+    },
+    {
+      "id": 7,
+      "title": "push",
+      "color": "limegreen",
+      "important": true
+    },
+    {
+      "title": "push",
+      "color": "limegreen",
+      "id": 8,
+      "important": true
+    },
+    {
+      "title": "push",
+      "color": "limegreen",
+      "id": 9,
+      "important": false
+    },
+    {
+      "title": "push",
+      "color": "limegreen",
+      "id": 10,
+      "important": false
+    },
+    {
+      "title": "push",
+      "color": "limegreen",
+      "id": 11,
+      "important": true
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    },
+    {
+      "id": 2,
+      "body": "new comm",
+      "postId": 2
+    }
+  ],
+  "profile": {
+    "name": "typicode"
   }
+}
