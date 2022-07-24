@@ -12,21 +12,15 @@ it directly in the JS */
   --body-color: white;
 } */
 
-@import url('https://fonts.googleapis.com/css2?family=Sofia&display=swap');
-
 /* Styles for fullstackopen tutorial, improved error messages tutorial  */
-
-h6 {
-  color: green;
-  font-style: italic;
-}
 
 .habitListItem {
   color: grey;
   padding-top: 5px;
   font-size: 15px;
 }
-.error {
+
+.errorNotificationBox {
   color: red;
   background: lightgrey;
   font-size: 20px;
@@ -46,6 +40,7 @@ h6 {
   width: 200px;
   border: 10px solid;
   border-color: var(--second-color);
+  box-sizing: border-box;
 }
 
 .App-logo {
@@ -110,6 +105,7 @@ h6 {
   font-weight: 100;
   /* font-size: 50px; */
   line-height: .125em;
+  box-sizing: border-box;
 }
 .react-calendar--doubleView {
   width: 700px;
@@ -131,7 +127,7 @@ h6 {
   box-sizing: border-box;
 }
 .react-calendar button {
-  margin: 0px;
+  margin: 0;
   border: 3px solid #fff;
   outline: none;
 }
@@ -185,7 +181,7 @@ h6 {
   max-width: 100%;
   /* default padding */
   /* padding: 10px 6.6667px; */
-  padding: 0px 5px;
+  padding: 0 5px;
   background: coral;
   /* border: 100px solid #000;
   margin: 10px; */

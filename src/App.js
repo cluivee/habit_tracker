@@ -414,17 +414,18 @@ const JustMUIDrawer = ({
 //   );
 // };
 
-const Notification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
+// Notification form fullstackopen, might be useful later
+// const Notification = ({ message }) => {
+//   if (message === null) {
+//     return null
+//   }
 
-  return (
-    <div className='error'>
-      {message}
-    </div>
-  )
-}
+//   return (
+//     <div className='errorNotificationBox'>
+//       {message}
+//     </div>
+//   )
+// }
 
 const App = () => {
   // habits/sethabits was an example for testing a JSON server database. You can ignore this.
@@ -480,7 +481,15 @@ const App = () => {
   };
 
   const deleteJsonOnClick = () => {
-    
+    const lastItemIndex = habits.length-1;
+    console.log(habits[lastItemIndex]);
+    console.log(...habits.slice(0,16));
+
+
+    if (habits.length > 0) {
+      // setHabits(habits.filter(n => n.id !== id))
+      setHabits([...habits.slice(0,habits.length-1)]);
+    }
   }
 
   const [errorMessage, setErrorMessage] = useState('some error happened...')
@@ -644,10 +653,12 @@ const App = () => {
               />
             ) : null}
             {/* Ignore everything after this point*/}
-            <Notification message={errorMessage} />
             <Sidebar habits={habits} toggleImportanceOf={toggleImportanceOf} />
             <Button variant="contained" onClick={addJsonOnClick}>
               Add To Server
+            </Button>
+            <Button variant="contained" onClick={deleteJsonOnClick}>
+              Delete last item
             </Button>
             {/* <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>

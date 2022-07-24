@@ -1,0 +1,104 @@
+{
+    "habits": [
+      {
+        "id": 1,
+        "title": "eat",
+        "color": "blue",
+        "important": false
+      },
+      {
+        "id": 2,
+        "title": "sleep",
+        "color": "orange",
+        "important": true
+      },
+      {
+        "id": 3,
+        "title": "dance",
+        "color": "green",
+        "important": false
+      },
+      {
+        "id": 4,
+        "title": "meditation",
+        "color": "purple",
+        "important": true
+      },
+      {
+        "id": 5,
+        "title": "study stuff",
+        "color": "pink",
+        "important": false
+      },
+      {
+        "id": 7,
+        "title": "push",
+        "color": "limegreen",
+        "important": true
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 8,
+        "important": false
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 9,
+        "important": false
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 10,
+        "important": false
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 11,
+        "important": true
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 12
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 13
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 14
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 15
+      },
+      {
+        "title": "push",
+        "color": "limegreen",
+        "id": 16
+      }
+    ],
+    "comments": [
+      {
+        "id": 1,
+        "body": "some comment",
+        "postId": 1
+      },
+      {
+        "id": 2,
+        "body": "new comm",
+        "postId": 2
+      }
+    ],
+    "profile": {
+      "name": "typicode"
+    }
+  }
