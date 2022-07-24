@@ -1,4 +1,4 @@
-import { Button, Checkbox, TextField, ThemeProvider } from "@mui/material";
+import { Button, Checkbox, TextField, ThemeProvider, Typography } from "@mui/material";
 import React, {useMemo, useEffect} from "react";
 
 import {
@@ -12,6 +12,7 @@ import {
 
 const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propSelectedHabitButtonId }) => {
 
+  console.log(propHabitDict);  
   return (
     <div>
       {/* MUI button habit */}
@@ -66,6 +67,7 @@ const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propS
           >
             Streak: {propStreak}
           </label>
+          <Typography>{propHabitDict[0].newness}</Typography>
         </div>
         <Checkbox
           color="default"

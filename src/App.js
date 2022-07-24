@@ -124,10 +124,12 @@ const drawerWidth = 240;
 
 // This is the left sidebar
 const JustMUIDrawer = ({
-  propHabitDict,
-  propSetHabitDict,
+  habits,
+  setHabits,
   propSelectedHabitButtonId,
   propSetSelectedHabitButtonId,
+  addJsonOnClick,
+  deleteJsonOnClick,
 }) => {
   // 21.07.2022: this was used in some examples
   // const [buttonText, setButtonText] = useState("Not Selected");
@@ -150,17 +152,67 @@ const JustMUIDrawer = ({
     "pink",
   ];
 
-  let habitList = propHabitDict.map((dict) => (
+  let habitList = habits.map((dict) => (
     <Habit
       key={dict.id}
       id={dict.id}
       propColor={dict.color}
       propStreak={dict.streak}
-      propHabitDict={propHabitDict}
+      propHabitDict={habits}
       propSetHabitId={propSetSelectedHabitButtonId}
       propSelectedHabitButtonId={propSelectedHabitButtonId}
     />
   ));
+
+  const addHabitOnClick = () => {
+    const habitObject = {
+      color: habitColorArray[habits.length % 6],
+      colorHex: habitColorHexArray[habits.length % 6],
+      maxStreak: 0,
+      streak: 0,
+      ticked: [],
+      newness: "new",
+    };
+
+    habitsservice.create(habitObject).then((returnedNote) => {
+      setHabits(habits.concat(returnedNote));
+    });
+
+    // propSetHabitDict((propHabitDict) => [
+    //   ...propHabitDict,
+    //   {
+    //     id: propHabitDict.length + 1,
+    //     // color: propHabitDict[propHabitDict.length - 6].color,
+    //     color: habitColorArray[propHabitDict.length % 6],
+    //     colorHex: habitColorHexArray[propHabitDict.length % 6],
+    //     maxStreak: 0,
+    //     streak: 0,
+    //     ticked: [],
+    //   },
+    // ]);
+  };
+
+  const deleteHabitOnClick = () => {
+    if (habits.length > 0) {
+      const idLastItem = habits.at(-1).id;
+      axios
+        .delete("http://localhost:3000/habits/" + idLastItem)
+        .then(() => {
+          setHabits([...habits.slice(0, habits.length - 1)]);
+        });
+    } else {
+      console.log("habits is already empty");
+    }
+
+    // if (habits.length > 1) {
+    //   setHabits((habits) =>
+    //     habits.filter((item) => item.id !== habits.length)
+    //   );
+    //   if (propSelectedHabitButtonId === habits.length) {
+    //     propSetSelectedHabitButtonId(habits.length - 1);
+    //   }
+    // }
+  }
 
   // 21.07.2022: Example of how to handle event change
   // function childHandleChange(e) {
@@ -219,20 +271,7 @@ const JustMUIDrawer = ({
       {/* "Add Habit" button */}
       <Button
         variant="contained"
-        onClick={() =>
-          propSetHabitDict((propHabitDict) => [
-            ...propHabitDict,
-            {
-              id: propHabitDict.length + 1,
-              // color: propHabitDict[propHabitDict.length - 6].color,
-              color: habitColorArray[propHabitDict.length % 6],
-              colorHex: habitColorHexArray[propHabitDict.length % 6],
-              maxStreak: 0,
-              streak: 0,
-              ticked: [],
-            },
-          ])
-        }
+        onClick={addHabitOnClick}
         sx={{
           margin: "10px",
           textTransform: "none",
@@ -249,17 +288,7 @@ const JustMUIDrawer = ({
       {/* "Delete Habit" button */}
       <Button
         variant="contained"
-        onClick={() => {
-          console.log(propHabitDict.length);
-          if (propHabitDict.length > 1) {
-            propSetHabitDict((propHabitDict) =>
-              propHabitDict.filter((item) => item.id !== propHabitDict.length)
-            );
-            if (propSelectedHabitButtonId === propHabitDict.length) {
-              propSetSelectedHabitButtonId(propHabitDict.length - 1);
-            }
-          }
-        }}
+        onClick={deleteHabitOnClick}
         sx={{
           margin: "10px",
           textTransform: "none",
@@ -455,21 +484,23 @@ const App = () => {
     const habit = habits.find((n) => n.id === id);
     const changedHabit = { ...habit, important: !habit.important };
 
-    habitsservice.update(id, changedHabit).then((returnedHabit) => {
-      setHabits(
-        habits.map((habit) => (habit.id !== id ? habit : returnedHabit))
-      );
-    }).catch(error => {
+    habitsservice
+      .update(id, changedHabit)
+      .then((returnedHabit) => {
+        setHabits(
+          habits.map((habit) => (habit.id !== id ? habit : returnedHabit))
+        );
+      })
+      .catch((error) => {
+        setErrorMessage(
+          `Note '${habit.color}' was already removed from server`
+        );
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
 
-      setErrorMessage(
-        `Note '${habit.color}' was already removed from server`
-      )
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 3000)
-      
-      setHabits(habits.filter(n => n.id !== id))
-    });
+        setHabits(habits.filter((n) => n.id !== id));
+      });
   };
 
   const toggleDelete = (id) => {
@@ -477,34 +508,44 @@ const App = () => {
     const habit = habits.find((n) => n.id === id);
     const changedHabit = { ...habit, important: !habit.important };
 
-    axios.delete('http://localhost:3000/habits/' + id).then(() => {
-      setHabits(habits.filter(n => n.id !== id))
-    }).catch(error => {
-      console.log('item already deleted');
-    });
-  
+    axios
+      .delete("http://localhost:3000/habits/" + id)
+      .then(() => {
+        setHabits(habits.filter((n) => n.id !== id));
+      })
+      .catch((error) => {
+        console.log("item already deleted");
+      });
   };
 
   const addJsonOnClick = () => {
-    const habitObject = { title: "push", color: "limegreen" };
-
-    habitsservice.create(habitObject).then((returnedNote) => {
-      setHabits(habits.concat(returnedNote));
-    });
+    // propSetHabitDict((propHabitDict) => [
+    //   ...propHabitDict,
+    //   {
+    //     id: propHabitDict.length + 1,
+    //     color: habitColorArray[propHabitDict.length % 6],
+    //     colorHex: habitColorHexArray[propHabitDict.length % 6],
+    //     maxStreak: 0,
+    //     streak: 0,
+    //     ticked: [],
+    //   },
+    // habitsservice.create(habitObject).then((returnedNote) => {
+    //   setHabits(habits.concat(returnedNote));
+    // });
   };
 
   const deleteJsonOnClick = () => {
     if (habits.length > 0) {
       const idLastItem = habits.at(-1).id;
-      axios.delete('http://localhost:3000/habits/' + idLastItem).then(() => {
-        setHabits([...habits.slice(0,habits.length-1)]);
+      axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
+        setHabits([...habits.slice(0, habits.length - 1)]);
       });
     } else {
-      console.log('habits is already empty');
+      console.log("habits is already empty");
     }
-  }
+  };
 
-  const [errorMessage, setErrorMessage] = useState('some error happened...')
+  const [errorMessage, setErrorMessage] = useState("some error happened...");
 
   // const [msg, setMsg] = useState("Initial Message");
 
@@ -518,6 +559,7 @@ const App = () => {
       maxStreak: 0,
       streak: 0,
       ticked: [],
+      newness: "old",
     },
     {
       id: 2,
@@ -526,6 +568,7 @@ const App = () => {
       maxStreak: 0,
       streak: 0,
       ticked: [],
+      newness: "old",
     },
     {
       id: 3,
@@ -534,6 +577,7 @@ const App = () => {
       maxStreak: 0,
       streak: 0,
       ticked: [],
+      newness: "old",
     },
     {
       id: 4,
@@ -542,6 +586,7 @@ const App = () => {
       maxStreak: 0,
       streak: 0,
       ticked: [],
+      newness: "old",
     },
     {
       id: 5,
@@ -550,6 +595,7 @@ const App = () => {
       maxStreak: 0,
       streak: 0,
       ticked: [],
+      newness: "old",
     },
     {
       id: 6,
@@ -558,6 +604,7 @@ const App = () => {
       maxStreak: 0,
       streak: 0,
       ticked: [],
+      newness: "old",
     },
   ]);
 
@@ -642,10 +689,12 @@ const App = () => {
         <div className="flexcontainer">
           <JustMUIDrawer
             className="fixed"
-            propHabitDict={habitDict}
-            propSetHabitDict={setHabitDict}
+            habits={habits}
+            setHabits={setHabits}
             propSelectedHabitButtonId={selectedHabitButtonId}
             propSetSelectedHabitButtonId={setSelectedHabitButtonId}
+            addJsonOnClick={addJsonOnClick}
+            deleteJsonOnClick={deleteJsonOnClick}
           />
           <div className="flex-item">
             <FirebaseAuthenticationComponent
@@ -665,7 +714,11 @@ const App = () => {
               />
             ) : null}
             {/* Ignore everything after this point*/}
-            <Sidebar habits={habits} toggleImportanceOf={toggleImportanceOf} toggleDelete={toggleDelete}/>
+            <Sidebar
+              habits={habits}
+              toggleImportanceOf={toggleImportanceOf}
+              toggleDelete={toggleDelete}
+            />
             <Button variant="contained" onClick={addJsonOnClick}>
               Add To Server
             </Button>

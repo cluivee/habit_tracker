@@ -1,89 +1,67 @@
 {
   "habits": [
     {
-      "id": 1,
-      "title": "eat",
-      "color": "blue",
-      "important": false
-    },
-    {
-      "id": 2,
-      "title": "sleep",
       "color": "orange",
-      "important": true
+      "colorHex": "#F24E1ECC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 1
     },
     {
-      "id": 3,
-      "title": "dance",
-      "color": "green",
-      "important": false
+      "color": "lightorange",
+      "colorHex": "#FF8D24CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 2
     },
     {
-      "id": 4,
-      "title": "meditation",
       "color": "purple",
-      "important": true
+      "colorHex": "#A259FFCC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 3
     },
     {
-      "id": 5,
-      "title": "study stuff",
+      "color": "green",
+      "colorHex": "#0ACF83CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 4
+    },
+    {
+      "color": "blue",
+      "colorHex": "#1ABCFECC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 5
+    },
+    {
       "color": "pink",
-      "important": false
+      "colorHex": "#FF7262CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 6
     },
     {
-      "id": 7,
-      "title": "push",
-      "color": "limegreen",
-      "important": true
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 8,
-      "important": false
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 9,
-      "important": false
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 10,
-      "important": false
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 11,
-      "important": true
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 12
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 13
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 14
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 15
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 16
+      "color": "orange",
+      "colorHex": "#F24E1ECC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 7
     }
   ],
   "comments": [
