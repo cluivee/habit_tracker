@@ -414,7 +414,7 @@ const JustMUIDrawer = ({
 //   );
 // };
 
-// Notification form fullstackopen, might be useful later
+// Example Notification form fullstackopen, might be useful later
 // const Notification = ({ message }) => {
 //   if (message === null) {
 //     return null
@@ -472,6 +472,19 @@ const App = () => {
     });
   };
 
+  const toggleDelete = (id) => {
+    const url = `http://localhost:3000/habits/${id}`;
+    const habit = habits.find((n) => n.id === id);
+    const changedHabit = { ...habit, important: !habit.important };
+
+    axios.delete('http://localhost:3000/habits/' + id).then(() => {
+      setHabits(habits.filter(n => n.id !== id))
+    }).catch(error => {
+      console.log('item already deleted');
+    });
+  
+  };
+
   const addJsonOnClick = () => {
     const habitObject = { title: "push", color: "limegreen" };
 
@@ -481,14 +494,13 @@ const App = () => {
   };
 
   const deleteJsonOnClick = () => {
-    const lastItemIndex = habits.length-1;
-    console.log(habits[lastItemIndex]);
-    console.log(...habits.slice(0,16));
-
-
     if (habits.length > 0) {
-      // setHabits(habits.filter(n => n.id !== id))
-      setHabits([...habits.slice(0,habits.length-1)]);
+      const idLastItem = habits.at(-1).id;
+      axios.delete('http://localhost:3000/habits/' + idLastItem).then(() => {
+        setHabits([...habits.slice(0,habits.length-1)]);
+      });
+    } else {
+      console.log('habits is already empty');
     }
   }
 
@@ -653,7 +665,7 @@ const App = () => {
               />
             ) : null}
             {/* Ignore everything after this point*/}
-            <Sidebar habits={habits} toggleImportanceOf={toggleImportanceOf} />
+            <Sidebar habits={habits} toggleImportanceOf={toggleImportanceOf} toggleDelete={toggleDelete}/>
             <Button variant="contained" onClick={addJsonOnClick}>
               Add To Server
             </Button>
@@ -730,14 +742,25 @@ Done:
 - sidebar of habits
 - count streak
 - make it look good/ material ui
+- logins
 
 - save the state of buttons
 - save the database of the days that have been clicked
 - have lots of colours on one square
 - save preferences
-- logins
 
-TODO 22.06.2022:
+TODO 24.07.2022:
+- Something we probably ought to do at some point is with the axios delete ensure their have an authentication token:
+axios.delete(URL, {
+  headers: {
+    Authorization: authorizationToken
+  },
+  data: {
+    source: source
+  }
+});
+
+TODO 22.07.2022:
 - Remove all the selectors like h1 from CSS files, as they might be clashing with MUI styles. The specific classnames can probably stay as they're unlikely to clash with other things, unless they wrap child components that are affected by the positioning
 - checkboxes don't work at all.
 - perhaps log out button could say 'sign in' when you log in successfully?

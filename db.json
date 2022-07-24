@@ -84,24 +84,6 @@
       "title": "push",
       "color": "limegreen",
       "id": 16
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 17,
-      "important": true
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 18,
-      "important": false
-    },
-    {
-      "title": "push",
-      "color": "limegreen",
-      "id": 19,
-      "important": false
     }
   ],
   "comments": [
