@@ -10,9 +10,8 @@ import {
 
 // This reusable component is the habit button in the left sidebar.
 
-const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSelectedHabitButtonId }) => {
+const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSelectedHabitButtonId, toggleDelete }) => {
 
-  console.log(habits);  
   return (
     <div>
       {/* MUI button habit */}
@@ -20,7 +19,7 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
         variant="contained"
         color={propColor}
         onClick={() => {setSelectedHabitButtonId(id);
-        console.log(id);}}
+          console.log('Habit button clicked id is: ', id);}}
         
         sx={{
           padding: 0,
@@ -68,6 +67,7 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
             Streak: {propStreak}
           </label>
           <Typography>{habits[0].newness}</Typography>
+          
         </div>
         <Checkbox
           color="default"
@@ -76,6 +76,8 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
           }}
         />
       </Button>
+      {/* The delete individual item button caused a lot of problems. When it was on top of the button, clicking the delete button also clicked the underlying habit button underneath at the same time, causing the id to be set to the just deleted habit, causing crashes. So at some point I must make sure that the buttons on top of the habit button don't overlap, and are actually on top*/}
+      <button onClick={() => toggleDelete(id)}>Delete this item</button>
     </div>
   );
 };

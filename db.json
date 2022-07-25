@@ -8,24 +8,6 @@
       "ticked": [],
       "newness": "new",
       "id": 1
-    },
-    {
-      "color": "lightorange",
-      "colorHex": "#FF8D24CC",
-      "maxStreak": 0,
-      "streak": 0,
-      "ticked": [],
-      "newness": "new",
-      "id": 2
-    },
-    {
-      "color": "purple",
-      "colorHex": "#A259FFCC",
-      "maxStreak": 0,
-      "streak": 0,
-      "ticked": [],
-      "newness": "new",
-      "id": 3
     }
   ],
   "comments": [

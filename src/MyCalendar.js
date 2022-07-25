@@ -57,13 +57,17 @@ function MyCalendar({
 
   // the currently select habit
   const selectedDict = useMemo(
-    () => habits.find((dict) => dict.id === selectedHabitButtonId),
+    () => {
+      let theReturn = habits.find((dict) => dict.id === selectedHabitButtonId);
+      console.log('myCalendar selectedDict is: ', theReturn);
+      console.log('myCalendar selectedHabitButtonId is: ', selectedHabitButtonId);
+    return theReturn},
     [habits, selectedHabitButtonId]
   );
 
   let currentTicked = [];
     if (selectedDict) {
-      console.log('currentTicked');
+      console.log('currentTicked ', selectedDict);
       currentTicked = selectedDict.ticked;
     } else {
       console.log('currentTicked not found');
@@ -143,6 +147,7 @@ function MyCalendar({
         setCalendarDate(dayToChange);
 
         console.log("currentDate: " + currentDate);
+        console.log("clicked tile, habitbuttonid is: ",selectedHabitButtonId);
 
         // console.log(
         //   getComputedStyle(document.body).getPropertyValue("--toggled-color")

@@ -128,10 +128,13 @@ const JustMUIDrawer = ({
   setHabits,
   selectedHabitButtonId,
   setSelectedHabitButtonId,
+  toggleDelete,
 }) => {
   // 21.07.2022: this was used in some examples
   // const [buttonText, setButtonText] = useState("Not Selected");
   // const [cssColor, setCSSColor] = useState("#1affa0");
+
+  console.log('current habit id: ', selectedHabitButtonId);
 
   const habitColorHexArray = [
     "#F24E1ECC",
@@ -159,10 +162,16 @@ const JustMUIDrawer = ({
       habits={habits}
       selectedHabitButtonId={selectedHabitButtonId}
       setSelectedHabitButtonId={setSelectedHabitButtonId}
+      toggleDelete={toggleDelete}
     />
   ));
 
   const addHabitOnClick = () => {
+    if (habits.length === 0) {
+      setSelectedHabitButtonId(1)
+      console.log('addhabit currentID: ', 1);
+    }
+
     const habitObject = {
       color: habitColorArray[habits.length % 6],
       colorHex: habitColorHexArray[habits.length % 6],
@@ -174,6 +183,7 @@ const JustMUIDrawer = ({
 
     habitsservice.create(habitObject).then((returnedNote) => {
       setHabits(habits.concat(returnedNote));
+      console.log('addhabit currentID: ', selectedHabitButtonId);
     });
 
     // propSetHabitDict((propHabitDict) => [
@@ -191,15 +201,23 @@ const JustMUIDrawer = ({
   };
 
   const deleteHabitOnClick = () => {
+    const idLastItem = habits.at(-1).id;
     if (habits.length > 1) {
-      const idLastItem = habits.at(-1).id;
       axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
         setHabits([...habits.slice(0, habits.length - 1)]);
+        if (selectedHabitButtonId === idLastItem) {
+          setSelectedHabitButtonId(idLastItem - 1);
+          console.log('currentID: ', idLastItem - 1);
+        } else {
+          console.log('currentID: ', idLastItem);
+        }
+        
       });
     } else if (habits.length === 1) {
-      const idLastItem = habits.at(-1).id;
       axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
         setHabits([]);
+        setSelectedHabitButtonId(1);
+        console.log('currentID: ', 1);
       });
     } else {
       console.log("habits is already empty");
@@ -504,14 +522,36 @@ const App = () => {
   };
 
   const toggleDelete = (id) => {
-    const url = `http://localhost:3000/habits/${id}`;
-    const habit = habits.find((n) => n.id === id);
-    const changedHabit = { ...habit, important: !habit.important };
+
+    let elementPos = habits.map((x) => {return x.id}).indexOf(id);
+
+    let nextId = (function() {
+      // habits is about to become empty
+      if (habits.length === 1) {
+        return 1
+      }
+      // habits has at least length 2 and we have selected the first element
+      else if (elementPos === 0) {
+        return habits[elementPos + 1].id
+      } 
+      // habits has at least length 2 and we can move the id down one
+      else {
+        return habits[elementPos - 1].id
+      }
+  })();  ;
 
     axios
       .delete("http://localhost:3000/habits/" + id)
       .then(() => {
         setHabits(habits.filter((n) => n.id !== id));
+        console.log('toggleDelete id: ', id);
+        console.log('toggleDelete selectedHabitButtonId: ', selectedHabitButtonId);
+        if (selectedHabitButtonId === id) {
+          setSelectedHabitButtonId(nextId);
+          console.log('currentID: ', nextId);
+        } else {
+          console.log('currentID: ', id);
+        }
       })
       .catch((error) => {
         console.log("item already deleted");
@@ -609,6 +649,7 @@ const App = () => {
     console.log("Habit Streak updated");
 
     if (habits.length > 0) {
+      console.log('selectedDict for ticked is: ', selectedDict);
       const posToday = selectedDict.ticked.findIndex((item) => {
         return isSameDay(item, new Date());
       });
@@ -668,6 +709,7 @@ const App = () => {
             setHabits={setHabits}
             selectedHabitButtonId={selectedHabitButtonId}
             setSelectedHabitButtonId={setSelectedHabitButtonId}
+            toggleDelete={toggleDelete}
           />
           <div className="flex-item">
             <FirebaseAuthenticationComponent
