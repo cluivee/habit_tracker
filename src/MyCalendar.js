@@ -24,6 +24,7 @@ import {
 } from "date-fns";
 import { ToggleButton, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { letterSpacing } from "@mui/system";
 
 // This is the main calendar / habit tracker component.
 
@@ -35,12 +36,12 @@ console.log(
 );
 
 function MyCalendar({
-  propSetCalendarDate,
-  propHabitDict,
-  propSetHabitDict,
-  propSelectedHabitButtonId,
-  propCalendarButtonBoolean,
-  propSetCalendarButtonBoolean,
+  setCalendarDate,
+  habits,
+  setHabits,
+  selectedHabitButtonId,
+  calendarButtonBoolean,
+  setCalendarButtonBoolean,
 }) {
   // const buttonStyle = {
   //   backgroundColor: "#fff",
@@ -53,13 +54,22 @@ function MyCalendar({
   // state for the currently selected date. There is already a state for this in the parent App component, so potentially I could only have one state variable for this, but I may move the date into only the MyCalendar component in the future to prevent some rerendering issues.
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  console.log(propHabitDict);
 
   // the currently select habit
   const selectedDict = useMemo(
-    () => propHabitDict.find((dict) => dict.id === propSelectedHabitButtonId),
-    [propHabitDict, propSelectedHabitButtonId]
+    () => habits.find((dict) => dict.id === selectedHabitButtonId),
+    [habits, selectedHabitButtonId]
   );
+
+  let currentTicked = [];
+    if (selectedDict) {
+      console.log('currentTicked');
+      currentTicked = selectedDict.ticked;
+    } else {
+      console.log('currentTicked not found');
+      currentTicked = [];
+    }
+
 
   // CalendarToggleButton component. Each of these represents one date on the calendar.
   const CalendarToggleButton = memo(
@@ -77,7 +87,7 @@ function MyCalendar({
 
       // function to add a date to ticked array. We now sort the ticked array every time to make it easier to count the streak, but it might be better if we could just place the dates in sorted order from the start
       function addDate(id, tickedDate) {
-        propSetHabitDict((currActiveDict) => {
+        setHabits((currActiveDict) => {
           return currActiveDict.map((dict) => {
             if (dict.id === id) {
               return {
@@ -99,13 +109,13 @@ function MyCalendar({
 
       // onClick function each date button
       const onDateClick = (dayToChange, event) => {
-        addDate(propSelectedHabitButtonId, day);
+        addDate(selectedHabitButtonId, day);
         setCurrentDate(dayToChange);
 
-        if (propCalendarButtonBoolean === false) {
-          propSetCalendarButtonBoolean(true);
+        if (calendarButtonBoolean === false) {
+          setCalendarButtonBoolean(true);
         } else {
-          propSetCalendarButtonBoolean(false);
+          setCalendarButtonBoolean(false);
         }
 
         // if (intermediateDict.hasOwnProperty(day)) {
@@ -130,7 +140,7 @@ function MyCalendar({
         // }
 
         setButtonState(!buttonState);
-        propSetCalendarDate(dayToChange);
+        setCalendarDate(dayToChange);
 
         console.log("currentDate: " + currentDate);
 
@@ -185,7 +195,7 @@ function MyCalendar({
 
           style={{
             backgroundColor: `${
-              isInArray(selectedDict.ticked, day)
+              isInArray(currentTicked, day)
                 ? // ? eval("theme.palette."+selectedDict.color+".main")
                   selectedDict.colorHex
                 : getComputedStyle(document.body).getPropertyValue(

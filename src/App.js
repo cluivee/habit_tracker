@@ -126,10 +126,8 @@ const drawerWidth = 240;
 const JustMUIDrawer = ({
   habits,
   setHabits,
-  propSelectedHabitButtonId,
-  propSetSelectedHabitButtonId,
-  addJsonOnClick,
-  deleteJsonOnClick,
+  selectedHabitButtonId,
+  setSelectedHabitButtonId,
 }) => {
   // 21.07.2022: this was used in some examples
   // const [buttonText, setButtonText] = useState("Not Selected");
@@ -158,9 +156,9 @@ const JustMUIDrawer = ({
       id={dict.id}
       propColor={dict.color}
       propStreak={dict.streak}
-      propHabitDict={habits}
-      propSetHabitId={propSetSelectedHabitButtonId}
-      propSelectedHabitButtonId={propSelectedHabitButtonId}
+      habits={habits}
+      selectedHabitButtonId={selectedHabitButtonId}
+      setSelectedHabitButtonId={setSelectedHabitButtonId}
     />
   ));
 
@@ -193,13 +191,16 @@ const JustMUIDrawer = ({
   };
 
   const deleteHabitOnClick = () => {
-    if (habits.length > 0) {
+    if (habits.length > 1) {
       const idLastItem = habits.at(-1).id;
-      axios
-        .delete("http://localhost:3000/habits/" + idLastItem)
-        .then(() => {
-          setHabits([...habits.slice(0, habits.length - 1)]);
-        });
+      axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
+        setHabits([...habits.slice(0, habits.length - 1)]);
+      });
+    } else if (habits.length === 1) {
+      const idLastItem = habits.at(-1).id;
+      axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
+        setHabits([]);
+      });
     } else {
       console.log("habits is already empty");
     }
@@ -212,7 +213,7 @@ const JustMUIDrawer = ({
     //     propSetSelectedHabitButtonId(habits.length - 1);
     //   }
     // }
-  }
+  };
 
   // 21.07.2022: Example of how to handle event change
   // function childHandleChange(e) {
@@ -457,7 +458,6 @@ const JustMUIDrawer = ({
 // }
 
 const App = () => {
-  // habits/sethabits was an example for testing a JSON server database. You can ignore this.
   const [habits, setHabits] = useState([]);
   // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
   // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call function again (dependency array)
@@ -472,10 +472,10 @@ const App = () => {
   // }, []);
 
   useEffect(() => {
-    console.log("effect");
     habitsservice.getAll().then((response) => {
       console.log("Successful:", response);
       setHabits(response);
+      setSelectedHabitButtonId(response[0].id);
     });
   }, []);
 
@@ -516,33 +516,6 @@ const App = () => {
       .catch((error) => {
         console.log("item already deleted");
       });
-  };
-
-  const addJsonOnClick = () => {
-    // propSetHabitDict((propHabitDict) => [
-    //   ...propHabitDict,
-    //   {
-    //     id: propHabitDict.length + 1,
-    //     color: habitColorArray[propHabitDict.length % 6],
-    //     colorHex: habitColorHexArray[propHabitDict.length % 6],
-    //     maxStreak: 0,
-    //     streak: 0,
-    //     ticked: [],
-    //   },
-    // habitsservice.create(habitObject).then((returnedNote) => {
-    //   setHabits(habits.concat(returnedNote));
-    // });
-  };
-
-  const deleteJsonOnClick = () => {
-    if (habits.length > 0) {
-      const idLastItem = habits.at(-1).id;
-      axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
-        setHabits([...habits.slice(0, habits.length - 1)]);
-      });
-    } else {
-      console.log("habits is already empty");
-    }
   };
 
   const [errorMessage, setErrorMessage] = useState("some error happened...");
@@ -622,8 +595,8 @@ const App = () => {
 
   // The currently selected habit
   const selectedDict = useMemo(
-    () => habitDict.find((dict) => dict.id === selectedHabitButtonId),
-    [habitDict, selectedHabitButtonId]
+    () => habits.find((dict) => dict.id === selectedHabitButtonId),
+    [habits, selectedHabitButtonId]
   );
 
   let currentStreak = 0;
@@ -635,52 +608,54 @@ const App = () => {
   useEffect(() => {
     console.log("Habit Streak updated");
 
-    const posToday = selectedDict.ticked.findIndex((item) => {
-      return isSameDay(item, new Date());
-    });
-
-    const posYesterday = selectedDict.ticked.findIndex((item) => {
-      return isSameDay(item, subDays(new Date(), 1));
-    });
-
-    // logic to calculate the current streak. Streak can start from today or yesterday
-    if (posToday !== -1) {
-      currentStreak++;
-      for (var i = posToday; i > 0; i--) {
-        if (
-          !isSameDay(
-            subDays(selectedDict.ticked[i], 1),
-            selectedDict.ticked[i - 1]
-          )
-        ) {
-          break;
-        }
-        currentStreak++;
-      }
-    } else if (posYesterday !== -1) {
-      currentStreak++;
-      for (var i = posYesterday; i > 0; i--) {
-        if (
-          !isSameDay(
-            subDays(selectedDict.ticked[i], 1),
-            selectedDict.ticked[i - 1]
-          )
-        ) {
-          break;
-        }
-        currentStreak++;
-      }
-    }
-
-    setHabitDict((currActiveDict) => {
-      return currActiveDict.map((dict) => {
-        if (dict.id === selectedHabitButtonId) {
-          return { ...dict, streak: currentStreak };
-        } else {
-          return dict;
-        }
+    if (habits.length > 0) {
+      const posToday = selectedDict.ticked.findIndex((item) => {
+        return isSameDay(item, new Date());
       });
-    });
+
+      const posYesterday = selectedDict.ticked.findIndex((item) => {
+        return isSameDay(item, subDays(new Date(), 1));
+      });
+
+      // logic to calculate the current streak. Streak can start from today or yesterday
+      if (posToday !== -1) {
+        currentStreak++;
+        for (var i = posToday; i > 0; i--) {
+          if (
+            !isSameDay(
+              subDays(selectedDict.ticked[i], 1),
+              selectedDict.ticked[i - 1]
+            )
+          ) {
+            break;
+          }
+          currentStreak++;
+        }
+      } else if (posYesterday !== -1) {
+        currentStreak++;
+        for (var i = posYesterday; i > 0; i--) {
+          if (
+            !isSameDay(
+              subDays(selectedDict.ticked[i], 1),
+              selectedDict.ticked[i - 1]
+            )
+          ) {
+            break;
+          }
+          currentStreak++;
+        }
+      }
+
+      setHabits((currActiveDict) => {
+        return currActiveDict.map((dict) => {
+          if (dict.id === selectedHabitButtonId) {
+            return { ...dict, streak: currentStreak };
+          } else {
+            return dict;
+          }
+        });
+      });
+    }
   }, [calendarButtonBoolean]);
 
   return (
@@ -691,10 +666,8 @@ const App = () => {
             className="fixed"
             habits={habits}
             setHabits={setHabits}
-            propSelectedHabitButtonId={selectedHabitButtonId}
-            propSetSelectedHabitButtonId={setSelectedHabitButtonId}
-            addJsonOnClick={addJsonOnClick}
-            deleteJsonOnClick={deleteJsonOnClick}
+            selectedHabitButtonId={selectedHabitButtonId}
+            setSelectedHabitButtonId={setSelectedHabitButtonId}
           />
           <div className="flex-item">
             <FirebaseAuthenticationComponent
@@ -705,12 +678,12 @@ const App = () => {
             />
             {myUserAuthState && showComponent === "Home" ? (
               <MemoCalendar
-                propSetCalendarDate={setCalendarDate}
-                propHabitDict={habitDict}
-                propSetHabitDict={setHabitDict}
-                propSelectedHabitButtonId={selectedHabitButtonId}
-                propCalendarButtonBoolean={calendarButtonBoolean}
-                propSetCalendarButtonBoolean={setCalendarButtonBoolean}
+                setCalendarDate={setCalendarDate}
+                habits={habits}
+                setHabits={setHabits}
+                selectedHabitButtonId={selectedHabitButtonId}
+                calendarButtonBoolean={calendarButtonBoolean}
+                setCalendarButtonBoolean={setCalendarButtonBoolean}
               />
             ) : null}
             {/* Ignore everything after this point*/}
@@ -719,12 +692,7 @@ const App = () => {
               toggleImportanceOf={toggleImportanceOf}
               toggleDelete={toggleDelete}
             />
-            <Button variant="contained" onClick={addJsonOnClick}>
-              Add To Server
-            </Button>
-            <Button variant="contained" onClick={deleteJsonOnClick}>
-              Delete last item
-            </Button>
+
             {/* <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
               <h1>{msg}</h1>

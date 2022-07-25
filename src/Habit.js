@@ -10,16 +10,16 @@ import {
 
 // This reusable component is the habit button in the left sidebar.
 
-const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propSelectedHabitButtonId }) => {
+const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSelectedHabitButtonId }) => {
 
-  console.log(propHabitDict);  
+  console.log(habits);  
   return (
     <div>
       {/* MUI button habit */}
       <Button
         variant="contained"
         color={propColor}
-        onClick={() => {propSetHabitId(id);
+        onClick={() => {setSelectedHabitButtonId(id);
         console.log(id);}}
         
         sx={{
@@ -67,7 +67,7 @@ const Habit = ({ id, propColor, propStreak, propHabitDict, propSetHabitId, propS
           >
             Streak: {propStreak}
           </label>
-          <Typography>{propHabitDict[0].newness}</Typography>
+          <Typography>{habits[0].newness}</Typography>
         </div>
         <Checkbox
           color="default"

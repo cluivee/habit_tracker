@@ -26,42 +26,6 @@
       "ticked": [],
       "newness": "new",
       "id": 3
-    },
-    {
-      "color": "green",
-      "colorHex": "#0ACF83CC",
-      "maxStreak": 0,
-      "streak": 0,
-      "ticked": [],
-      "newness": "new",
-      "id": 4
-    },
-    {
-      "color": "blue",
-      "colorHex": "#1ABCFECC",
-      "maxStreak": 0,
-      "streak": 0,
-      "ticked": [],
-      "newness": "new",
-      "id": 5
-    },
-    {
-      "color": "pink",
-      "colorHex": "#FF7262CC",
-      "maxStreak": 0,
-      "streak": 0,
-      "ticked": [],
-      "newness": "new",
-      "id": 6
-    },
-    {
-      "color": "orange",
-      "colorHex": "#F24E1ECC",
-      "maxStreak": 0,
-      "streak": 0,
-      "ticked": [],
-      "newness": "new",
-      "id": 7
     }
   ],
   "comments": [
