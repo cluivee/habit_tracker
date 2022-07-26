@@ -134,8 +134,6 @@ const JustMUIDrawer = ({
   // const [buttonText, setButtonText] = useState("Not Selected");
   // const [cssColor, setCSSColor] = useState("#1affa0");
 
-  console.log('current habit id: ', selectedHabitButtonId);
-
   const habitColorHexArray = [
     "#F24E1ECC",
     "#FF8D24CC",
@@ -649,7 +647,6 @@ const App = () => {
     console.log("Habit Streak updated");
 
     if (habits.length > 0) {
-      console.log('selectedDict for ticked is: ', selectedDict);
       const posToday = selectedDict.ticked.findIndex((item) => {
         return isSameDay(item, new Date());
       });

@@ -1,13 +1,58 @@
 {
   "habits": [
     {
-      "color": "orange",
-      "colorHex": "#F24E1ECC",
+      "color": "lightorange",
+      "colorHex": "#FF8D24CC",
       "maxStreak": 0,
       "streak": 0,
       "ticked": [],
       "newness": "new",
-      "id": 1
+      "id": 2
+    },
+    {
+      "color": "pink",
+      "colorHex": "#FF7262CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 6
+    },
+    {
+      "color": "purple",
+      "colorHex": "#A259FFCC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 7
+    },
+    {
+      "color": "green",
+      "colorHex": "#0ACF83CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 8
+    },
+    {
+      "color": "blue",
+      "colorHex": "#1ABCFECC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 9
+    },
+    {
+      "color": "pink",
+      "colorHex": "#FF7262CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new",
+      "id": 10
     }
   ],
   "comments": [
