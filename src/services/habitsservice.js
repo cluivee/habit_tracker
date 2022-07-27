@@ -1,7 +1,8 @@
 import axios from 'axios'
 // const baseUrl = 'http://localhost:3000/habits'
 // const baseUrl = 'http://localhost:3002/api/notes'
-const baseUrl = 'https://agile-badlands-55487.herokuapp.com/api/notes'
+// const baseUrl = 'https://agile-badlands-55487.herokuapp.com/api/notes'
+const baseUrl = '/api/notes'
 
 const getAll = () => {
   const request = axios.get(baseUrl)

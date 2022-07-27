@@ -496,7 +496,6 @@ const App = () => {
   }, []);
 
   const toggleImportanceOf = (id) => {
-    const url = `http://localhost:3000/habits/${id}`;
     const habit = habits.find((n) => n.id === id);
     const changedHabit = { ...habit, important: !habit.important };
 
@@ -513,7 +512,7 @@ const App = () => {
         );
         setTimeout(() => {
           setErrorMessage(null);
-        }, 3000);
+        }, 2000);
 
         setHabits(habits.filter((n) => n.id !== id));
       });
