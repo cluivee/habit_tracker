@@ -1,6 +1,8 @@
 import axios from 'axios'
+// this was JSON server
 // const baseUrl = 'http://localhost:3000/habits'
-// const baseUrl = 'http://localhost:3002/api/notes'
+// This is with node express local server
+// const baseUrl = 'http://localhost:3001/api/notes'
 // const baseUrl = 'https://agile-badlands-55487.herokuapp.com/api/notes'
 const baseUrl = '/api/notes'
 
