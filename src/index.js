@@ -8,6 +8,8 @@ import MUIGridExample from './MUIGridExample';
 import ExampleDerivedState from './ExampleDerivedState';
 import FirebaseAuthenticationComponent from './FirebaseAuthenticationComponent';
 
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
