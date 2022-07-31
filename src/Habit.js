@@ -10,7 +10,7 @@ import {
 
 // This reusable component is the habit button in the left sidebar.
 
-const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSelectedHabitButtonId, toggleDelete }) => {
+const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSelectedHabitButtonId, toggleDelete, important }) => {
 
   return (
     <div>
@@ -66,7 +66,7 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
           >
             Streak: {propStreak}
           </label>
-          <Typography>{habits[0].newness}</Typography>
+          <Typography>{important.toString()}</Typography>
           
         </div>
         <Checkbox

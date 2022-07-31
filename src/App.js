@@ -45,13 +45,12 @@ import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { orange } from "@mui/material/colors";
 
 // imports for date-fns
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
 import axios from "axios";
-import { LensTwoTone, RepeatOneSharp } from "@mui/icons-material";
 
 var r = document.querySelector(":root");
 
@@ -158,6 +157,7 @@ const JustMUIDrawer = ({
       id={dict.id}
       propColor={dict.color}
       propStreak={dict.streak}
+      important={dict.important}
       habits={habits}
       selectedHabitButtonId={selectedHabitButtonId}
       setSelectedHabitButtonId={setSelectedHabitButtonId}
@@ -534,11 +534,16 @@ const App = () => {
 
   const toggleImportanceOf = (id) => {
     const habit = habits.find((n) => n.id === id);
+    console.log('toggleimportance: habits: ', habits);
+    console.log('toggleimportance: singular habit: ', habit);
     const changedHabit = { ...habit, important: !habit.important };
+    console.log('changedHabit: ', changedHabit);
 
     habitsservice
       .update(id, changedHabit)
       .then((returnedHabit) => {
+        console.log('returnedHabit', returnedHabit)
+        console.log('returnedHabitd date', returnedHabit.date, typeof returnedHabit.date,)
         setHabits(
           habits.map((habit) => (habit.id !== id ? habit : returnedHabit))
         );
@@ -693,11 +698,15 @@ const App = () => {
 
     if (habits.length > 0) {
       const posToday = selectedDict.ticked.findIndex((item) => {
-        return isSameDay(item, new Date());
+        console.log('item to check for datefns strings ', item, typeof item)
+        // if parseISO doesn't work we can revert to this:
+        // return isSameDay(item, new Date());
+        return isSameDay(parseISO(item), new Date());
       });
 
       const posYesterday = selectedDict.ticked.findIndex((item) => {
-        return isSameDay(item, subDays(new Date(), 1));
+        console.log('item to check for datefns strings ', item)
+        return isSameDay(parseISO(item), subDays(new Date(), 1));
       });
 
       // logic to calculate the current streak. Streak can start from today or yesterday

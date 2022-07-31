@@ -17,7 +17,7 @@ const ExampleDerivedState = ({  }) => {
 
   // function I got off StackOverflow to check if date object is in array
   function isInArray(array, value) {
-    return !!array.find(item => {return item.getTime() == value.getTime()});
+    return !!array.find(item => {return item.getTime() === value.getTime()});
   }
 
   function addDate(id) {

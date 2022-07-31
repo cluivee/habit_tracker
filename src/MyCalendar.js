@@ -21,6 +21,7 @@ import {
   isSameMonth,
   isSameDay,
   toDate,
+  parseISO,
 } from "date-fns";
 import { ToggleButton, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -77,10 +78,17 @@ function MyCalendar({
       // buttonstate is not really used anymore, but I would one day want to use a state variable for each date button to toggle the color, as this would prevent some rerendering.
       const [buttonState, setButtonState] = useState(true);
 
-      // function I got off StackOverflow to check if date object is in array
+      // Now very modified (using Date.parse() instead of getTime()) function I got off StackOverflow to check if date object is in array
+      // This became very complicated. JSON does not support date objects and automatically stringifys everything. So we accept this currently and use datefns parseISO method to turn strings into date objects, and still do the comparison between dates with getTime()
       function isInArray(array, value) {
         return !!array.find((item) => {
-          return item.getTime() === value.getTime();
+          const itemToDate = typeof item === "string" ? parseISO(item) : item;
+          const valueToDate =
+            typeof value === "string" ? parseISO(value) : value;
+          // console.log("isInArray, item: ", itemToDate, typeof itemToDate);
+          // console.log("isInArray, value: ", valueToDate, typeof valueToDate);
+          return itemToDate.getTime() === valueToDate.getTime();
+          // return stringItem === valueItem;
         });
       }
 
@@ -92,9 +100,17 @@ function MyCalendar({
               return {
                 ...dict,
                 ticked: isInArray(dict.ticked, tickedDate)
-                  ? dict.ticked.filter(
-                      (item) => item.getTime() !== tickedDate.getTime()
-                    )
+                  ? dict.ticked.filter((item) => {
+                      const itemToDate =
+                        typeof item === "string" ? parseISO(item) : item;
+                      const tickedDatetoString =
+                        typeof tickedDate === "string"
+                          ? parseISO(tickedDate)
+                          : tickedDate;
+                      return (
+                        itemToDate.getTime() !== tickedDatetoString.getTime()
+                      );
+                    })
                   : [...dict.ticked, tickedDate].sort((a, b) => {
                       return a - b;
                     }),
@@ -108,6 +124,12 @@ function MyCalendar({
 
       // onClick function each date button
       const onDateClick = (dayToChange, event) => {
+        console.log("day prop is: ", day);
+        console.log("typeof day prop is: ", typeof day);
+        console.log(
+          "why am I not using daytoChange: daytChange: ",
+          dayToChange
+        );
         addDate(selectedHabitButtonId, day);
         setCurrentDate(dayToChange);
 
