@@ -51,6 +51,7 @@ import { orange } from "@mui/material/colors";
 // imports for date-fns
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
 import axios from "axios";
+import { LensTwoTone, RepeatOneSharp } from "@mui/icons-material";
 
 var r = document.querySelector(":root");
 
@@ -165,23 +166,28 @@ const JustMUIDrawer = ({
   ));
 
   const addHabitOnClick = () => {
-    if (habits.length === 0) {
-      setSelectedHabitButtonId(1)
-      console.log('addhabit currentID: ', 1);
-    }
-
-    const habitObject = {
-      color: habitColorArray[habits.length % 6],
-      colorHex: habitColorHexArray[habits.length % 6],
-      maxStreak: 0,
-      streak: 0,
-      ticked: [],
-      newness: "new",
-    };
-
-    habitsservice.create(habitObject).then((returnedNote) => {
-      setHabits(habits.concat(returnedNote));
-      console.log('addhabit currentID: ', selectedHabitButtonId);
+    habitsservice.getAll().then((response) => {
+      console.log("Check response length:", response.length);
+      if (response.length < 31) {
+        if (habits.length === 0) {
+          setSelectedHabitButtonId(1);
+          console.log("addhabit currentID: ", 1);
+        }
+        const habitObject = {
+          color: habitColorArray[habits.length % 6],
+          colorHex: habitColorHexArray[habits.length % 6],
+          maxStreak: 0,
+          streak: 0,
+          ticked: [],
+          newness: "new",
+        };
+        habitsservice.create(habitObject).then((returnedNote) => {
+          setHabits(habits.concat(returnedNote));
+          console.log("addhabit currentID: ", selectedHabitButtonId);
+        });
+      } else {
+        console.log("Maximum number of habits is 30");
+      }
     });
 
     // propSetHabitDict((propHabitDict) => [
@@ -199,27 +205,56 @@ const JustMUIDrawer = ({
   };
 
   const deleteHabitOnClick = () => {
+    if (habits.length === 0) {
+      console.log('habits is already empty, cannot delete anything');
+      return
+    }
     const idLastItem = habits.at(-1).id;
+
+    const idSecondLastItem = habits.length >= 2 ? habits.at(-2).id : '';
+
+    const baseUrl = "/api/notes";
+
     if (habits.length > 1) {
-      axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
+      axios.delete(`${baseUrl}/${idLastItem}`).then(() => {
         setHabits([...habits.slice(0, habits.length - 1)]);
         if (selectedHabitButtonId === idLastItem) {
-          setSelectedHabitButtonId(idLastItem - 1);
-          console.log('currentID: ', idLastItem - 1);
+          setSelectedHabitButtonId(idSecondLastItem);
+          console.log("currentID: ", idSecondLastItem);
         } else {
-          console.log('currentID: ', idLastItem);
+          console.log("currentID: ", idLastItem);
         }
-        
       });
     } else if (habits.length === 1) {
-      axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
+      axios.delete(`${baseUrl}/${idLastItem}`).then(() => {
         setHabits([]);
+        // This is now set to just an arbitrary id of 1, it is not an actual mongoDB id
         setSelectedHabitButtonId(1);
-        console.log('currentID: ', 1);
+        console.log("currentID: ", 1);
       });
     } else {
       console.log("habits is already empty");
     }
+
+    // if (habits.length > 1) {
+    //   axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
+    //     setHabits([...habits.slice(0, habits.length - 1)]);
+    //     if (selectedHabitButtonId === idLastItem) {
+    //       setSelectedHabitButtonId(idLastItem - 1);
+    //       console.log('currentID: ', idLastItem - 1);
+    //     } else {
+    //       console.log('currentID: ', idLastItem);
+    //     }
+    //   });
+    // } else if (habits.length === 1) {
+    //   axios.delete("http://localhost:3000/habits/" + idLastItem).then(() => {
+    //     setHabits([]);
+    //     setSelectedHabitButtonId(1);
+    //     console.log('currentID: ', 1);
+    //   });
+    // } else {
+    //   console.log("habits is already empty");
+    // }
 
     // if (habits.length > 1) {
     //   setHabits((habits) =>
@@ -474,7 +509,7 @@ const JustMUIDrawer = ({
 // }
 
 const App = () => {
-  const [habits, setHabits] = useState([]);
+  // const [habits, setHabits] = useState([]);
   // setHabits takes the json element of json habits databse, puts it into our new array which we've called habits
   // lookup useeffect, has 2 arguments, the first here is just an inline func li wrote, second is what to watch for to call function again (dependency array)
   // Empty dependency array means nothing to watch, so only runs once
@@ -486,6 +521,8 @@ const App = () => {
   //       setHabits(habits);
   //     });
   // }, []);
+
+  const [habits, setHabits] = useState([]);
 
   useEffect(() => {
     habitsservice.getAll().then((response) => {
@@ -519,38 +556,46 @@ const App = () => {
   };
 
   const toggleDelete = (id) => {
+    let elementPos = habits
+      .map((x) => {
+        return x.id;
+      })
+      .indexOf(id);
+    const baseUrl = "/api/notes";
 
-    let elementPos = habits.map((x) => {return x.id}).indexOf(id);
-
-    let nextId = (function() {
+    let nextId = (function () {
       // habits is about to become empty
       if (habits.length === 1) {
-        return 1
+        return 1;
       }
       // habits has at least length 2 and we have selected the first element
       else if (elementPos === 0) {
-        return habits[elementPos + 1].id
-      } 
+        return habits[elementPos + 1].id;
+      }
       // habits has at least length 2 and we can move the id down one
       else {
-        return habits[elementPos - 1].id
+        return habits[elementPos - 1].id;
       }
-  })();  ;
+    })();
 
     axios
-      .delete("http://localhost:3000/habits/" + id)
+      .delete(`${baseUrl}/${id}`)
       .then(() => {
         setHabits(habits.filter((n) => n.id !== id));
-        console.log('toggleDelete id: ', id);
-        console.log('toggleDelete selectedHabitButtonId: ', selectedHabitButtonId);
+        console.log("toggleDelete id: ", id);
+        console.log(
+          "toggleDelete selectedHabitButtonId: ",
+          selectedHabitButtonId
+        );
         if (selectedHabitButtonId === id) {
           setSelectedHabitButtonId(nextId);
-          console.log('currentID: ', nextId);
+          console.log("currentID: ", nextId);
         } else {
-          console.log('currentID: ', id);
+          console.log("currentID: ", id);
         }
       })
       .catch((error) => {
+        console.log(error);
         console.log("item already deleted");
       });
   };
