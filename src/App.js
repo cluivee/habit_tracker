@@ -166,6 +166,7 @@ const JustMUIDrawer = ({
   ));
 
   const addHabitOnClick = () => {
+    // we're now doing a get request on every click of the addHabit button to check that the length of habits is less than 30. If it turns out that response.length is manipulable in the browser anyway then there's no real point and we may as well count the length when we do the initial get in the useeffect. Probably the more secure way to do this is to store the no of habits a user has in the database, probably each user has a database entry, and they have an array with all their notes or smth like that.
     habitsservice.getAll().then((response) => {
       console.log("Check response length:", response.length);
       if (response.length < 31) {

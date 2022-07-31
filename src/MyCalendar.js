@@ -54,31 +54,26 @@ function MyCalendar({
   // state for the currently selected date. There is already a state for this in the parent App component, so potentially I could only have one state variable for this, but I may move the date into only the MyCalendar component in the future to prevent some rerendering issues.
   const [currentDate, setCurrentDate] = useState(new Date());
 
-
   // the currently select habit
-  const selectedDict = useMemo(
-    () => {
-      let theReturn = habits.find((dict) => dict.id === selectedHabitButtonId);
-      console.log('myCalendar selectedDict is: ', theReturn);
-      console.log('myCalendar selectedHabitButtonId is: ', selectedHabitButtonId);
-    return theReturn},
-    [habits, selectedHabitButtonId]
-  );
+  const selectedDict = useMemo(() => {
+    let theReturn = habits.find((dict) => dict.id === selectedHabitButtonId);
+    console.log("myCalendar selectedDict is: ", theReturn);
+    console.log("myCalendar selectedHabitButtonId is: ", selectedHabitButtonId);
+    return theReturn;
+  }, [habits, selectedHabitButtonId]);
 
   let currentTicked = [];
-    if (selectedDict) {
-      console.log('currentTicked ', selectedDict);
-      currentTicked = selectedDict.ticked;
-    } else {
-      console.log('currentTicked not found');
-      currentTicked = [];
-    }
-
+  if (selectedDict) {
+    console.log("currentTicked ", selectedDict);
+    currentTicked = selectedDict.ticked;
+  } else {
+    console.log("currentTicked not found");
+    currentTicked = [];
+  }
 
   // CalendarToggleButton component. Each of these represents one date on the calendar.
   const CalendarToggleButton = memo(
     ({ day, cloneDay, monthStart, formattedDate }) => {
-
       // buttonstate is not really used anymore, but I would one day want to use a state variable for each date button to toggle the color, as this would prevent some rerendering.
       const [buttonState, setButtonState] = useState(true);
 
@@ -147,7 +142,7 @@ function MyCalendar({
         setCalendarDate(dayToChange);
 
         console.log("currentDate: " + currentDate);
-        console.log("clicked tile, habitbuttonid is: ",selectedHabitButtonId);
+        console.log("clicked tile, habitbuttonid is: ", selectedHabitButtonId);
 
         // console.log(
         //   getComputedStyle(document.body).getPropertyValue("--toggled-color")
@@ -167,6 +162,8 @@ function MyCalendar({
 
       return (
         <ToggleButton
+          // The MUI togglebutton must have a value property so I'm just calling it placeholder for now, one day we might actually use 'value'
+          value="placeholder"
           sx={{
             borderRadius: 0,
             height: "100%",
