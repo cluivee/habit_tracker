@@ -170,10 +170,6 @@ const JustMUIDrawer = ({
     habitsservice.getAll().then((response) => {
       console.log("Check response length:", response.length);
       if (response.length < 31) {
-        if (habits.length === 0) {
-          setSelectedHabitButtonId(1);
-          console.log("addhabit currentID: ", 1);
-        }
         const habitObject = {
           color: habitColorArray[habits.length % 6],
           colorHex: habitColorHexArray[habits.length % 6],
@@ -184,6 +180,9 @@ const JustMUIDrawer = ({
         };
         habitsservice.create(habitObject).then((returnedNote) => {
           setHabits(habits.concat(returnedNote));
+          if (habits.length === 0) {
+            setSelectedHabitButtonId(returnedNote.id);
+          }
           console.log("addhabit currentID: ", selectedHabitButtonId);
         });
       } else {
@@ -678,7 +677,8 @@ const App = () => {
 
   // The currently selected habit
   const selectedDict = useMemo(
-    () => habits.find((dict) => dict.id === selectedHabitButtonId),
+    () => {console.log('selectedDict Memo ran, and selectedDict is: ', habits.find((dict) => dict.id === selectedHabitButtonId));
+       return habits.find((dict) => dict.id === selectedHabitButtonId)},
     [habits, selectedHabitButtonId]
   );
 
@@ -883,5 +883,5 @@ TODO 24.05.2022:
 TODO 26.06.2022:
 - Perhaps try to rewrite the orig/blue/purple dicts using this "derived state" example from this video (webdevsimplified): https://www.youtube.com/watch?v=tz0fDABt67g.
 I'm thinking to have one object that stores all the dicts, perhaps each dict has an id at the front so we can reference them, then the colour, Then we have an array of dates.
-
 */
+
