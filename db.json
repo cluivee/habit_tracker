@@ -1,5 +1,60 @@
 {
-  "habits": [],
+  "habits": [
+    {
+      "id": 1,
+      "color": "orange",
+      "colorHex": "#F24E1ECC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new"
+    },
+    {
+      "id": 2,
+      "color": "lightorange",
+      "colorHex": "#FF8D24CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new"
+    },
+    {
+      "id": 3,
+      "color": "purple",
+      "colorHex": "#A259FFCC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new"
+    },
+    {
+      "id": 4,
+      "color": "green",
+      "colorHex": "#0ACF83CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new"
+    },
+    {
+      "id": 5,
+      "color": "blue",
+      "colorHex": "#1ABCFECC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new"
+    },
+    {
+      "id": 6,
+      "color": "pink",
+      "colorHex": "#FF7262CC",
+      "maxStreak": 0,
+      "streak": 0,
+      "ticked": [],
+      "newness": "new"
+    }
+  ],
   "comments": [
     {
       "id": 1,
