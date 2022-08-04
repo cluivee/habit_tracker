@@ -1,4 +1,5 @@
 import "./App.css";
+import habitsservice from "./services/habitsservice";
 import { createContext, useEffect, useRef, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
@@ -71,9 +72,6 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth();
-
-// the current logged in user
-// let currentUser = auth.currentUser;
 
 // function for when the "log in with Google" button is clicked
 function GoogleHandleClick(event) {
@@ -186,17 +184,17 @@ if (isSignInWithEmailLink(auth, window.location.href)) {
 }
 
 // simple default Home Page component
-function Home({ user }) {
+function Home({ theUser }) {
   return (
     <Container component="main">
       <CssBaseline />
-      {user !== null ? (
+      {theUser !== null ? (
         <h2>You are logged in so home calendar is visible</h2>
       ) : (
         <h2>You do not have access to the Home page. Please sign in</h2>
       )}
-      {user !== null ? (
-        <h2>{`Welcome back, ${user.email}`}</h2>
+      {theUser !== null ? (
+        <h2>{`Welcome back, ${theUser.email}`}</h2>
       ) : null}
     </Container>
   );
@@ -212,8 +210,9 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      {/* TODO: add a link here I guess */}
+      <Link color="inherit" href="">
+      Habitimity
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -715,17 +714,17 @@ function ForgotPassword(props) {
 
 // Delete user component
 
-function DeleteUser({user}) {
+function DeleteUser({theUser}) {
   const [deleteUserErrorText, setdeleteUserErrorText] = useState("");
 
   const handleDeleteAccountSubmit = (event) => {
     event.preventDefault();
-    console.log(user);
+    console.log(theUser);
 
-    if (user === null) {
+    if (theUser === null) {
       setdeleteUserErrorText("You are not logged in");
     } else if (window.confirm("Do you really want to delete your account?")) {
-      deleteUser(user)
+      deleteUser(theUser)
         .then(() => {
           console.log("user deleted: ");
           setdeleteUserErrorText("Account deleted successfully");
@@ -834,21 +833,21 @@ function SwitchLabels() {
 }
 
 // This switches between which component we want to show
-const Switcher = ({ setshowComponent, showComponent, user }) => {
+const Switcher = ({ setshowComponent, showComponent, theUser }) => {
   switch (showComponent) {
     case "Home":
       return <Home setshowComponent={setshowComponent} 
-      user={user} />;
+      theUser={theUser} />;
     case "SignUp":
-      return <SignUp setshowComponent={setshowComponent} user={user}/>;
+      return <SignUp setshowComponent={setshowComponent} theUser={theUser}/>;
     case "SignIn":
-      return <SignIn setshowComponent={setshowComponent} user={user}/>;
+      return <SignIn setshowComponent={setshowComponent} theUser={theUser}/>;
     case "DeleteUser":
-      return <DeleteUser setshowComponent={setshowComponent} user={user}/>;
+      return <DeleteUser setshowComponent={setshowComponent} theUser={theUser}/>;
     case "ForgotPassword":
-      return <ForgotPassword setshowComponent={setshowComponent} user={user}/>;
+      return <ForgotPassword setshowComponent={setshowComponent} theUser={theUser}/>;
     default:
-      return <SignUp setshowComponent={setshowComponent} user={user}/>;
+      return <SignUp setshowComponent={setshowComponent} theUser={theUser}/>;
   }
 };
 
@@ -859,8 +858,8 @@ function FirebaseAuthenticationComponent({
   myUserAuthState,
   userToken,
   setUserToken,
-  user,
-  setUser,
+  theUser,
+  setTheUser,
 }) {
   console.log("App rerendered");
   // state for the username of the currently signed in user
@@ -883,7 +882,10 @@ function FirebaseAuthenticationComponent({
           .getIdToken()
           .then(function (idToken) {
             // setToken to state
-            setUserToken(idToken);
+            // setUserToken(idToken);
+            
+            habitsservice.setToken(idToken)
+
             console.log("thetoken is: ", idToken);
             // Send token to your backend via HTTPS
             // could also just send token to the backend directly here I guess
@@ -892,7 +894,7 @@ function FirebaseAuthenticationComponent({
             // Handle error
             console.log("error retrieving token: ", error);
           });
-        setUser(user);
+        setTheUser(user);
         setmyUserAuthState(user);
         console.log(
           "Auth state changed, user is: " + uid + " username: " + user.email
@@ -903,7 +905,7 @@ function FirebaseAuthenticationComponent({
       } else {
         console.log("Auth state changed, Logged Out");
         setsignedInUsername("Logged Out");
-        setUser(user);
+        setTheUser(user);
         setmyUserAuthState(user);
 
         // set theToken to null
@@ -981,7 +983,7 @@ function FirebaseAuthenticationComponent({
         <Switcher
           setshowComponent={setshowComponent}
           showComponent={showComponent}
-          user={user}
+          theUser={theUser}
         />
       </div>
     </ThemeProvider>

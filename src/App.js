@@ -605,24 +605,24 @@ const App = () => {
       });
   };
 
-  // this method is usually called on click of the sign in form
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  // probably dont need any of this now - this method is usually called on click of the sign in form 
+  // const handleLogin = async (event) => {
+  //   event.preventDefault()
     
-    try {
-      // const user = await loginService.login({
-      //   username, password,
-      // })
-      setUserToken(null)
-      // setUsername('')
-      // setPassword('')
-    } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
+  //   try {
+  //     // const user = await loginService.login({
+  //     //   username, password,
+  //     // })
+  //     setUserToken(null)
+  //     // setUsername('')
+  //     // setPassword('')
+  //   } catch (exception) {
+  //     setErrorMessage('Wrong credentials')
+  //     setTimeout(() => {
+  //       setErrorMessage(null)
+  //     }, 5000)
+  //   }
+  // }
 
 
   // States for the whole app, there ought to be only 5.
@@ -686,7 +686,7 @@ const App = () => {
 
   const [habits, setHabits] = useState([]);
 
-  const [user, setUser] = useState(null);
+  const [theUser, setTheUser] = useState(null);
 
   const [userToken, setUserToken] = useState(null);
 
@@ -796,8 +796,8 @@ const App = () => {
               setshowComponent={setshowComponent}
               userToken={userToken}
               setUserToken={setUserToken}
-              user={user}
-              setUser={setUser}
+              theUser={theUser}
+              setTheUser={setTheUser}
 
             />
             {myUserAuthState && showComponent === "Home" ? (
