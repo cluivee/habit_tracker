@@ -73,7 +73,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 // the current logged in user
-let currentUser = auth.currentUser;
+// let currentUser = auth.currentUser;
 
 // function for when the "log in with Google" button is clicked
 function GoogleHandleClick(event) {
@@ -186,19 +186,19 @@ if (isSignInWithEmailLink(auth, window.location.href)) {
 }
 
 // simple default Home Page component
-function Home() {
+function Home({ user }) {
   return (
-      <Container component="main">
-        <CssBaseline />
-        {currentUser !== null ? (
-          <h2>You are logged in so home calendar is visible</h2>
-        ) : (
-          <h2>You do not have access to the Home page. Please sign in</h2>
-        )}
-        {currentUser !== null ? (
-          <h2>{`Welcome back, ${currentUser.email}`}</h2>
-        ) : null}
-      </Container>
+    <Container component="main">
+      <CssBaseline />
+      {user !== null ? (
+        <h2>You are logged in so home calendar is visible</h2>
+      ) : (
+        <h2>You do not have access to the Home page. Please sign in</h2>
+      )}
+      {user !== null ? (
+        <h2>{`Welcome back, ${user.email}`}</h2>
+      ) : null}
+    </Container>
   );
 }
 
@@ -715,17 +715,17 @@ function ForgotPassword(props) {
 
 // Delete user component
 
-function DeleteUser() {
+function DeleteUser({user}) {
   const [deleteUserErrorText, setdeleteUserErrorText] = useState("");
 
   const handleDeleteAccountSubmit = (event) => {
     event.preventDefault();
-    console.log(currentUser);
+    console.log(user);
 
-    if (currentUser === null) {
+    if (user === null) {
       setdeleteUserErrorText("You are not logged in");
     } else if (window.confirm("Do you really want to delete your account?")) {
-      deleteUser(currentUser)
+      deleteUser(user)
         .then(() => {
           console.log("user deleted: ");
           setdeleteUserErrorText("Account deleted successfully");
@@ -834,20 +834,21 @@ function SwitchLabels() {
 }
 
 // This switches between which component we want to show
-const Switcher = ({setshowComponent, showComponent}) => {
+const Switcher = ({ setshowComponent, showComponent, user }) => {
   switch (showComponent) {
     case "Home":
-      return <Home setshowComponent={setshowComponent} />;
+      return <Home setshowComponent={setshowComponent} 
+      user={user} />;
     case "SignUp":
-      return <SignUp setshowComponent={setshowComponent} />;
+      return <SignUp setshowComponent={setshowComponent} user={user}/>;
     case "SignIn":
-      return <SignIn setshowComponent={setshowComponent} />;
+      return <SignIn setshowComponent={setshowComponent} user={user}/>;
     case "DeleteUser":
-      return <DeleteUser setshowComponent={setshowComponent} />;
+      return <DeleteUser setshowComponent={setshowComponent} user={user}/>;
     case "ForgotPassword":
-      return <ForgotPassword setshowComponent={setshowComponent} />;
+      return <ForgotPassword setshowComponent={setshowComponent} user={user}/>;
     default:
-      return <SignUp setshowComponent={setshowComponent} />;
+      return <SignUp setshowComponent={setshowComponent} user={user}/>;
   }
 };
 
@@ -855,6 +856,11 @@ function FirebaseAuthenticationComponent({
   setshowComponent,
   showComponent,
   setmyUserAuthState,
+  myUserAuthState,
+  userToken,
+  setUserToken,
+  user,
+  setUser,
 }) {
   console.log("App rerendered");
   // state for the username of the currently signed in user
@@ -872,9 +878,21 @@ function FirebaseAuthenticationComponent({
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
-        currentUser = user;
 
-        //updating the current auth user here, that is passed back to App component. Technically only need one of 'currentUser' and 'myUserAuthState'
+        user
+          .getIdToken()
+          .then(function (idToken) {
+            // setToken to state
+            setUserToken(idToken);
+            console.log("thetoken is: ", idToken);
+            // Send token to your backend via HTTPS
+            // could also just send token to the backend directly here I guess
+          })
+          .catch(function (error) {
+            // Handle error
+            console.log("error retrieving token: ", error);
+          });
+        setUser(user);
         setmyUserAuthState(user);
         console.log(
           "Auth state changed, user is: " + uid + " username: " + user.email
@@ -885,8 +903,13 @@ function FirebaseAuthenticationComponent({
       } else {
         console.log("Auth state changed, Logged Out");
         setsignedInUsername("Logged Out");
-        currentUser = user;
+        setUser(user);
         setmyUserAuthState(user);
+
+        // set theToken to null
+        const theToken = null;
+        console.log("thetoken is logged out: ", theToken);
+
         // User is signed out
         // ...
       }
@@ -958,6 +981,7 @@ function FirebaseAuthenticationComponent({
         <Switcher
           setshowComponent={setshowComponent}
           showComponent={showComponent}
+          user={user}
         />
       </div>
     </ThemeProvider>

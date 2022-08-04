@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./App.css";
 import habitsservice from "./services/habitsservice";
+// Again this may not get used
+import loginService from './services/login'
 
 // The App component imports MyCalendar which is the main calendar/habit tracker component, Habit which is one of the buttons in the sidebar,
 // and FirebaseAuthenticationComponent which is where I keep most of the components and functions for the sign in/sign out authentication.
@@ -170,13 +172,13 @@ const JustMUIDrawer = ({
     habitsservice.getAll().then((response) => {
       console.log("Check response length:", response.length);
       if (response.length < 31) {
+        // in our habitobject we will now have to post the user, which we will only get from the uid
         const habitObject = {
           color: habitColorArray[habits.length % 6],
           colorHex: habitColorHexArray[habits.length % 6],
           maxStreak: 0,
           streak: 0,
           ticked: [],
-          newness: "new",
         };
         habitsservice.create(habitObject).then((returnedNote) => {
           setHabits(habits.concat(returnedNote));
@@ -522,8 +524,6 @@ const App = () => {
   //     });
   // }, []);
 
-  const [habits, setHabits] = useState([]);
-
   useEffect(() => {
     habitsservice.getAll().then((response) => {
       console.log("Successful:", response);
@@ -605,9 +605,25 @@ const App = () => {
       });
   };
 
-  const [errorMessage, setErrorMessage] = useState("some error happened...");
+  // this method is usually called on click of the sign in form
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    
+    try {
+      // const user = await loginService.login({
+      //   username, password,
+      // })
+      setUserToken(null)
+      // setUsername('')
+      // setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
 
-  // const [msg, setMsg] = useState("Initial Message");
 
   // States for the whole app, there ought to be only 5.
   // This state is to store the variables for all the habits in the sidebar
@@ -668,6 +684,16 @@ const App = () => {
     },
   ]);
 
+  const [habits, setHabits] = useState([]);
+
+  const [user, setUser] = useState(null);
+
+  const [userToken, setUserToken] = useState(null);
+
+  const [errorMessage, setErrorMessage] = useState("some error happened...");
+
+  // const [msg, setMsg] = useState("Initial Message");
+
   // adding another state for the firebase user state (similar to onauthstatechanged)
   const [myUserAuthState, setmyUserAuthState] = useState(null);
 
@@ -705,7 +731,7 @@ const App = () => {
       });
 
       const posYesterday = selectedDict.ticked.findIndex((item) => {
-        console.log('item to check for datefns strings ', item)
+        console.log('item to check for datefns strings ', item, typeof item)
         return isSameDay(parseISO(item), subDays(new Date(), 1));
       });
 
@@ -768,6 +794,11 @@ const App = () => {
               myUserAuthState={myUserAuthState}
               showComponent={showComponent}
               setshowComponent={setshowComponent}
+              userToken={userToken}
+              setUserToken={setUserToken}
+              user={user}
+              setUser={setUser}
+
             />
             {myUserAuthState && showComponent === "Home" ? (
               <MemoCalendar
