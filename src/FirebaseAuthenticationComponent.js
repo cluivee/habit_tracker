@@ -854,8 +854,6 @@ const Switcher = ({ setshowComponent, showComponent, theUser }) => {
 function FirebaseAuthenticationComponent({
   setshowComponent,
   showComponent,
-  setmyUserAuthState,
-  myUserAuthState,
   userToken,
   setUserToken,
   theUser,
@@ -881,12 +879,19 @@ function FirebaseAuthenticationComponent({
         user
           .getIdToken()
           .then(function (idToken) {
-            // setToken to state
-            // setUserToken(idToken);
-            
-            habitsservice.setToken(idToken)
 
-            console.log("thetoken is: ", idToken);
+            // we will set user token here, so that its available in the app component, though its possible we will never use it
+
+            habitsservice.setToken(idToken)
+            setUserToken(idToken);
+
+            // saving token to localStorage (again might not be necessary)
+            window.localStorage.setItem(
+              'loggedHabitsUserToken', JSON.stringify(idToken)
+            );
+
+            console.log('window localstorage set: ', JSON.stringify(idToken));
+
             // Send token to your backend via HTTPS
             // could also just send token to the backend directly here I guess
           })
@@ -894,8 +899,8 @@ function FirebaseAuthenticationComponent({
             // Handle error
             console.log("error retrieving token: ", error);
           });
+          
         setTheUser(user);
-        setmyUserAuthState(user);
         console.log(
           "Auth state changed, user is: " + uid + " username: " + user.email
         );
@@ -906,17 +911,20 @@ function FirebaseAuthenticationComponent({
         console.log("Auth state changed, Logged Out");
         setsignedInUsername("Logged Out");
         setTheUser(user);
-        setmyUserAuthState(user);
+        habitsservice.setToken(null)
 
-        // set theToken to null
-        const theToken = null;
-        console.log("thetoken is logged out: ", theToken);
+        // Again, we may never use userToken in the App component, so this could be deleted
+        setUserToken(null);
+
+        window.localStorage.clear();
+        console.log('window localstorage cleared: ', null);
 
         // User is signed out
         // ...
       }
     });
   }, []);
+
 
   return (
     <ThemeProvider theme={theme}>

@@ -688,14 +688,13 @@ const App = () => {
 
   const [theUser, setTheUser] = useState(null);
 
+  // We're going to keep this if we want to refrence the token from app, and it is set in "onauthstatechanged" in the firebaseauthenticationcomponent, but we might not need this and it could be deleted
+
   const [userToken, setUserToken] = useState(null);
 
   const [errorMessage, setErrorMessage] = useState("some error happened...");
 
   // const [msg, setMsg] = useState("Initial Message");
-
-  // adding another state for the firebase user state (similar to onauthstatechanged)
-  const [myUserAuthState, setmyUserAuthState] = useState(null);
 
   // state for the id of the button of the currently selected habit
   const [selectedHabitButtonId, setSelectedHabitButtonId] = useState(1);
@@ -790,8 +789,6 @@ const App = () => {
           />
           <div className="flex-item">
             <FirebaseAuthenticationComponent
-              setmyUserAuthState={setmyUserAuthState}
-              myUserAuthState={myUserAuthState}
               showComponent={showComponent}
               setshowComponent={setshowComponent}
               userToken={userToken}
@@ -800,7 +797,7 @@ const App = () => {
               setTheUser={setTheUser}
 
             />
-            {myUserAuthState && showComponent === "Home" ? (
+            {theUser && showComponent === "Home" ? (
               <MemoCalendar
                 setCalendarDate={setCalendarDate}
                 habits={habits}
