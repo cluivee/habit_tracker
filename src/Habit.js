@@ -63,11 +63,10 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
               padding: "5px 5px 7px 5px",
             }}
           >
-          {/* TODO: really hacking it now, was just propstreak */}
-            Streak: {propColor === "orange" ? "3" : propStreak}
+            Streak: {propStreak}
           </label>
-          {/* TODO: Hiding this for the moment */}
-          {/* <Typography>{important.toString()}</Typography> */}
+
+          <Typography>{important.toString()}</Typography>
           
         </div>
         <Checkbox
@@ -78,8 +77,7 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
         />
       </Button>
       {/* The delete individual item button caused a lot of problems. When it was on top of the button, clicking the delete button also clicked the underlying habit button underneath at the same time, causing the id to be set to the just deleted habit, causing crashes. So at some point I must make sure that the buttons on top of the habit button don't overlap, and are actually on top*/}
-      {/* TODO: just hiding this for the moment */}
-      {/* <button onClick={() => toggleDelete(id)}>Delete this item</button> */}
+      <button onClick={() => toggleDelete(id)}>Delete this item</button>
     </div>
   );
 };

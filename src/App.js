@@ -59,7 +59,7 @@ import axios from "axios";
 var r = document.querySelector(":root");
 
 // Mui custom theme that we use for some colors and component style overrides
-// TODO: temp hack to get the color on the right background, change back afterward
+
 const darkTheme = createTheme({
   palette: {
     // I can change this to light to change the theme
@@ -75,19 +75,19 @@ const darkTheme = createTheme({
       contrastText: "#fff",
     },
     orange: {
-      main: "#F57251",
+      main: "#F24E1ECC",
       contrastText: "#fff",
     },
     lightorange: {
-      main: "#FFA456",
+      main: "#FF8D24CC",
       contrastText: "#fff",
     },
     purple: {
-      main: "#B47BFD",
+      main: "#A259FFCC",
       contrastText: "#fff",
     },
     green: {
-      main: "#48D99C",
+      main: "#0ACF83CC",
       contrastText: "#fff",
     },
     blue: {
@@ -123,70 +123,6 @@ const darkTheme = createTheme({
     },
   },
 });
-
-// const darkTheme = createTheme({
-//   palette: {
-//     // I can change this to light to change the theme
-//     mode: "dark",
-//     myColor: {
-//       main: "#ffa726",
-//       contrastText: "#fff",
-//     },
-//     myOtherColor: {
-//       main: "#3700B3",
-//       light: "#3700B3",
-//       dark: "#3700B3",
-//       contrastText: "#fff",
-//     },
-//     orange: {
-//       main: "#F24E1ECC",
-//       contrastText: "#fff",
-//     },
-//     lightorange: {
-//       main: "#FF8D24CC",
-//       contrastText: "#fff",
-//     },
-//     purple: {
-//       main: "#A259FFCC",
-//       contrastText: "#fff",
-//     },
-//     green: {
-//       main: "#0ACF83CC",
-//       contrastText: "#fff",
-//     },
-//     blue: {
-//       main: "#1ABCFECC",
-//       contrastText: "#fff",
-//     },
-//     pink: {
-//       main: "#FF7262CC",
-//       contrastText: "#fff",
-//     },
-//     white: {
-//       main: "#fff",
-//       contrastText: "#fff",
-//     },
-//   },
-//   components: {
-//     MuiDrawer: {
-//       styleOverrides: {
-//         paper: {
-//           backgroundColor: "#fff",
-//           color: "#000",
-//         },
-//       },
-//     },
-//     MuiToggleButton: {
-//       styleOverrides: {
-//         // Name of the slot
-//         root: {
-//           fontSize: "1.1rem",
-//           color: "#000",
-//         },
-//       },
-//     },
-//   },
-// });
 
 // width of the MUI drawer sidebar
 const drawerWidth = 240;
@@ -389,9 +325,8 @@ const JustMUIDrawer = ({
     >
       {habitList}
 
-{/* TODO: hiding the add and delete buttons for now */}
       {/* "Add Habit" button */}
-      {/* <Button
+      <Button
         variant="contained"
         onClick={addHabitOnClick}
         sx={{
@@ -405,10 +340,10 @@ const JustMUIDrawer = ({
         }}
       >
         + Add Habit
-      </Button> */}
+      </Button>
 
       {/* "Delete Habit" button */}
-      {/* <Button
+      <Button
         variant="contained"
         onClick={deleteHabitOnClick}
         sx={{
@@ -422,9 +357,9 @@ const JustMUIDrawer = ({
         }}
       >
         - Delete Habit
-      </Button> */}
+      </Button>
 
-      {/* TODO: Ill have to fix the color prop here, at the moment its white on hover */}
+      {/* Ill have to fix the color prop here, at the moment its white on hover. Still now really sure how to access colors without just wrapping everything in themeproviders */}
       <Fab
         color="error"
         aria-label="add"
@@ -903,12 +838,11 @@ const App = () => {
               />
             ) : null}
             {/* Ignore everything after this point*/}
-            {/* TODO bring this back for testing */}
-            {/* <Sidebar
+            <Sidebar
               habits={habits}
               toggleImportanceOf={toggleImportanceOf}
               toggleDelete={toggleDelete}
-            /> */}
+            />
 
             {/* <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
