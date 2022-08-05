@@ -126,10 +126,7 @@ function MyCalendar({
       const onDateClick = (dayToChange, event) => {
         console.log("day prop is: ", day);
         console.log("typeof day prop is: ", typeof day);
-        console.log(
-          "why am I not using daytoChange: ",
-          dayToChange
-        );
+        console.log("why am I not using daytoChange: ", dayToChange);
         addDate(selectedHabitButtonId, day);
         setCurrentDate(dayToChange);
 
@@ -183,58 +180,67 @@ function MyCalendar({
       // const theme = useTheme();
 
       return (
-        <ToggleButton
-          // The MUI togglebutton must have a value property so I'm just calling it placeholder for now, one day we might actually use 'value'
-          value="placeholder"
-          sx={{
-            borderRadius: 0,
-            height: "100%",
-            border: 0,
-          }}
-          variant="contained"
-          fullWidth
-          className={`${
-            !isSameMonth(day, monthStart)
-              ? "toggleButtonClass disabled"
-              : isSameDay(day, new Date())
-              ? "toggleButtonClass today"
-              : isSameDay(day, currentDate)
-              ? "toggleButtonClass selected"
-              : "toggleButtonClass"
-          }`}
-          key={day}
-          // originally doing it by changing a custom style
-          // style={buttonState ? buttonStyle : otherStyle}
+        <>
+        
+          <ToggleButton
+            // The MUI togglebutton must have a value property so I'm just calling it placeholder for now, one day we might actually use 'value'
+            value="placeholder"
+            sx={{
+              borderRadius: 0,
+              height: "100%",
+              border: 0,
+            }}
+            variant="contained"
+            fullWidth
+            className={`${
+              !isSameMonth(day, monthStart)
+                ? "toggleButtonClass disabled"
+                : isSameDay(day, new Date())
+                ? "toggleButtonClass today"
+                : isSameDay(day, currentDate)
+                ? "toggleButtonClass selected"
+                : "toggleButtonClass"
+            }`}
+            key={day}
+            // originally doing it by changing a custom style
+            // style={buttonState ? buttonStyle : otherStyle}
 
-          // then doing it based off a boolean state value
+            // then doing it based off a boolean state value
 
-          // style={{
-          //   backgroundColor: `${
-          //     buttonState
-          //       ? "#fff"
-          //       : getComputedStyle(document.body).getPropertyValue(
-          //           "--toggled-color"
-          //         )
-          //   }`,
+            // style={{
+            //   backgroundColor: `${
+            //     buttonState
+            //       ? "#fff"
+            //       : getComputedStyle(document.body).getPropertyValue(
+            //           "--toggled-color"
+            //         )
+            //   }`,
 
-          style={{
-            backgroundColor: `${
-              isInArray(currentTicked, day)
-                ? // ? eval("theme.palette."+selectedDict.color+".main")
-                  selectedDict.colorHex
-                : getComputedStyle(document.body).getPropertyValue(
-                    "--toggled-color"
-                  )
-            }`,
-            borderColor: `${buttonState ? "#pink" : "red"}`,
-          }}
-          // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
-          // () => setButtonState(!buttonState)
-          onClick={(e) => onDateClick(toDate(cloneDay), e)}
-        >
-          {isSameDay(day, new Date()) ? <span className="numberWithCircle">{formattedDate}</span> : <span className="number">{formattedDate}</span>}
-          <span className="bg">{formattedDate}</span>
-        </ToggleButton>
+            style={{
+              backgroundColor: `${
+                isInArray(currentTicked, day)
+                  ? // ? eval("theme.palette."+selectedDict.color+".main")
+                    selectedDict.colorHex
+                  : getComputedStyle(document.body).getPropertyValue(
+                      "--toggled-color"
+                    )
+              }`,
+              borderColor: `${buttonState ? "#pink" : "red"}`,
+
+            }}
+            // this was in onClick : (e) => onDateClick(toDate(cloneDay), e)
+            // () => setButtonState(!buttonState)
+            onClick={(e) => onDateClick(toDate(cloneDay), e)}
+          >
+            {isSameDay(day, new Date()) ? (
+              <span className="numberWithCircle">{formattedDate}</span>
+            ) : (
+              <span className="number">{formattedDate}</span>
+            )}
+            <span className="bg">{formattedDate}</span>
+            
+          </ToggleButton>
+        </>
       );
     }
   );

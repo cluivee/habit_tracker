@@ -7,7 +7,7 @@
   font-style: normal;
   font-size: 2rem;
   font-weight: 700;
-  color: #000;
+  color: #fff;
   /* display: inline-block;
   vertical-align: middle;
   line-height: 1;
@@ -33,7 +33,7 @@
   --neutral-color: #fff;
   --cell-color: #fff;
   --toggled-color: #f8f8f8;
-  --firebase-auth-darktheme-color: 'transparent';
+  --firebase-auth-darktheme-color: #373740E6;
 }
 
 /* GENERAL */
@@ -217,8 +217,8 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 2rem;
-  font-weight: 700;
-  color: black;
+  font-weight: 300;
+  color: white;
 }
 
 /* specifing an id selector to override borders in MUIButtonbase as they were taking over .selected classname */
@@ -254,6 +254,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #fff;
 }
 
 .container.col-center {
@@ -266,14 +267,15 @@ body {
   grid-column-start: 2;
   grid-column-end: 7;
   font-size: 2rem;
-  font-weight: 700;
-  color: black;
+  font-weight: 300;
+  color: #fff;
 }
 
 .col-end {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #fff;
 }
 
 /* Calendar */
@@ -281,7 +283,7 @@ body {
   display: block;
   position: relative;
   width: 80%;
-  background: var(--firebase-auth-darktheme-color);
+  background: 'transparent';
   height: auto;
   margin: 0 auto;
 }

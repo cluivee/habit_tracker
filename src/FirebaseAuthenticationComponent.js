@@ -977,29 +977,32 @@ function FirebaseAuthenticationComponent({
             alignItems: "center",
           }}
         >
-          <Button color="whiteText" onClick={() => setshowComponent("Home")}>
+          <Button color="whiteText" sx={{ fontWeight: 'light' }} onClick={() => setshowComponent("Home")}>
             Home
           </Button>
-          <Button color="whiteText" onClick={() => setshowComponent("SignUp")}>
+          <Button color="whiteText" sx={{ fontWeight: 'light' }} onClick={() => setshowComponent("SignUp")}>
             Sign Up
           </Button>
-          <Button color="whiteText" onClick={() => setshowComponent("SignIn")}>
+          <Button color="whiteText" sx={{ fontWeight: 'light' }} onClick={() => setshowComponent("SignIn")}>
             Log In
           </Button>
           <Button
             color="whiteText"
+            sx={{ fontWeight: 'light' }}
             onClick={() => setshowComponent("DeleteUser")}
           >
             Profile
           </Button>
           <Button
             color="whiteText"
+            sx={{ fontWeight: 'light' }}
             onClick={() => setshowComponent("ForgotPassword")}
             style={{ marginRight: "auto" }}
           >
             Forgot Password
           </Button>
-          <div style={{ marginRight: "8px", fontWeight: "700", color: "#fff" }}>
+          <div style={{ marginRight: "8px", fontWeight: "300", color: "#fff" }}
+          >
             {signedInUsername}
           </div>
 

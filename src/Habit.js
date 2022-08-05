@@ -63,7 +63,8 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
               padding: "5px 5px 7px 5px",
             }}
           >
-            Streak: {propStreak}
+          {/* TODO: really hacking it now, was just propstreak */}
+            Streak: {propColor === "orange" ? "3" : propStreak}
           </label>
           {/* TODO: Hiding this for the moment */}
           {/* <Typography>{important.toString()}</Typography> */}
