@@ -85,7 +85,9 @@ body {
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 
-.toggleButtonClass.today {
+/* This is the attractive gradient effect for todays date that was originally in the tutorial. Might keep this class as it may be useful in the future*/
+
+/* .toggleButtonClass.today {
   border-left: 10px solid transparent;
   border-image: linear-gradient(
     45deg,
@@ -94,7 +96,7 @@ body {
   );
   border-image-slice: 1;
   transition: 0.5s ease-in;
-}
+} */
 
 .toggleButtonClass.disabled {
   opacity: 0.5;
@@ -102,12 +104,12 @@ body {
   pointer-events: none;
 }
 
-.toggleButtonClass.selected {
+/* This was the red border around the selected date (or the last clicked on date). Could also maybe use this class in the future, especially if we work out how to do an elevated effect for todays date */
+/* .toggleButtonClass.selected {
   border: 3px solid red;
   font-size: 100;
   transition: 0.5s ease-in;
-
-}
+} */
 
 /* testing button by copying and pasting css from muibuttonbase */
 /* 
@@ -144,6 +146,26 @@ body {
   aspect-ratio: 1;
 }
 
+.container div .numberWithCircle {
+  position: absolute;
+  /* font size is now set in the styleoverrides in App.js darktheme */
+  /* font-size: 1rem; */
+  line-height: 1;
+  top: 0.25em;
+  right: 0.25em;
+  font-weight: 700;
+
+  background: #1A73E8;
+  border-radius: 1em;
+  -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
+  color: #ffffff;
+  line-height: 2em;
+  text-align: center;
+  width: 2em; 
+
+}
+
 .container div .number {
   position: absolute;
   /* font size is now set in the styleoverrides in App.js darktheme */
@@ -152,6 +174,7 @@ body {
   top: 0.25em;
   right: 0.25em;
   font-weight: 700;
+
 }
 
 .container div:hover .number,

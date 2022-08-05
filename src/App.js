@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./App.css";
 import habitsservice from "./services/habitsservice";
 // Again this may not get used
-import loginService from './services/login'
+import loginService from "./services/login";
 
 // The App component imports MyCalendar which is the main calendar/habit tracker component, Habit which is one of the buttons in the sidebar,
 // and FirebaseAuthenticationComponent which is where I keep most of the components and functions for the sign in/sign out authentication.
@@ -32,12 +32,14 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Fab,
 } from "@mui/material";
 
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import SendIcon from "@mui/icons-material/Send";
+import AddIcon from "@mui/icons-material/Add";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -208,12 +210,12 @@ const JustMUIDrawer = ({
 
   const deleteHabitOnClick = () => {
     if (habits.length === 0) {
-      console.log('habits is already empty, cannot delete anything');
-      return
+      console.log("habits is already empty, cannot delete anything");
+      return;
     }
     const idLastItem = habits.at(-1).id;
 
-    const idSecondLastItem = habits.length >= 2 ? habits.at(-2).id : '';
+    const idSecondLastItem = habits.length >= 2 ? habits.at(-2).id : "";
 
     const baseUrl = "/api/notes";
 
@@ -322,6 +324,7 @@ const JustMUIDrawer = ({
     >
       {habitList}
 
+{/* TODO: hiding the add and delete buttons for now */}
       {/* "Add Habit" button */}
       <Button
         variant="contained"
@@ -355,6 +358,29 @@ const JustMUIDrawer = ({
       >
         - Delete Habit
       </Button>
+
+      {/* TODO: Ill have to fix the color prop here, at the moment its white on hover */}
+      <Fab
+        color="error"
+        aria-label="add"
+        sx={{
+          bgcolor: "#f50057",
+          margin: "10px",
+          color: "#fff",
+          // minHeight: "50px",
+          // maxHeight: "50px",
+          // maxWidth: "50px",
+          // minWidth: "50px",
+          width: "50px",
+          maxWidth: "50px",
+          minHeight: "50px",
+          maxHeight: "50px",
+          fontWeight: "400",
+          fontSize: "1rem",
+        }}
+      >
+        <AddIcon />
+      </Fab>
 
       {/* Example of the original contents of the MUI sidebar drawer, including dividers */}
       {/* 
@@ -534,16 +560,20 @@ const App = () => {
 
   const toggleImportanceOf = (id) => {
     const habit = habits.find((n) => n.id === id);
-    console.log('toggleimportance: habits: ', habits);
-    console.log('toggleimportance: singular habit: ', habit);
+    console.log("toggleimportance: habits: ", habits);
+    console.log("toggleimportance: singular habit: ", habit);
     const changedHabit = { ...habit, important: !habit.important };
-    console.log('changedHabit: ', changedHabit);
+    console.log("changedHabit: ", changedHabit);
 
     habitsservice
       .update(id, changedHabit)
       .then((returnedHabit) => {
-        console.log('returnedHabit', returnedHabit)
-        console.log('returnedHabitd date', returnedHabit.date, typeof returnedHabit.date,)
+        console.log("returnedHabit", returnedHabit);
+        console.log(
+          "returnedHabitd date",
+          returnedHabit.date,
+          typeof returnedHabit.date
+        );
         setHabits(
           habits.map((habit) => (habit.id !== id ? habit : returnedHabit))
         );
@@ -605,10 +635,10 @@ const App = () => {
       });
   };
 
-  // probably dont need any of this now - this method is usually called on click of the sign in form 
+  // probably dont need any of this now - this method is usually called on click of the sign in form
   // const handleLogin = async (event) => {
   //   event.preventDefault()
-    
+
   //   try {
   //     // const user = await loginService.login({
   //     //   username, password,
@@ -623,7 +653,6 @@ const App = () => {
   //     }, 5000)
   //   }
   // }
-
 
   // States for the whole app, there ought to be only 5.
   // This state is to store the variables for all the habits in the sidebar
@@ -706,11 +735,13 @@ const App = () => {
   const [calendarButtonBoolean, setCalendarButtonBoolean] = useState(false);
 
   // The currently selected habit
-  const selectedDict = useMemo(
-    () => {console.log('selectedDict Memo ran, and selectedDict is: ', habits.find((dict) => dict.id === selectedHabitButtonId));
-       return habits.find((dict) => dict.id === selectedHabitButtonId)},
-    [habits, selectedHabitButtonId]
-  );
+  const selectedDict = useMemo(() => {
+    console.log(
+      "selectedDict Memo ran, and selectedDict is: ",
+      habits.find((dict) => dict.id === selectedHabitButtonId)
+    );
+    return habits.find((dict) => dict.id === selectedHabitButtonId);
+  }, [habits, selectedHabitButtonId]);
 
   let currentStreak = 0;
 
@@ -723,14 +754,14 @@ const App = () => {
 
     if (habits.length > 0) {
       const posToday = selectedDict.ticked.findIndex((item) => {
-        console.log('item to check for datefns strings ', item, typeof item)
+        console.log("item to check for datefns strings ", item, typeof item);
         // if parseISO doesn't work we can revert to this:
         // return isSameDay(item, new Date());
         return isSameDay(parseISO(item), new Date());
       });
 
       const posYesterday = selectedDict.ticked.findIndex((item) => {
-        console.log('item to check for datefns strings ', item, typeof item)
+        console.log("item to check for datefns strings ", item, typeof item);
         return isSameDay(parseISO(item), subDays(new Date(), 1));
       });
 
@@ -795,7 +826,6 @@ const App = () => {
               setUserToken={setUserToken}
               theUser={theUser}
               setTheUser={setTheUser}
-
             />
             {theUser && showComponent === "Home" ? (
               <MemoCalendar
@@ -921,4 +951,3 @@ TODO 26.06.2022:
 - Perhaps try to rewrite the orig/blue/purple dicts using this "derived state" example from this video (webdevsimplified): https://www.youtube.com/watch?v=tz0fDABt67g.
 I'm thinking to have one object that stores all the dicts, perhaps each dict has an id at the front so we can reference them, then the colour, Then we have an array of dates.
 */
-

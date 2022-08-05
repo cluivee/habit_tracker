@@ -45,7 +45,7 @@ import {
   FacebookLoginButton,
   GoogleLoginButton,
 } from "react-social-login-buttons";
-import { FormGroup } from "@mui/material";
+import { AppBar, FormGroup, Toolbar } from "@mui/material";
 
 // configuration and apikeys for firebase
 const firebaseConfig = {
@@ -188,14 +188,15 @@ function Home({ theUser }) {
   return (
     <Container component="main">
       <CssBaseline />
-      {theUser !== null ? (
-        <h2>You are logged in so home calendar is visible</h2>
+      {/* This was the text above the calendar */}
+      {/* {theUser !== null ? (
+        null
       ) : (
         <h2>You do not have access to the Home page. Please sign in</h2>
       )}
       {theUser !== null ? (
         <h2>{`Welcome back, ${theUser.email}`}</h2>
-      ) : null}
+      ) : null} */}
     </Container>
   );
 }
@@ -212,7 +213,7 @@ function Copyright(props) {
       {"Copyright © "}
       {/* TODO: add a link here I guess */}
       <Link color="inherit" href="">
-      Habitimity
+        Habitimity
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -220,7 +221,43 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // I can change this to light to change the theme
+    whiteText: {
+      main: "#fff",
+      contrastText: "#fff",
+    },
+    orange: {
+      main: "#F24E1ECC",
+      contrastText: "#fff",
+    },
+    lightorange: {
+      main: "#FF8D24CC",
+      contrastText: "#fff",
+    },
+    purple: {
+      main: "#A259FFCC",
+      contrastText: "#fff",
+    },
+    green: {
+      main: "#0ACF83CC",
+      contrastText: "#fff",
+    },
+    blue: {
+      main: "#1ABCFECC",
+      contrastText: "#fff",
+    },
+    pink: {
+      main: "#FF7262CC",
+      contrastText: "#fff",
+    },
+    white: {
+      main: "#fff",
+      contrastText: "#fff",
+    },
+  },
+});
 
 function SignUp({ setshowComponent }) {
   const [signUpErrorText, setsignUpErrorText] = useState("");
@@ -714,7 +751,7 @@ function ForgotPassword(props) {
 
 // Delete user component
 
-function DeleteUser({theUser}) {
+function DeleteUser({ theUser }) {
   const [deleteUserErrorText, setdeleteUserErrorText] = useState("");
 
   const handleDeleteAccountSubmit = (event) => {
@@ -836,18 +873,21 @@ function SwitchLabels() {
 const Switcher = ({ setshowComponent, showComponent, theUser }) => {
   switch (showComponent) {
     case "Home":
-      return <Home setshowComponent={setshowComponent} 
-      theUser={theUser} />;
+      return <Home setshowComponent={setshowComponent} theUser={theUser} />;
     case "SignUp":
-      return <SignUp setshowComponent={setshowComponent} theUser={theUser}/>;
+      return <SignUp setshowComponent={setshowComponent} theUser={theUser} />;
     case "SignIn":
-      return <SignIn setshowComponent={setshowComponent} theUser={theUser}/>;
+      return <SignIn setshowComponent={setshowComponent} theUser={theUser} />;
     case "DeleteUser":
-      return <DeleteUser setshowComponent={setshowComponent} theUser={theUser}/>;
+      return (
+        <DeleteUser setshowComponent={setshowComponent} theUser={theUser} />
+      );
     case "ForgotPassword":
-      return <ForgotPassword setshowComponent={setshowComponent} theUser={theUser}/>;
+      return (
+        <ForgotPassword setshowComponent={setshowComponent} theUser={theUser} />
+      );
     default:
-      return <SignUp setshowComponent={setshowComponent} theUser={theUser}/>;
+      return <SignUp setshowComponent={setshowComponent} theUser={theUser} />;
   }
 };
 
@@ -879,18 +919,18 @@ function FirebaseAuthenticationComponent({
         user
           .getIdToken()
           .then(function (idToken) {
-
             // we will set user token here, so that its available in the app component, though its possible we will never use it
 
-            habitsservice.setToken(idToken)
+            habitsservice.setToken(idToken);
             setUserToken(idToken);
 
             // saving token to localStorage (again might not be necessary)
             window.localStorage.setItem(
-              'loggedHabitsUserToken', JSON.stringify(idToken)
+              "loggedHabitsUserToken",
+              JSON.stringify(idToken)
             );
 
-            console.log('window localstorage set: ', JSON.stringify(idToken));
+            console.log("window localstorage set: ", JSON.stringify(idToken));
 
             // Send token to your backend via HTTPS
             // could also just send token to the backend directly here I guess
@@ -899,7 +939,7 @@ function FirebaseAuthenticationComponent({
             // Handle error
             console.log("error retrieving token: ", error);
           });
-          
+
         setTheUser(user);
         console.log(
           "Auth state changed, user is: " + uid + " username: " + user.email
@@ -911,13 +951,13 @@ function FirebaseAuthenticationComponent({
         console.log("Auth state changed, Logged Out");
         setsignedInUsername("Logged Out");
         setTheUser(user);
-        habitsservice.setToken(null)
+        habitsservice.setToken(null);
 
         // Again, we may never use userToken in the App component, so this could be deleted
         setUserToken(null);
 
         window.localStorage.clear();
-        console.log('window localstorage cleared: ', null);
+        console.log("window localstorage cleared: ", null);
 
         // User is signed out
         // ...
@@ -925,42 +965,41 @@ function FirebaseAuthenticationComponent({
     });
   }, []);
 
-
   return (
     <ThemeProvider theme={theme}>
       <div>
         <header
           style={{
-            backgroundColor: "lightBlue",
+            backgroundColor: "#33333D",
             height: "3rem",
             textAlign: "center",
             display: "flex",
             alignItems: "center",
           }}
         >
-          <Button color="primary" onClick={() => setshowComponent("Home")}>
+          <Button color="whiteText" onClick={() => setshowComponent("Home")}>
             Home
           </Button>
-          <Button color="primary" onClick={() => setshowComponent("SignUp")}>
+          <Button color="whiteText" onClick={() => setshowComponent("SignUp")}>
             Sign Up
           </Button>
-          <Button color="primary" onClick={() => setshowComponent("SignIn")}>
+          <Button color="whiteText" onClick={() => setshowComponent("SignIn")}>
             Log In
           </Button>
           <Button
-            color="primary"
+            color="whiteText"
             onClick={() => setshowComponent("DeleteUser")}
           >
             Profile
           </Button>
           <Button
-            color="primary"
+            color="whiteText"
             onClick={() => setshowComponent("ForgotPassword")}
             style={{ marginRight: "auto" }}
           >
             Forgot Password
           </Button>
-          <div style={{ marginRight: "8px", fontWeight: "700" }}>
+          <div style={{ marginRight: "8px", fontWeight: "700", color: "#fff" }}>
             {signedInUsername}
           </div>
 
@@ -975,20 +1014,20 @@ function FirebaseAuthenticationComponent({
             }}
             onClick={() => {
               if (theUser) {
-              signOut(auth)
-                .then(() => {
-                  // Sign-out successful.
-                  console.log("Sign out successful");
-                })
-                .catch((error) => {
-                  // An error happened.
-                });
+                signOut(auth)
+                  .then(() => {
+                    // Sign-out successful.
+                    console.log("Sign out successful");
+                  })
+                  .catch((error) => {
+                    // An error happened.
+                  });
               } else {
                 setshowComponent("SignIn");
               }
             }}
           >
-            {theUser ? "Log Out" : "Sign In" }
+            {theUser ? "Log Out" : "Sign In"}
           </Button>
         </header>
         <Box textAlign="center"></Box>

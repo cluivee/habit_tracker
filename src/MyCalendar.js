@@ -127,7 +127,7 @@ function MyCalendar({
         console.log("day prop is: ", day);
         console.log("typeof day prop is: ", typeof day);
         console.log(
-          "why am I not using daytoChange: daytChange: ",
+          "why am I not using daytoChange: ",
           dayToChange
         );
         addDate(selectedHabitButtonId, day);
@@ -232,7 +232,7 @@ function MyCalendar({
           // () => setButtonState(!buttonState)
           onClick={(e) => onDateClick(toDate(cloneDay), e)}
         >
-          <span className="number">{formattedDate}</span>
+          {isSameDay(day, new Date()) ? <span className="numberWithCircle">{formattedDate}</span> : <span className="number">{formattedDate}</span>}
           <span className="bg">{formattedDate}</span>
         </ToggleButton>
       );
