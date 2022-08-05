@@ -974,6 +974,7 @@ function FirebaseAuthenticationComponent({
               marginRight: "8px",
             }}
             onClick={() => {
+              if (theUser) {
               signOut(auth)
                 .then(() => {
                   // Sign-out successful.
@@ -982,9 +983,12 @@ function FirebaseAuthenticationComponent({
                 .catch((error) => {
                   // An error happened.
                 });
+              } else {
+                setshowComponent("SignIn");
+              }
             }}
           >
-            Log Out
+            {theUser ? "Log Out" : "Sign In" }
           </Button>
         </header>
         <Box textAlign="center"></Box>

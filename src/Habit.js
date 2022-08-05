@@ -20,7 +20,6 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
         color={propColor}
         onClick={() => {setSelectedHabitButtonId(id);
           console.log('Habit button clicked id is: ', id);}}
-        
         sx={{
           padding: 0,
           display: "flex",
@@ -28,7 +27,7 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
           flexWrap: "wrap",
           maxHeight: "30px",
           minHeight: "150px",
-          borderRadius: 0
+          borderRadius: 0,
         }}
       >
         <div
@@ -48,7 +47,6 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
             inputProps={{
               style: {
                 padding: "5px",
-                zIndex: 100,
               },
             }}
           ></TextField>
