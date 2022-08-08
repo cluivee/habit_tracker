@@ -919,8 +919,9 @@ function FirebaseAuthenticationComponent({
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
 
+        // addding the boolean true in getIdToken to force Refresh so that token is always valid
         user
-          .getIdToken()
+          .getIdToken(true)
           .then(function (idToken) {
             // we will set user token here, so that its available in the app component, though its possible we will never use it
 
