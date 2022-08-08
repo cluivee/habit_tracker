@@ -55,6 +55,7 @@ import { orange } from "@mui/material/colors";
 // imports for date-fns
 import { addDays, subDays, isSameDay, toDate } from "date-fns";
 import axios from "axios";
+import login from "./services/login";
 
 var r = document.querySelector(":root");
 
@@ -171,29 +172,32 @@ const JustMUIDrawer = ({
   ));
 
   const addHabitOnClick = () => {
-    // we're now doing a get request on every click of the addHabit button to check that the length of habits is less than 30. If it turns out that response.length is manipulable in the browser anyway then there's no real point and we may as well count the length when we do the initial get in the useeffect. Probably the more secure way to do this is to store the no of habits a user has in the database, probably each user has a database entry, and they have an array with all their notes or smth like that.
-    habitsservice.getAll().then((response) => {
-      console.log("Check response length:", response.length);
-      if (response.length < 31) {
-        // in our habitobject we will now have to post the user, which we will only get from the uid
-        const habitObject = {
-          color: habitColorArray[habits.length % 6],
-          colorHex: habitColorHexArray[habits.length % 6],
-          maxStreak: 0,
-          streak: 0,
-          ticked: [],
-        };
-        habitsservice.create(habitObject).then((returnedNote) => {
-          setHabits(habits.concat(returnedNote));
-          if (habits.length === 0) {
-            setSelectedHabitButtonId(returnedNote.id);
-          }
-          console.log("addhabit currentID: ", selectedHabitButtonId);
-        });
-      } else {
-        console.log("Maximum number of habits is 30");
-      }
-    });
+    // TODO 08.08.2022: Now just going to check habits.length as performance hit was too high when using get request. But this is not secure as someone could manipulate the length of habits and then send more than 30 hits to our database, so we may have to change this in the future. Original: We're now doing a get request on every click of the addHabit button to check that the length of habits is less than 30. If it turns out that response.length is manipulable in the browser anyway then there's no real point and we may as well count the length when we do the initial get in the useeffect. Probably the more secure way to do this is to store the no of habits a user has in the database, probably each user has a database entry, and they have an array with all their notes or smth like that. 
+
+    // habitsservice.getAll().then((response) => {
+    //   console.log("Check response length:", response.length);
+    // });
+
+    if (habits.length < 31) {
+      console.log('current length of habits: ', habits.length);
+      // in our habitobject we will now have to post the user, which we will only get from the uid
+      const habitObject = {
+        color: habitColorArray[habits.length % 6],
+        colorHex: habitColorHexArray[habits.length % 6],
+        maxStreak: 0,
+        streak: 0,
+        ticked: [],
+      };
+      habitsservice.create(habitObject).then((returnedNote) => {
+        setHabits(habits.concat(returnedNote));
+        if (habits.length === 0) {
+          setSelectedHabitButtonId(returnedNote.id);
+        }
+        console.log("addhabit currentID: ", selectedHabitButtonId);
+      });
+    } else {
+      console.log("Maximum number of habits is 30");
+    }
 
     // propSetHabitDict((propHabitDict) => [
     //   ...propHabitDict,
@@ -920,6 +924,10 @@ Done:
 - save the database of the days that have been clicked
 - have lots of colours on one square
 - save preferences
+
+TODO: 05.08.2022:
+From firebase authentication docs https://firebase.google.com/docs/auth/users#auth_tokens: for actions where the user must have recently reauthenticated, instead of signing the user in and out again, get new credentials from the user, and pass the new credentials to the reauthenticate method of the user object
+
 
 TODO 24.07.2022:
 - Something we probably ought to do at some point is with the axios delete ensure their have an authentication token:

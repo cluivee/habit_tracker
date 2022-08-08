@@ -7,6 +7,7 @@ import axios from 'axios'
 const baseUrl = '/api/notes'
 // const config = { headers: {'Content-Type': 'application/json'} };
 
+// it appears the token is saved to the backend, and so saving to localstorage does nothing
 let token = null;
 
 const setToken = newToken => {
@@ -22,7 +23,7 @@ const create = async newObject => {
   const config = {
     headers: { Authorization: token },
   }
-  
+
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }

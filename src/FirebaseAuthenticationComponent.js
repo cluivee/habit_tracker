@@ -160,6 +160,9 @@ if (isSignInWithEmailLink(auth, window.location.href)) {
   // the sign-in operation.
   // Get the email if available. This should be available if the user completes
   // the flow on the same device where they started it.
+
+  // TODO: 08/08/2022 its possible this may be broken, because we clear the localstorage in the useeffect if the user is logged out.
+
   let email = window.localStorage.getItem("emailForSignIn");
   if (!email) {
     // User opened the link on a different device. To prevent session fixation
@@ -924,12 +927,11 @@ function FirebaseAuthenticationComponent({
             habitsservice.setToken(idToken);
             setUserToken(idToken);
 
-            // saving token to localStorage (again might not be necessary)
+            // saving token to localStorage. Current not necessary as Firebase somehow persists the user. Otherwise the token would disappear when we refresh the page, so thats what saving to window.localstorage is for
             window.localStorage.setItem(
               "loggedHabitsUserToken",
               JSON.stringify(idToken)
             );
-
             console.log("window localstorage set: ", JSON.stringify(idToken));
 
             // Send token to your backend via HTTPS
