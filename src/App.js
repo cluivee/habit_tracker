@@ -225,7 +225,7 @@ const JustMUIDrawer = ({
     const baseUrl = "/api/notes";
 
     if (habits.length > 1) {
-      axios.delete(`${baseUrl}/${idLastItem}`).then(() => {
+      habitsservice.axiosDelete(idLastItem).then(() => {
         setHabits([...habits.slice(0, habits.length - 1)]);
         if (selectedHabitButtonId === idLastItem) {
           setSelectedHabitButtonId(idSecondLastItem);
@@ -235,7 +235,7 @@ const JustMUIDrawer = ({
         }
       });
     } else if (habits.length === 1) {
-      axios.delete(`${baseUrl}/${idLastItem}`).then(() => {
+      habitsservice.axiosDelete(idLastItem).then(() => {
         setHabits([]);
         // This is now set to just an arbitrary id of 1, it is not an actual mongoDB id
         setSelectedHabitButtonId(1);
