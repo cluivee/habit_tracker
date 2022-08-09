@@ -17,6 +17,7 @@ import {
   signInWithPopup,
   sendPasswordResetEmail,
   deleteUser,
+  getAdditionalUserInfo,
 } from "firebase/auth";
 // import SignIn from "./SignIn";
 // import SignUp from "./SignUp";
@@ -88,40 +89,36 @@ function GoogleHandleClick(event) {
       // The signed-in user info.
       const user = result.user;
 
+      const { isNewUser } = getAdditionalUserInfo(result);
+
+      console.log("is this a new user?", isNewUser);
+
       // Creating user in database, if they don't exist already
       userservice.setToken(token);
 
       // setting refreshToken too, but not using it yet:
       userservice.setRefreshToken(user.stsTokenManager.refreshToken);
 
-      // console.log("do we get a credential token here?", userCredential);
-      // console.log("I believe this is the accessToken", userCredential.user.accessToken, typeof userCredential.user.accessToken);
-      // console.log("I believe this is the refreshToken also", userCredential.user.stsTokenManager.refreshToken);
-      // console.log("checking email", userCredential.user.email, typeof userCredential.user.email);
-      // console.log("checking uid", userCredential.user.uid, typeof userCredential.uid);
-      // console.log("checking creationtime", userCredential.user.metadata.creationTime, typeof userCredential.user.metadata.creationTime);
-      // console.log("checking lastSignInTime", userCredential.user.metadata.lastSignInTime, typeof userCredential.user.metadata.lastSignInTime);
-      // console.log("checking verifiedEmail", userCredential.user.emailVerified, typeof userCredential.user.emailVerified)
+      // We only do the following if this is a new user
 
-      // create user in database. Note: creationTime and lastSignInTime are Strings
-      // Lets try to send these string dates to mongoDB and see if it works them out
+      if (isNewUser) {
+        console.log("This is a new user, adding user to database:");
 
-      console.log("adding user to database:");
+        const newUserObject = {
+          email: user.email,
+          uid: user.uid,
+          dateAccountCreated: user.metadata.creationTime,
+          dateLastSignedIn: user.metadata.lastSignInTime,
+          verifiedEmail: user.emailVerified,
+        };
 
-      const newUserObject = {
-        email: user.email,
-        uid: user.uid,
-        dateAccountCreated: user.metadata.creationTime,
-        dateLastSignedIn: user.metadata.lastSignInTime,
-        verifiedEmail: user.emailVerified,
-      };
-
-      userservice.create(newUserObject).then((returnedUser) => {
-        console.log(
-          "successfully created user with google signup",
-          user.email
-        );
-      });
+        userservice.create(newUserObject).then((returnedUser) => {
+          console.log(
+            "successfully created user with google signup",
+            user.email
+          );
+        });
+      }
     })
     .catch((error) => {
       // Handle Errors here.
@@ -146,14 +143,45 @@ function FacebookHandleClick() {
 
   signInWithPopup(auth, provider)
     .then((result) => {
-      // The signed-in user info.
-      const user = result.user;
 
       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
       const credential = FacebookAuthProvider.credentialFromResult(result);
-      const accessToken = credential.accessToken;
+      const token = credential.accessToken;
+      
+      // The signed-in user info.
+      const user = result.user;
 
-      // ...
+
+      const { isNewUser } = getAdditionalUserInfo(result);
+
+      console.log("is this a new user?", isNewUser);
+
+      // Creating user in database, if they don't exist already
+      userservice.setToken(token);
+
+      // setting refreshToken too, but not using it yet:
+      userservice.setRefreshToken(user.stsTokenManager.refreshToken);
+
+      // We only do the following if this is a new user
+      if (isNewUser) {
+        console.log("This is a new user, adding user to database:");
+
+        const newUserObject = {
+          email: user.email,
+          uid: user.uid,
+          dateAccountCreated: user.metadata.creationTime,
+          dateLastSignedIn: user.metadata.lastSignInTime,
+          verifiedEmail: user.emailVerified,
+        };
+
+        userservice.create(newUserObject).then((returnedUser) => {
+          console.log(
+            "successfully created user with facebook signup",
+            user.email
+          );
+        });
+      }
+
     })
     .catch((error) => {
       // Handle Errors here.
