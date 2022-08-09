@@ -574,11 +574,11 @@ const App = () => {
   // }, []);
 
   useEffect(() => {
-    // habitsservice.getAll().then((response) => {
-    //   console.log("Successful:", response);
-    //   setHabits(response);
-    //   setSelectedHabitButtonId(response[0].id);
-    // });
+    habitsservice.getAll().then((response) => {
+      console.log("Successful:", response);
+      setHabits(response);
+      setSelectedHabitButtonId(response[0].id);
+    });
     console.log("we used to fetch notes here");
   }, []);
 
@@ -778,20 +778,20 @@ const App = () => {
 
     if (habits.length > 0) {
       const posToday = selectedDict.ticked.findIndex((item) => {
-        console.log("item to check for datefns strings ", item, typeof item);
-        // if parseISO doesn't work we can revert to this:
-        // return isSameDay(item, new Date());
-        return isSameDay(parseISO(item), new Date());
+        // was using parseISO but was useless and rubbish
+        // return isSameDay(parseISO(item), new Date());
+        return isSameDay(item, new Date());
       });
 
       const posYesterday = selectedDict.ticked.findIndex((item) => {
-        console.log("item to check for datefns strings ", item, typeof item);
-        return isSameDay(parseISO(item), subDays(new Date(), 1));
+        return isSameDay(item, subDays(new Date(), 1));
       });
+
 
       // logic to calculate the current streak. Streak can start from today or yesterday
       if (posToday !== -1) {
         currentStreak++;
+
         for (var i = posToday; i > 0; i--) {
           if (
             !isSameDay(

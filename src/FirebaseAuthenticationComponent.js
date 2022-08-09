@@ -983,6 +983,17 @@ function SwitchLabels() {
   );
 }
 
+function ContactUs({}) {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Typography component="h1" variant="h5" align="center">
+        Send your feedback to habitimity [at] gmail.com!
+      </Typography>
+    </ThemeProvider>
+  );
+}
+
 // This switches between which component we want to show
 const Switcher = ({ setshowComponent, showComponent, theUser }) => {
   switch (showComponent) {
@@ -1000,6 +1011,8 @@ const Switcher = ({ setshowComponent, showComponent, theUser }) => {
       return (
         <ForgotPassword setshowComponent={setshowComponent} theUser={theUser} />
       );
+    case "ContactUs":
+      return <ContactUs />;
     default:
       return <SignUp setshowComponent={setshowComponent} theUser={theUser} />;
   }
@@ -1061,7 +1074,9 @@ function FirebaseAuthenticationComponent({
                 console.log("setting selectedhabitbuttonid");
                 setSelectedHabitButtonId(response[0].id);
               } else {
-                console.log("habits array was empty, setting current habit id to 1");
+                console.log(
+                  "habits array was empty, setting current habit id to 1"
+                );
                 setSelectedHabitButtonId(1);
               }
             });
@@ -1149,10 +1164,18 @@ function FirebaseAuthenticationComponent({
             color="whiteText"
             sx={{ fontWeight: "light" }}
             onClick={() => setshowComponent("ForgotPassword")}
-            style={{ marginRight: "auto" }}
           >
             Forgot Password
           </Button>
+          <Button
+            color="whiteText"
+            sx={{ fontWeight: "light" }}
+            onClick={() => setshowComponent("ContactUs")}
+            style={{ marginRight: "auto" }}
+          >
+            Contact Us
+          </Button>
+          
           <div style={{ marginRight: "8px", fontWeight: "300", color: "#fff" }}>
             {signedInUsername}
           </div>
