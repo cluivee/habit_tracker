@@ -574,11 +574,11 @@ const App = () => {
   // }, []);
 
   useEffect(() => {
-    habitsservice.getAll().then((response) => {
-      console.log("Successful:", response);
-      setHabits(response);
-      setSelectedHabitButtonId(response[0].id);
-    });
+    // habitsservice.getAll().then((response) => {
+    //   console.log("Successful:", response);
+    //   setHabits(response);
+    //   setSelectedHabitButtonId(response[0].id);
+    // });
     console.log("we used to fetch notes here");
   }, []);
 
