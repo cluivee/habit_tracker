@@ -866,15 +866,18 @@ function DeleteUser({ theUser }) {
     if (theUser === null) {
       setdeleteUserErrorText("You are not logged in");
     } else if (window.confirm("Do you really want to delete your account?")) {
+      // we perhaps have to keep a copy of the token here
+      let copyOfToken = theUser.accessToken;
+
       deleteUser(theUser)
         .then(() => {
-          console.log("user deleted: ");
-          console.log("the uid was", theUser.uid)
+          userservice.setToken(copyOfToken);
 
           // we delete from MongoDB here.
-
           userservice.axiosDelete(theUser.uid).then(() => {
-            console.log("user deleted successfully")
+            console.log("user deleted successfully");
+            userservice.setToken(null);
+            copyOfToken = null;
           });
 
           setdeleteUserErrorText("Account deleted successfully");

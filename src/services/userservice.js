@@ -8,11 +8,12 @@ const baseUrl = "/api/users";
 // const config = { headers: {'Content-Type': 'application/json'} };
 
 let token = null;
+
 let refreshToken = null;
 
 const setToken = (newToken) => {
-  token = `bearer ${newToken}`;
-};
+  token = `bearer ${newToken}`
+}
 
 // setting the refreshtoken in case we want to use it in the future
 const setRefreshToken = (newToken) => {
