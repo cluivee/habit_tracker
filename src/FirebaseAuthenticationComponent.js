@@ -143,7 +143,6 @@ function FacebookHandleClick() {
 
   signInWithPopup(auth, provider)
     .then((result) => {
-
       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
@@ -180,7 +179,6 @@ function FacebookHandleClick() {
           );
         });
       }
-
     })
     .catch((error) => {
       // Handle Errors here.
@@ -1014,6 +1012,8 @@ function FirebaseAuthenticationComponent({
   setUserToken,
   theUser,
   setTheUser,
+  setHabits,
+  setSelectedHabitButtonId,
 }) {
   console.log("App rerendered");
   // state for the username of the currently signed in user
@@ -1052,6 +1052,20 @@ function FirebaseAuthenticationComponent({
               JSON.stringify(idToken)
             );
 
+            // here we are fetching the habits for each user
+            // TODO 09.08.2022: Oh ok so the bug was that i didn't send the token with the get request in habitservice, so perhaps this could make back to useEffect in App, but maybe it is working well as it is
+            habitsservice.getAll().then((response) => {
+              console.log("Successful:", response);
+              setHabits(response);
+              if (response && response.length) {
+                console.log("setting selectedhabitbuttonid");
+                setSelectedHabitButtonId(response[0].id);
+              } else {
+                console.log("habits array was empty, setting current habit id to 1");
+                setSelectedHabitButtonId(1);
+              }
+            });
+
             // console.log("window localstorage set: ", JSON.stringify(idToken));
 
             // Send token to your backend via HTTPS
@@ -1080,11 +1094,13 @@ function FirebaseAuthenticationComponent({
         // Again, we may never use userToken in the App component, so this could be deleted
         setUserToken(null);
 
+        // clearing habits array too:
+        setHabits([]);
+
         window.localStorage.clear();
         console.log("window localstorage cleared: ", null);
 
         // User is signed out
-        // ...
       }
     });
   }, []);

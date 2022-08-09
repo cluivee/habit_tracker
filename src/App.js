@@ -556,11 +556,12 @@ const App = () => {
   // }, []);
 
   useEffect(() => {
-    habitsservice.getAll().then((response) => {
-      console.log("Successful:", response);
-      setHabits(response);
-      setSelectedHabitButtonId(response[0].id);
-    });
+    // habitsservice.getAll().then((response) => {
+    //   console.log("Successful:", response);
+    //   setHabits(response);
+    //   setSelectedHabitButtonId(response[0].id);
+    // });
+    console.log("we used to fetch notes here");
   }, []);
 
   const toggleImportanceOf = (id) => {
@@ -831,6 +832,8 @@ const App = () => {
               setUserToken={setUserToken}
               theUser={theUser}
               setTheUser={setTheUser}
+              setHabits={setHabits}
+              setSelectedHabitButtonId={setSelectedHabitButtonId}
             />
             {theUser && showComponent === "Home" ? (
               <MemoCalendar
