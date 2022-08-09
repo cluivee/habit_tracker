@@ -167,6 +167,7 @@ const JustMUIDrawer = ({
       propStreak={dict.streak}
       important={dict.important}
       habits={habits}
+      setHabits={setHabits}
       selectedHabitButtonId={selectedHabitButtonId}
       setSelectedHabitButtonId={setSelectedHabitButtonId}
       toggleDelete={toggleDelete}

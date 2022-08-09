@@ -59,16 +59,6 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-// Keeping this here because I might use this for Github pages anyway
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyApO_RmF_i4oZglgdAaiZwHNO4mWDCsbO8',
-//   authDomain: 'auth-firebaseauthentication.firebaseapp.com',
-//   projectId: 'auth-firebaseauthentication',
-//   storageBucket: 'auth-firebaseauthentication.appspot.com',
-//   messagingSenderId: '83111206827',
-//   appId: '1:83111206827:web:f7bc2274def0a45bf9fcee',
-// };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 

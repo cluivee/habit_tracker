@@ -1,25 +1,61 @@
-import { Button, Checkbox, TextField, ThemeProvider, Typography } from "@mui/material";
-import React, {useMemo, useEffect} from "react";
-
 import {
-  addDays,
-  subDays,
-  isSameDay,
-  toDate,
-} from "date-fns";
+  Button,
+  Checkbox,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import React, { useMemo, useEffect } from "react";
+
+import habitsservice from "./services/habitsservice";
+
+import { addDays, subDays, isSameDay, toDate } from "date-fns";
 
 // This reusable component is the habit button in the left sidebar.
 
-const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSelectedHabitButtonId, toggleDelete, important }) => {
-
+const Habit = ({
+  id,
+  propColor,
+  propStreak,
+  habits,
+  setHabits,
+  selectedHabitButtonId,
+  setSelectedHabitButtonId,
+  toggleDelete,
+  important,
+}) => {
   return (
     <div>
       {/* MUI button habit */}
       <Button
         variant="contained"
         color={propColor}
-        onClick={() => {setSelectedHabitButtonId(id);
-          console.log('Habit button clicked id is: ', id);}}
+        onClick={() => {
+          setSelectedHabitButtonId(id);
+          const habit = habits.find((n) => n.id === id);
+          const changedHabit = { ...habit};
+
+          habitsservice
+            .update(id, changedHabit)
+            .then((returnedHabit) => {
+              console.log("can we update? returnedHabit", returnedHabit);
+              setHabits(
+                habits.map((habit) => (habit.id !== id ? habit : returnedHabit))
+              );
+            })
+            .catch((error) => {
+              // setErrorMessage(
+              //   `Note '${habit.color}' was already removed from server`
+              // );
+              // setTimeout(() => {
+              //   setErrorMessage(null);
+              // }, 2000);
+
+              setHabits(habits.filter((n) => n.id !== id));
+            });
+
+          console.log("Habit button clicked id is: ", id);
+        }}
         sx={{
           padding: 0,
           display: "flex",
@@ -67,7 +103,6 @@ const Habit = ({ id, propColor, propStreak, habits, selectedHabitButtonId, setSe
           </label>
 
           {/* <Typography>{important.toString()}</Typography> */}
-          
         </div>
         <Checkbox
           color="default"
