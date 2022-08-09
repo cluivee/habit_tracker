@@ -40,6 +40,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import SendIcon from "@mui/icons-material/Send";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from '@mui/icons-material/Remove';
+
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -331,7 +333,7 @@ const JustMUIDrawer = ({
       {habitList}
 
       {/* "Add Habit" button */}
-      <Button
+      {/* <Button
         variant="contained"
         onClick={addHabitOnClick}
         sx={{
@@ -345,10 +347,10 @@ const JustMUIDrawer = ({
         }}
       >
         + Add Habit
-      </Button>
+      </Button> */}
 
       {/* "Delete Habit" button */}
-      <Button
+      {/* <Button
         variant="contained"
         onClick={deleteHabitOnClick}
         sx={{
@@ -362,20 +364,17 @@ const JustMUIDrawer = ({
         }}
       >
         - Delete Habit
-      </Button>
+      </Button> */}
 
       {/* Ill have to fix the color prop here, at the moment its white on hover. Still now really sure how to access colors without just wrapping everything in themeproviders */}
       <Fab
         color="error"
         aria-label="add"
+        onClick={addHabitOnClick}
         sx={{
           bgcolor: "#f50057",
           margin: "10px",
           color: "#fff",
-          // minHeight: "50px",
-          // maxHeight: "50px",
-          // maxWidth: "50px",
-          // minWidth: "50px",
           width: "50px",
           maxWidth: "50px",
           minHeight: "50px",
@@ -385,6 +384,25 @@ const JustMUIDrawer = ({
         }}
       >
         <AddIcon />
+      </Fab>
+
+      <Fab
+        color="error"
+        aria-label="add"
+        onClick={deleteHabitOnClick}
+        sx={{
+          bgcolor: "#f50057",
+          margin: "10px",
+          color: "#fff",
+          width: "50px",
+          maxWidth: "50px",
+          minHeight: "50px",
+          maxHeight: "50px",
+          fontWeight: "400",
+          fontSize: "1rem",
+        }}
+      >
+        <RemoveIcon />
       </Fab>
 
       {/* Example of the original contents of the MUI sidebar drawer, including dividers */}
@@ -846,11 +864,11 @@ const App = () => {
               />
             ) : null}
             {/* Ignore everything after this point*/}
-            <Sidebar
+            {/* <Sidebar
               habits={habits}
               toggleImportanceOf={toggleImportanceOf}
               toggleDelete={toggleDelete}
-            />
+            /> */}
 
             {/* <div style={{ border: "1px solid black", padding: 5, margin: 5 }}>
               <h1>I'm the parent, here's your message:</h1>
