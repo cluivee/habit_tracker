@@ -172,15 +172,15 @@ const JustMUIDrawer = ({
   ));
 
   const addHabitOnClick = () => {
-    // TODO 08.08.2022: Now just going to check habits.length as performance hit was too high when using get request. But this is not secure as someone could manipulate the length of habits and then send more than 30 hits to our database, so we may have to change this in the future. Original: We're now doing a get request on every click of the addHabit button to check that the length of habits is less than 30. If it turns out that response.length is manipulable in the browser anyway then there's no real point and we may as well count the length when we do the initial get in the useeffect. Probably the more secure way to do this is to store the no of habits a user has in the database, probably each user has a database entry, and they have an array with all their notes or smth like that. 
+    // TODO 08.08.2022: Now just going to check habits.length as performance hit was too high when using get request. But this is not secure as someone could manipulate the length of habits and then send more than 30 hits to our database, so we may have to change this in the future. Original: We're now doing a get request on every click of the addHabit button to check that the length of habits is less than 30. If it turns out that response.length is manipulable in the browser anyway then there's no real point and we may as well count the length when we do the initial get in the useeffect. Probably the more secure way to do this is to store the no of habits a user has in the database, probably each user has a database entry, and they have an array with all their notes or smth like that.
 
     // habitsservice.getAll().then((response) => {
     //   console.log("Check response length:", response.length);
     // });
 
     if (habits.length < 31) {
-      console.log('current length of habits: ', habits.length);
-      // in our habitobject we will now have to post the user, which we will only get from the uid
+      console.log("current length of habits: ", habits.length);
+      //TODO actually we can do this from our backend- in our habitobject we will now have to post the user, which we will only get from the uid
       const habitObject = {
         color: habitColorArray[habits.length % 6],
         colorHex: habitColorHexArray[habits.length % 6],
@@ -188,6 +188,7 @@ const JustMUIDrawer = ({
         streak: 0,
         ticked: [],
       };
+
       habitsservice.create(habitObject).then((returnedNote) => {
         setHabits(habits.concat(returnedNote));
         if (habits.length === 0) {

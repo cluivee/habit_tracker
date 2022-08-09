@@ -1,5 +1,6 @@
 import "./App.css";
 import habitsservice from "./services/habitsservice";
+import userservice from "./services/userservice";
 import { createContext, useEffect, useRef, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
@@ -86,7 +87,41 @@ function GoogleHandleClick(event) {
       const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user;
-      // ...
+
+      // Creating user in database, if they don't exist already
+      userservice.setToken(token);
+
+      // setting refreshToken too, but not using it yet:
+      userservice.setRefreshToken(user.stsTokenManager.refreshToken);
+
+      // console.log("do we get a credential token here?", userCredential);
+      // console.log("I believe this is the accessToken", userCredential.user.accessToken, typeof userCredential.user.accessToken);
+      // console.log("I believe this is the refreshToken also", userCredential.user.stsTokenManager.refreshToken);
+      // console.log("checking email", userCredential.user.email, typeof userCredential.user.email);
+      // console.log("checking uid", userCredential.user.uid, typeof userCredential.uid);
+      // console.log("checking creationtime", userCredential.user.metadata.creationTime, typeof userCredential.user.metadata.creationTime);
+      // console.log("checking lastSignInTime", userCredential.user.metadata.lastSignInTime, typeof userCredential.user.metadata.lastSignInTime);
+      // console.log("checking verifiedEmail", userCredential.user.emailVerified, typeof userCredential.user.emailVerified)
+
+      // create user in database. Note: creationTime and lastSignInTime are Strings
+      // Lets try to send these string dates to mongoDB and see if it works them out
+
+      console.log("adding user to database:");
+
+      const newUserObject = {
+        email: user.email,
+        uid: user.uid,
+        dateAccountCreated: user.metadata.creationTime,
+        dateLastSignedIn: user.metadata.lastSignInTime,
+        verifiedEmail: user.emailVerified,
+      };
+
+      userservice.create(newUserObject).then((returnedUser) => {
+        console.log(
+          "successfully created user with google signup",
+          user.email
+        );
+      });
     })
     .catch((error) => {
       // Handle Errors here.
@@ -96,7 +131,11 @@ function GoogleHandleClick(event) {
       const email = error.customData.email;
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
+      console.log(
+        "something went wrong with Google Sign In",
+        error.code,
+        error.message
+      );
     });
 }
 
@@ -285,10 +324,46 @@ function SignUp({ setshowComponent }) {
         data.get("password")
       )
         .then((userCredential) => {
-          // Signed in
+          // Successful Sign Up via email, automatically logged in
           const user = userCredential.user;
+
+          // Actually possibly do want this, as we're just about to send a post request with axios setting token to userservice:
+          userservice.setToken(userCredential.user.accessToken);
+          // setting refreshToken too, but not using it yet:
+          userservice.setRefreshToken(
+            userCredential.user.stsTokenManager.refreshToken
+          );
+
+          // console.log("do we get a credential token here?", userCredential);
+          // console.log("I believe this is the accessToken", userCredential.user.accessToken, typeof userCredential.user.accessToken);
+          // console.log("I believe this is the refreshToken also", userCredential.user.stsTokenManager.refreshToken);
+          // console.log("checking email", userCredential.user.email, typeof userCredential.user.email);
+          // console.log("checking uid", userCredential.user.uid, typeof userCredential.uid);
+          // console.log("checking creationtime", userCredential.user.metadata.creationTime, typeof userCredential.user.metadata.creationTime);
+          // console.log("checking lastSignInTime", userCredential.user.metadata.lastSignInTime, typeof userCredential.user.metadata.lastSignInTime);
+          // console.log("checking verifiedEmail", userCredential.user.emailVerified, typeof userCredential.user.emailVerified)
+
+          // create user in database. Note: creationTime and lastSignInTime are Strings
+          // Lets try to send these string dates to mongoDB and see if it works them out
+
+          console.log("adding user to database:");
+
+          const newUserObject = {
+            email: userCredential.user.email,
+            uid: userCredential.user.uid,
+            dateAccountCreated: userCredential.user.metadata.creationTime,
+            dateLastSignedIn: userCredential.user.metadata.lastSignInTime,
+            verifiedEmail: userCredential.user.emailVerified,
+          };
+
+          userservice.create(newUserObject).then((returnedUser) => {
+            console.log(
+              "successfully created user with email signup",
+              userCredential.user.email
+            );
+          });
+
           setsignUpErrorText("Account Successfully Created!");
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -919,6 +994,8 @@ function FirebaseAuthenticationComponent({
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
 
+        console.log("logged in, finding out what user is ", user);
+
         // addding the boolean true in getIdToken to force Refresh so that token is always valid
         user
           .getIdToken(true)
@@ -926,6 +1003,9 @@ function FirebaseAuthenticationComponent({
             // we will set user token here, so that its available in the app component, though its possible we will never use it
 
             habitsservice.setToken(idToken);
+            userservice.setToken(idToken);
+            userservice.setRefreshToken(user.refreshToken);
+
             setUserToken(idToken);
 
             // saving token to localStorage. Current not necessary as Firebase somehow persists the user. Otherwise the token would disappear when we refresh the page, so thats what saving to window.localstorage is for
@@ -933,7 +1013,8 @@ function FirebaseAuthenticationComponent({
               "loggedHabitsUserToken",
               JSON.stringify(idToken)
             );
-            console.log("window localstorage set: ", JSON.stringify(idToken));
+
+            // console.log("window localstorage set: ", JSON.stringify(idToken));
 
             // Send token to your backend via HTTPS
             // could also just send token to the backend directly here I guess
@@ -955,6 +1036,8 @@ function FirebaseAuthenticationComponent({
         setsignedInUsername("Logged Out");
         setTheUser(user);
         habitsservice.setToken(null);
+        userservice.setToken(null);
+        userservice.setRefreshToken(null);
 
         // Again, we may never use userToken in the App component, so this could be deleted
         setUserToken(null);
@@ -980,32 +1063,43 @@ function FirebaseAuthenticationComponent({
             alignItems: "center",
           }}
         >
-          <Button color="whiteText" sx={{ fontWeight: 'light' }} onClick={() => setshowComponent("Home")}>
+          <Button
+            color="whiteText"
+            sx={{ fontWeight: "light" }}
+            onClick={() => setshowComponent("Home")}
+          >
             Home
           </Button>
-          <Button color="whiteText" sx={{ fontWeight: 'light' }} onClick={() => setshowComponent("SignUp")}>
+          <Button
+            color="whiteText"
+            sx={{ fontWeight: "light" }}
+            onClick={() => setshowComponent("SignUp")}
+          >
             Sign Up
           </Button>
-          <Button color="whiteText" sx={{ fontWeight: 'light' }} onClick={() => setshowComponent("SignIn")}>
+          <Button
+            color="whiteText"
+            sx={{ fontWeight: "light" }}
+            onClick={() => setshowComponent("SignIn")}
+          >
             Log In
           </Button>
           <Button
             color="whiteText"
-            sx={{ fontWeight: 'light' }}
+            sx={{ fontWeight: "light" }}
             onClick={() => setshowComponent("DeleteUser")}
           >
             Profile
           </Button>
           <Button
             color="whiteText"
-            sx={{ fontWeight: 'light' }}
+            sx={{ fontWeight: "light" }}
             onClick={() => setshowComponent("ForgotPassword")}
             style={{ marginRight: "auto" }}
           >
             Forgot Password
           </Button>
-          <div style={{ marginRight: "8px", fontWeight: "300", color: "#fff" }}
-          >
+          <div style={{ marginRight: "8px", fontWeight: "300", color: "#fff" }}>
             {signedInUsername}
           </div>
 
