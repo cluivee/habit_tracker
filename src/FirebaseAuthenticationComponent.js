@@ -147,10 +147,9 @@ function FacebookHandleClick() {
       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
-      
+
       // The signed-in user info.
       const user = result.user;
-
 
       const { isNewUser } = getAdditionalUserInfo(result);
 
@@ -870,6 +869,14 @@ function DeleteUser({ theUser }) {
       deleteUser(theUser)
         .then(() => {
           console.log("user deleted: ");
+          console.log("the uid was", theUser.uid)
+
+          // we delete from MongoDB here.
+
+          userservice.axiosDelete(theUser.uid).then(() => {
+            console.log("user deleted successfully")
+          });
+
           setdeleteUserErrorText("Account deleted successfully");
         })
         .catch((error) => {
