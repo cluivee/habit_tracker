@@ -40,8 +40,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import SendIcon from "@mui/icons-material/Send";
 import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from '@mui/icons-material/Remove';
-
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -778,16 +777,58 @@ const App = () => {
     console.log("Habit Streak updated");
 
     if (habits.length > 0) {
+
+      //trying this again
+
+      let results = [];
+
+      if (selectedDict.ticked && selectedDict.ticked.length) {
+        results = selectedDict.ticked.map((date) => {if (typeof date === 'string') {
+          return parseISO(date);
+        } else {
+          return date;
+        }});
+      }
+
+      console.log('results selecteddict ticked', selectedDict.ticked)
+      console.log('results array', results)
+
+      // here we convert selectedDict.ticked to an array of date objects, in case we came back from the database and it had converted th dates to strings fed up of this
+      // let stringDatesToObjectsArray = [];
+
+      // if (selectedDict.ticked && selectedDict.ticked.length) {
+      //   if (typeof selectedDict.ticked[0] === "string") {
+         
+      //     stringDatesToObjectsArray = selectedDict.ticked.map((date) => {
+      //       const parsedDate = typeof date === "string" ? parseISO(date) : date;
+      //       console.log("parsedDate: ", parsedDate, typeof parsedDate);
+      //       return parsedDate;
+      //     });
+      //   } else {
+      //     stringDatesToObjectsArray = selectedDict.ticked;
+      //   }
+      //   console.log("stringDatesToObjectsArray: ", stringDatesToObjectsArray);
+      //   stringDatesToObjectsArray.sort();
+      //   console.log("sorted stringDatesToObjectsArray: ", stringDatesToObjectsArray);
+      // }
+
       const posToday = selectedDict.ticked.findIndex((item) => {
         // was using parseISO but was useless and rubbish
         // return isSameDay(parseISO(item), new Date());
+      
         return isSameDay(item, new Date());
       });
 
       const posYesterday = selectedDict.ticked.findIndex((item) => {
+        // const dateConvertedToObject =
+        //   typeof item === "string" ? parseISO(item) : item;
+        // console.log(
+        //   "yesterday dates converted to Objects",
+        //   dateConvertedToObject,
+        //   typeof dateConvertedToObject
+        // );
         return isSameDay(item, subDays(new Date(), 1));
       });
-
 
       // logic to calculate the current streak. Streak can start from today or yesterday
       if (posToday !== -1) {
@@ -942,15 +983,22 @@ Done:
 - count streak
 - make it look good/ material ui
 - logins
-
 - save the state of buttons
 - save the database of the days that have been clicked
+
 - have lots of colours on one square
 - save preferences
 
+TODO 18.08.2022:
+At this point what I wanted to do next is fix the streak counter, by converting the dates from strings back to date objects once they come back from
+the database and are downloaded as JSON.
+I also wanted to improve performance by preventing data being sent to the server on every request, and stopping having so many rerenderings. Perhaps having a save button, so we wouldn't have to save on every click
+We also want to save the name of the habits.
+I also wanted to have transitions when clicking on buttons. Maybe a raised button effect when hovering over buttons, and or a color transition
+
+
 TODO: 05.08.2022:
 From firebase authentication docs https://firebase.google.com/docs/auth/users#auth_tokens: for actions where the user must have recently reauthenticated, instead of signing the user in and out again, get new credentials from the user, and pass the new credentials to the reauthenticate method of the user object
-
 
 TODO 24.07.2022:
 - Something we probably ought to do at some point is with the axios delete ensure their have an authentication token:
